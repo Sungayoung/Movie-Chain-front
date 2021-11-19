@@ -5,9 +5,27 @@ import axios from "axios";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
-  mutations: {},
+  state: {
+    isLogin: localStorage.getItem('jwt') ? true : false,
+  },
+  mutations: {
+    LOG_IN: function (state) {
+      state.isLogin = true;
+    },
+    LOG_OUT: function (state) {
+      state.isLogin = false;
+      localStorage.removeItem("jwt")
+      this.$router.push({ name: "Home" });
+      console.log('--------------')
+    },
+  },
   actions: {
+    logIn: function ({ commit }) {
+      commit("LOG_IN");
+    },
+    logOut: function ({ commit }) {
+      commit("LOG_OUT");
+    },
     getMovieList: function ({ commit }, params) {
       /**
        * params: {
@@ -126,7 +144,7 @@ export default new Vuex.Store({
     },
     createReview: function ({ commit }, data) {
       commit;
-      console.log(data)
+      console.log(data);
       const token = localStorage.getItem("jwt");
       return new Promise((resolve, reject) => {
         axios({

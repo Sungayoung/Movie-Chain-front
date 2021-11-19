@@ -1,20 +1,7 @@
 <template>
-  <v-app>
-    <v-app-bar
-      app
-      color="warning"
-      dark
-    >
+  <v-app style="background: rgba(0, 0, 0, 0.9)">
+    <v-app-bar app color="teal darken-4" dark>
       <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
         <v-img
           alt="Vuetify Name"
           class="shrink mt-1 hidden-sm-and-down"
@@ -23,15 +10,26 @@
           src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
           width="100"
         />
-        <router-link to="/">Home</router-link> |
-      <div v-if="isLogin">
-        <router-link @click.native="logout" to="#">Logout</router-link>  | 
-        <router-link :to="{name: 'MovieList'}">MovieList</router-link>
-      </div>
-      <div v-else>
-        <router-link :to="{ name: 'Signup' }">Signup</router-link> |
-        <router-link :to="{ name: 'Login' }">Login</router-link> |
-      </div>
+        <router-link class="my-link" to="/">Home</router-link> |
+        <router-link class="my-link" :to="{ name: 'MainPage' }"
+          >Main</router-link
+        >
+        |
+        <div v-if="isLogin">
+          <router-link class="my-link" @click.native="logout" to="#"
+            >Logout</router-link
+          >
+          |
+          <router-link class="my-link" :to="{ name: 'MovieList' }"
+            >MovieList</router-link
+          >
+        </div>
+        <div v-else>
+          <router-link class="my-link" :to="{ name: 'Signup' }"
+            >Signup</router-link
+          >
+          |
+        </div>
       </div>
 
       <v-spacer></v-spacer>
@@ -47,34 +45,40 @@
     </v-app-bar>
 
     <v-main>
-       <router-view @login="login" />
+      <MainPage />
     </v-main>
   </v-app>
 </template>
 
 <script>
+import MainPage from "./views/accounts/MainPage.vue";
+import { mapState } from "vuex";
+import { mapActions } from "vuex";
 export default {
   name: "App",
-  data: function () {
-    return {
-      isLogin: false,
-    };
+  components: {
+    MainPage,
   },
   methods: {
+    ...mapActions(["logOut"]),
     logout: function () {
-      this.isLogin = false;
-      localStorage.removeItem("jwt");
-      this.$router.push({ name: "Login" });
+      this.logOut();
     },
-    login: function () {
-      this.isLogin = true;
-    }
   },
-  created: function () {
-    const token = localStorage.getItem("jwt");
-    if (token) {
-      this.isLogin = true;
-    }
+  computed: {
+    ...mapState(["isLogin"]),
   },
 };
 </script>
+
+<style>
+html {
+  background-color: black;
+}
+.bg {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.my-link {
+  text-decoration: aliceblue;
+}
+</style>
