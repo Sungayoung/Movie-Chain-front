@@ -11,9 +11,9 @@
           width="80"
           height="50"
         />
-        <router-link class="my-link" to="/">Home</router-link> |
         <router-link class="my-link" :to="{ name: 'MainPage' }"
-          >Main</router-link
+          >
+          Main</router-link
         >
         |
         <div v-if="isLogin">

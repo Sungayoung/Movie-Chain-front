@@ -1,9 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
-import Signup from "../views/accounts/Signup.vue";
-import Login from "../views/accounts/Login.vue";
-import MainPage from "../views/accounts/MainPage.vue";
+import Signup from "@/components/accounts/Signup.vue";
+import Login from "@/components/accounts/Login.vue";
+import MainPage from "../views/MainPage.vue";
 import MovieList from "../views/movies/MovieList";
 import MovieDetail from "../views/movies/MovieDetail";
 
@@ -12,18 +11,13 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: Home,
+    name: "MainPage",
+    component: MainPage,
   },
   {
     path: "/accounts/signup",
     name: "Signup",
     component: Signup,
-  },
-  {
-    path: "/mainpage",
-    name: "MainPage",
-    component: MainPage,
   },
   {
     path: "/accounts/login",

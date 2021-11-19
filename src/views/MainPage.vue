@@ -10,6 +10,7 @@
       width="200"
     />
     <div v-if="isLogin">
+      <SearchInput/>
     </div>
     <div v-else>
       <Login />
@@ -18,12 +19,14 @@
 </template>
 
 <script>
-import Login from "./Login.vue";
 import { mapState } from "vuex";
+import Login from '../components/accounts/Login.vue';
+import SearchInput from '../components/SearchInput.vue';
 export default {
   name: "MainPage",
   components: {
     Login,
+    SearchInput,
   },
   computed: {
     ...mapState(["isLogin"]),
