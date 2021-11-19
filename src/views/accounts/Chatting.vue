@@ -1,9 +1,14 @@
 <template>
-  <div>
+  <div style="color: white;">
     <h3>프로필 이미지 전송!</h3>
     <div>
       <v-file-input v-model="profileImg" name="profileImg"></v-file-input>
-      <button @click="sendImage()">전송</button>
+      <button @click="sendProfile()">전송</button>
+    </div>
+    <h3>유저 프로필 정보</h3>
+    <div>
+      {{ profile }}
+      <img :src="imgUrl" alt="">
     </div>
     <h3>채팅내역</h3>
     <div>
@@ -27,6 +32,7 @@ export default {
   name: 'Chatting',
   data: function () {
     return {
+      profile: null,
       chattingList: [],
       chattingInput: null,
       profileImg: null,
@@ -34,6 +40,7 @@ export default {
   },
   mounted: function () {
     this.getChatting()
+    this.getProfile()
   },
   methods: {
     getChatting: function () {
@@ -71,22 +78,36 @@ export default {
         console.log(err)
       })
     },
-    sendImage: function () {
+    getProfile: function () {
       const token = localStorage.getItem('jwt')
-      let csrftoken = Cookies.get('csrftoken');
+      axios({
+        method: 'get',
+        url: `${process.env.VUE_APP_MCS_URL}/accounts/profile/`,
+        headers: { Authorization: `JWT ${token}` },
+      })
+      .then( res => {
+        console.log(res)
+        this.profile = res.data
+      })
+      .catch( err => {
+        console.log(err)
+      })
+    },
+    sendProfile: function () {
+      const token = localStorage.getItem('jwt')
       let data = new FormData()
       data.append('files', this.profileImg)
       axios({
         method: 'post',
-        url: `${process.env.VUE_APP_MCS_URL}/accounts/set-profile-image/`,
+        url: `${process.env.VUE_APP_MCS_URL}/accounts/profile/`,
+        data: data,
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `JWT ${token}`,
-          'X-CSRFToken': csrftoken,
-        },
-        data
+        }
       })
       .then( res => {
+        this.getProfile()
         console.log(res.data)
       })
       .catch( err => {
@@ -94,6 +115,11 @@ export default {
       })
     }
   },
+  computed: {
+    imgUrl: function () {
+      return `${process.env.VUE_APP_MCS_URL}${this.profile.profile_img}`
+    }
+  }
 }
 </script>
 

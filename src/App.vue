@@ -16,13 +16,9 @@
         >
         |
         <div v-if="isLogin">
-          <router-link class="my-link" @click.native="logout" to="#"
-            >Logout</router-link
-          >
-          |
-          <router-link class="my-link" :to="{ name: 'MovieList' }"
-            >MovieList</router-link
-          >
+          <router-link class="my-link" @click.native="logout" to="#">Logout</router-link> |
+          <router-link class="my-link" :to="{ name: 'MovieList' }">MovieList</router-link> | 
+          <router-link :to="{name: 'Chatting'}">Chatting</router-link>
         </div>
         <div v-else>
           <router-link class="my-link" :to="{ name: 'Signup' }"
@@ -30,6 +26,7 @@
           >
           |
         </div>
+
       </div>
 
       <v-spacer></v-spacer>

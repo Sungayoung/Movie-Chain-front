@@ -9,6 +9,7 @@
       width="200"
     />
     <div v-if="isLogin">
+      <router-view/>
     </div>
     <div v-else>
       <Login />
