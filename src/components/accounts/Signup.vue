@@ -14,10 +14,99 @@
       </v-card-title>
 
       <v-window v-model="onboarding">
-        <Page1 />
-        <Page2 />
-        <Page3 />
-        <Page4 />
+        <!-- 1 페이지 -->
+        <v-window-item :onboarding="1">
+          <div class="container p-3">
+            <div>
+              <v-text-field
+                :rules="[rules.required]"
+                label="ID"
+                type="text"
+                id="username"
+                v-model="credentials.username"
+              />
+            </div>
+            <div>
+              <v-text-field
+                :rules="[rules.required]"
+                label="Nickname"
+                type="text"
+                id="nickname"
+                v-model="credentials.nickname"
+              />
+            </div>
+            <div>
+              <v-text-field
+                :rules="[rules.required]"
+                label="e-mail"
+                type="text"
+                id="email"
+                v-model="credentials.email"
+              />
+            </div>
+            <div>
+              <v-text-field
+                :rules="[rules.required]"
+                label="Password"
+                type="password"
+                id="password"
+                v-model="credentials.password"
+              />
+            </div>
+            <div>
+              <v-text-field
+                :rules="[rules.required, rules.notConfirmed]"
+                label="Password Confirmation"
+                type="password"
+                id="passwordConfirmation"
+                v-model="credentials.passwordConfirmation"
+              />
+            </div>
+          </div>
+        </v-window-item>
+
+        <!-- 2 페이지 -->
+        <v-window-item :onboarding="2">
+          <v-card-text>
+            <v-text-field label="Password" type="password"></v-text-field>
+            <v-text-field
+              label="Confirm Password"
+              type="password"
+            ></v-text-field>
+            <span class="text-caption grey--text text--darken-1">
+              Please enter a password for your account
+            </span>
+          </v-card-text>
+        </v-window-item>
+
+        <!-- 3 페이지 -->
+        <v-window-item :onboarding="3">
+          <v-card-text>
+            <v-text-field label="Password" type="password"></v-text-field>
+            <v-text-field
+              label="Confirm Password"
+              type="password"
+            ></v-text-field>
+            <span class="text-caption grey--text text--darken-1">
+              Please enter a password for your account
+            </span>
+          </v-card-text>
+        </v-window-item>
+
+        <!-- 4 페이지 -->
+        <v-window-item :onboarding="4">
+          <div class="pa-4 d-flex">
+            <h1 class="text-h6 font-weight-light mb-2 align-self-center">
+              {{ credentials.nickname }}
+            </h1>
+            <v-img
+              class="mb-4"
+              contain
+              height="128"
+              src="@/assets/movie_chain_no_text.png"
+            ></v-img>
+          </div>
+        </v-window-item>
       </v-window>
 
       <v-divider></v-divider>
@@ -46,27 +135,16 @@
 
 <script>
 import axios from "axios";
-import Page1 from "@components/accounts/signuppages/Page1.vue";
-import Page2 from "@components/accounts/signuppages/Page2.vue";
-import Page3 from "@components/accounts/signuppages/Page3.vue";
-import Page4 from "@components/accounts/signuppages/Page4.vue";
 
 export default {
   name: "Signup",
-  components: {
-    Page1,
-    Page2,
-    Page3,
-    Page4,
-  },
   data: function () {
     return {
       rules: {
         required: (value) => !!value || "Required.",
         lengthValid: (value) =>
           (value && value.length >= 5) || "Min 5 characters",
-        notConfirmed: (value) =>
-          !(value === this.password) || "비밀번호가 일치하지 않습니다.",
+        notConfirmed: (value) => !(value===this.password) || '비밀번호가 일치하지 않습니다.',
       },
       length: 4,
       onboarding: 0,
