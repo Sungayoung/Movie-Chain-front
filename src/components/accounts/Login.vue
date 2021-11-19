@@ -1,8 +1,7 @@
 <template>
-  <div>
-    <div class="p-3">
-      <h1 style="color: white">Login</h1>
-      <div class="login-box container rounded-lg">
+  <div class="d-flex justify-center">
+    <div>
+      <div class="login-box rounded-lg p-3">
         <div class="px-5 my-2">
           <v-text-field
             autofocus
@@ -12,6 +11,7 @@
             color="cyan darken-4"
             v-model="credentials.username"
             :rules="[rules.required]"
+            class="rounded-lg"
             hide-details="auto"
             @keyup.enter="login"
           ></v-text-field>
@@ -76,6 +76,7 @@ export default {
 
 <style>
 .login-box {
+  width: 300px;
   background: rgba(245, 245, 245, 0.8);
 }
 </style>

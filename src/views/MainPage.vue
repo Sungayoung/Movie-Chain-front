@@ -1,5 +1,6 @@
 <template>
   <div class="container justify-content-center">
+    <v-app-bar background-color="white" height='500' min-height='100' shrink-on-scroll='true'></v-app-bar>
     <v-img
       alt="Vuetify Logo"
       class="shrink mt-1 mx-auto"
