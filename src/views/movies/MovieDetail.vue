@@ -2,7 +2,7 @@
   <div>
     <Review />
     {{ movie }}
-    <v-app>
+    
       <v-rating
         color="warning"
         background-color="warning lighten-1"
@@ -29,7 +29,7 @@
       mdi-heart-outline
      
     </v-icon>
-    </v-app>
+    
     <input type="text" v-model="reviewInput" @keyup.enter="setReview()" />
     <hr />
     <div v-for="(review, idx) in reviewList" :key="idx">
