@@ -1,14 +1,15 @@
 <template>
   <v-app style="background: rgba(0, 0, 0, 0.9)">
-    <v-app-bar app color="teal darken-4" dark>
+    <v-app-bar app color="teal darken-4" >
       <div class="d-flex align-center">
         <v-img
-          alt="Vuetify Name"
+          alt="MovieChain"
           class="shrink mt-1 hidden-sm-and-down"
           contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
+          min-width="50"
+          src="@/assets/movie_chain_no_text.png"
+          width="80"
+          height="50"
         />
         <router-link class="my-link" to="/">Home</router-link> |
         <router-link class="my-link" :to="{ name: 'MainPage' }"
@@ -45,20 +46,16 @@
     </v-app-bar>
 
     <v-main>
-      <MainPage />
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import MainPage from "./views/accounts/MainPage.vue";
 import { mapState } from "vuex";
 import { mapActions } from "vuex";
 export default {
   name: "App",
-  components: {
-    MainPage,
-  },
   methods: {
     ...mapActions(["logOut"]),
     logout: function () {
