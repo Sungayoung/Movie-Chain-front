@@ -46,10 +46,10 @@
 
 <script>
 import axios from "axios";
-import Page1 from "@/components/signuppages/Page1.vue";
-import Page2 from "@/components/signuppages/Page2.vue";
-import Page3 from "@/components/signuppages/Page3.vue";
-import Page4 from "@/components/signuppages/Page4.vue";
+import Page1 from "@components/accounts/signuppages/Page1.vue";
+import Page2 from "@components/accounts/signuppages/Page2.vue";
+import Page3 from "@components/accounts/signuppages/Page3.vue";
+import Page4 from "@components/accounts/signuppages/Page4.vue";
 
 export default {
   name: "Signup",
