@@ -5,6 +5,7 @@ import Signup from "../views/accounts/Signup.vue";
 import Login from "../views/accounts/Login.vue";
 import MovieList from "../views/movies/MovieList";
 import MovieDetail from "../views/movies/MovieDetail";
+import Chatting from "../views/accounts/Chatting"
 
 Vue.use(VueRouter);
 
@@ -35,6 +36,11 @@ const routes = [
     component: MovieDetail,
     props: true,
   },
+  {
+    path: "/accounts/chatting",
+    name: "Chatting",
+    component: Chatting,
+  }
 ];
 
 const router = new VueRouter({
