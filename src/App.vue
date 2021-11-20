@@ -11,25 +11,25 @@
           width="80"
           height="50"
         />
-        <router-link class="my-link" :to="{ name: 'MainPage' }"
+        <router-link class="my-link mx-2" :to="{ name: 'MainPage' }"
           >
           Main</router-link
         >
-        |
+        
         <div v-if="isLogin">
-          <router-link class="my-link" @click.native="logout" to="#"
+          <router-link class="my-link mx-2" @click.native="logout" to="#"
             >Logout</router-link
           >
-          |
-          <router-link class="my-link" :to="{ name: 'MovieList' }"
+        
+          <router-link class="my-link mx-2" :to="{ name: 'MovieList' }"
             >MovieList</router-link
           >
         </div>
         <div v-else>
-          <router-link class="my-link" :to="{ name: 'Signup' }"
+          <router-link class="my-link mx-2" :to="{ name: 'Signup' }"
             >Signup</router-link
           >
-          |
+        
         </div>
       </div>
 
@@ -76,6 +76,7 @@ html {
   background-color: rgba(0, 0, 0, 0.5);
 }
 .my-link {
-  text-decoration: aliceblue;
+  text-decoration: none;
+  color: white !important;
 }
 </style>
