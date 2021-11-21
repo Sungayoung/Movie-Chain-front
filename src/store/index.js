@@ -15,7 +15,7 @@ export default new Vuex.Store({
     LOG_OUT: function (state) {
       state.isLogin = false;
       localStorage.removeItem("jwt")
-      this.$router.push({ name: "Home" });
+      this.$router.push({ name: "MainPage" });
       console.log('--------------')
     },
   },
@@ -39,6 +39,33 @@ export default new Vuex.Store({
         axios({
           method: "get",
           url: `${process.env.VUE_APP_MCS_URL}/movies/`,
+          params,
+        })
+          .then((res) => {
+            // console.log(res.data)
+            resolve(res.data);
+          })
+          .catch((err) => {
+            // console.log(err.data)
+            reject(err.data);
+          });
+      });
+    },
+    getMovieListPage: function ({ commit }, params) {
+      /**
+       * params: {
+       *  filter_by : all, actor, crew, keyword, genre
+       *  filter_id : actor/crew/keyword/genre's id
+       *  order_by : release_date, vote_average, title, -release_date, -vote_average, -title
+       * }
+       */
+      commit;
+      const token = localStorage.getItem("jwt");
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "get",
+          url: `${process.env.VUE_APP_MCS_URL}/movies/page/`,
+          headers: { Authorization: `JWT ${token}` },
           params,
         })
           .then((res) => {

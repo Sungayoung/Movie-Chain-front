@@ -2,6 +2,8 @@
   <v-app style="background: rgba(0, 0, 0, 0.9);color:white;">
     <v-app-bar app color="teal darken-4" >
       <div class="d-flex align-center">
+        <router-link class="my-link mx-2" :to="{ name: 'MainPage' }"
+          >
         <v-img
           alt="MovieChain"
           class="shrink mt-1 hidden-sm-and-down"
@@ -10,7 +12,8 @@
           src="@/assets/movie_chain_no_text.png"
           width="80"
           height="50"
-        />
+        /></router-link
+        >
         <router-link class="my-link mx-2" :to="{ name: 'MainPage' }"
           >
           Main</router-link
@@ -35,6 +38,21 @@
 
       <v-spacer></v-spacer>
 
+<<<<<<< HEAD
+=======
+      <!-- <v-btn
+        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        target="_blank"
+        text
+      >
+        <span class="mr-2">Latest Release</span>
+        <v-icon>mdi-open-in-new</v-icon>
+      </v-btn> -->
+      <div class="my-auto">
+
+      <SearchInput class="my-auto"/>
+      </div>
+>>>>>>> d0919a63ffa4013fa705e1401f3f686d843fcbf9
       <router-link :to="{ name: 'Profile' }">
         <v-avatar>
           <img :src="imgUrl" alt="">
@@ -52,6 +70,8 @@
 import axios from 'axios'
 import { mapState } from "vuex";
 import { mapActions } from "vuex";
+import SearchInput from './components/SearchInput.vue';
+
 export default {
   name: "App",
   data: function () {
@@ -59,6 +79,9 @@ export default {
       userProfile: null,
       imgUrl: null,
     }
+  },
+  components: {
+    SearchInput,
   },
   created: function () {
     this.getProfile()
