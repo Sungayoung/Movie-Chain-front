@@ -38,8 +38,6 @@
 
       <v-spacer></v-spacer>
 
-<<<<<<< HEAD
-=======
       <!-- <v-btn
         href="https://github.com/vuetifyjs/vuetify/releases/latest"
         target="_blank"
@@ -52,7 +50,6 @@
 
       <SearchInput class="my-auto"/>
       </div>
->>>>>>> d0919a63ffa4013fa705e1401f3f686d843fcbf9
       <router-link :to="{ name: 'Profile' }">
         <v-avatar>
           <img :src="imgUrl" alt="">
