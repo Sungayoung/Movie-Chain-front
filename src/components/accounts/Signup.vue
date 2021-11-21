@@ -4,7 +4,9 @@
     <!-- 점 페이지네이션 -->
     <v-item-group v-model="onboarding" class="text-center" mandatory>
       <v-item v-for="n in length" :key="`btn-${n}`">
-        <v-icon v-if="onboarding === n - 1" color="teal darken-2">mdi-record</v-icon>
+        <v-icon v-if="onboarding === n - 1" color="teal darken-2"
+          >mdi-record</v-icon
+        >
         <v-icon v-else color="white">mdi-record</v-icon>
       </v-item>
     </v-item-group>
@@ -93,37 +95,76 @@
 
         <!-- 3 페이지: 나만의 영화 3개 -->
         <v-window-item :onboarding="3">
+          <v-autocomplete
+          color='green'
+            hint="몰라욤"
+            height="150"
+            width='150'
+            class="d-flex row"
+            :disabled="isUpdating"
+            v-model="nowMovie"
+            :items="movieList"
+            item-text="title"
+            return-object
+            :change="searchMatrix"
+            label="My Movies"
+            hide-spin-buttons
+          >
+            
+            <template v-slot:item="data">
+              <div style="width:300px">
+                <template>
+                  <div >
+                    <v-list-item-image>
+                      <v-img
+                        :src="
+                          'https://image.tmdb.org/t/p/w500' +
+                          data.item.poster_path
+                        "
+                        width="100"
+                      />
+                    </v-list-item-image>
+                    <v-list-item-content>
+                      <v-list-item-title
+                        v-html="data.item.title"
+                      ></v-list-item-title>
+                    </v-list-item-content>
+                  </div>
+                </template>
+              </div>
+            </template>
+          </v-autocomplete>
+
           <v-card-text>
             <h1 class="text-h6 font-weight-light mb-2 align-self-center">
               {{ credentials.nickname }}
             </h1>
-            <v-autocomplete
-            v-model="values"
-            :items="items"
-            dense
-            chips
-            small-chips
-            label="Solo"
-            multiple
-            solo
-          ></v-autocomplete>
+
+            <h1
+              v-for="movie in credentials.personal_movies"
+              :key="movie"
+              @click="delMovie"
+            >
+              {{ movie }}
+            </h1>
           </v-card-text>
         </v-window-item>
 
         <!-- 4 페이지: 회원가입 완료 -->
         <v-window-item :onboarding="4">
-          <div class="pa-4 d-flex">
-            <h1 class="text-h6 font-weight-light mb-2 align-self-center">
-              {{ credentials.nickname }}
-            </h1>
-            <v-img
-              class="mb-4"
-              contain
-              height="128"
+            <div class='text-center'>
+              MovieChain과 연결되었습니다.
+              </div>
+          <div class="pa-4 d-flex justify-content-around">
+            <div class="text-h6 font-weight-light mb-2 align-self-center" style="width:150px">
+              {{ credentials.nickname }} 강동옥
+            </div>
+            <img
+            style='width: 150px;'
               src="@/assets/movie_chain_no_text.png"
-            ></v-img>
-            <p>MovieChain과 연결되었습니다.</p>
+            />
           </div>
+
         </v-window-item>
       </v-window>
 
@@ -153,11 +194,41 @@
 
 <script>
 import axios from "axios";
+import { mapActions } from "vuex";
 
 export default {
   name: "Signup",
   data: function () {
+    const srcs = {
+      1: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+      2: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
+      3: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
+      4: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
+      5: "https://cdn.vuetifyjs.com/images/lists/5.jpg",
+    };
+
     return {
+      autoUpdate: true,
+      friends: ["Sandra Adams", "Britta Holt"],
+      isUpdating: false,
+      name: "Midnight Crew",
+      people: [
+        { header: "Group 1" },
+        { name: "Sandra Adams", group: "Group 1", avatar: srcs[1] },
+        { name: "Ali Connors", group: "Group 1", avatar: srcs[2] },
+        { name: "Trevor Hansen", group: "Group 1", avatar: srcs[3] },
+        { name: "Tucker Smith", group: "Group 1", avatar: srcs[2] },
+        { divider: true },
+        { header: "Group 2" },
+        { name: "Britta Holt", group: "Group 2", avatar: srcs[4] },
+        { name: "Jane Smith ", group: "Group 2", avatar: srcs[5] },
+        { name: "John Smith", group: "Group 2", avatar: srcs[1] },
+        { name: "Sandra Williams", group: "Group 2", avatar: srcs[3] },
+      ],
+      title: "The summer breeze",
+
+      movieList: [],
+      nowMovie: null,
       genreList: [
         { id: 12, name: "모험" },
         { id: 14, name: "판타지" },
@@ -195,10 +266,35 @@ export default {
         password: null,
         passwordConfirmation: null,
         like_genres: [],
+        personal_movies: [],
       },
     };
   },
+  created: function () {
+    const params = {
+      filter_by: "all",
+    };
+    this.getMovieList(params)
+      .then((res) => {
+        // console.log(res);
+        this.movieList = res;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
   methods: {
+    ...mapActions(["getMovieList"]),
+    searchMatrix: function () {
+      document.querySelectorAll(".v-list").classList.add("row");
+      document.querySelectorAll(".v-list-item").classList.add("col-3");
+    },
+    delMovie: function (movieId) {
+      const idx = this.credentials.personal_movies.findIndex(
+        (item) => item === movieId
+      );
+      this.credentials.personal_movies.splice(idx, 1);
+    },
     addOrDelGenre: function (genreId) {
       if (this.credentials.like_genres.includes(genreId)) {
         const idx = this.credentials.like_genres.findIndex(
@@ -241,6 +337,14 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+  },
+
+  watch: {
+    nowMovie: function () {
+      if (this.credentials.personal_movies.length < 3) {
+        this.credentials.personal_movies.push(this.nowMovie.id);
+      }
     },
   },
 };

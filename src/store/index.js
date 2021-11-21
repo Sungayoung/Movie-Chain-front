@@ -35,12 +35,10 @@ export default new Vuex.Store({
        * }
        */
       commit;
-      const token = localStorage.getItem("jwt");
       return new Promise((resolve, reject) => {
         axios({
           method: "get",
           url: `${process.env.VUE_APP_MCS_URL}/movies/`,
-          headers: { Authorization: `JWT ${token}` },
           params,
         })
           .then((res) => {
