@@ -199,36 +199,12 @@ import { mapActions } from "vuex";
 export default {
   name: "Signup",
   data: function () {
-    const srcs = {
-      1: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-      2: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-      3: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-      4: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-      5: "https://cdn.vuetifyjs.com/images/lists/5.jpg",
-    };
-
     return {
-      autoUpdate: true,
-      friends: ["Sandra Adams", "Britta Holt"],
-      isUpdating: false,
-      name: "Midnight Crew",
-      people: [
-        { header: "Group 1" },
-        { name: "Sandra Adams", group: "Group 1", avatar: srcs[1] },
-        { name: "Ali Connors", group: "Group 1", avatar: srcs[2] },
-        { name: "Trevor Hansen", group: "Group 1", avatar: srcs[3] },
-        { name: "Tucker Smith", group: "Group 1", avatar: srcs[2] },
-        { divider: true },
-        { header: "Group 2" },
-        { name: "Britta Holt", group: "Group 2", avatar: srcs[4] },
-        { name: "Jane Smith ", group: "Group 2", avatar: srcs[5] },
-        { name: "John Smith", group: "Group 2", avatar: srcs[1] },
-        { name: "Sandra Williams", group: "Group 2", avatar: srcs[3] },
-      ],
-      title: "The summer breeze",
-
+      // personal movie 선택창에 필요힌 변수들
       movieList: [],
       nowMovie: null,
+
+      // 선호장르 종류
       genreList: [
         { id: 12, name: "모험" },
         { id: 14, name: "판타지" },
@@ -250,6 +226,8 @@ export default {
         { id: 10752, name: "전쟁" },
         { id: 10770, name: "TV 영화" },
       ],
+
+      // 유효성 검증
       rules: {
         required: (value) => !!value || "Required.",
         lengthValid: (value) =>
@@ -257,8 +235,12 @@ export default {
         notConfirmed: (value) =>
           !(value === this.password) || "비밀번호가 일치하지 않습니다.",
       },
+
+      // 회원가입 절차 페이지네이션
       length: 4,
       onboarding: 0,
+
+      // 회원가입에 필요한 정보들 
       credentials: {
         username: null,
         nickname: null,

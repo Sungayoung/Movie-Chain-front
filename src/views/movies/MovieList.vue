@@ -1,37 +1,53 @@
 <template>
   <div>
-    <button @click="getMovie">임시버튼</button>
-    <input type="text" @keyup.enter="getSearch" v-model="query" />
-    <hr />
-    <div v-for="(movie, idx) in movies" :key="idx"
-    @click="moveDetail(movie.id)">
-    {{ movie.id }}
-    </div>
-    <div v-for="(result, idx) in results" :key="idx">
-      {{ result }}
-    </div>
+    <div >
+      <SearchInput />
+      </div>
+    <MovieCardMatrix :movieList="movies" />
+    <!-- <v-list v-for="(movieList, idx) in movies" :key='idx'>
+    </v-list> -->
+     <v-item-group v-model="onboarding" class="text-center" mandatory>
+      <v-item v-for="n in length" :key="`btn-${n}`">
+        <v-icon v-if="onboarding === n - 1" color="teal darken-2"
+          >mdi-record</v-icon
+        >
+        <v-icon v-else color="white">mdi-record</v-icon>
+      </v-item>
+    </v-item-group>
   </div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
+import MovieCardMatrix from "../../components/movies/MovieCardMatrix.vue";
+import SearchInput from "../../components/SearchInput.vue";
 
 export default {
   name: "MovieList",
   data: function () {
     return {
-      query: null,
+      dataPerPage: 18,
+      page: 1,
+
       movies: [],
       results: [],
     };
   },
+  components: {
+    MovieCardMatrix,
+    SearchInput,
+  },
+  created: function () {
+    this.getMovie();
+  },
   methods: {
-    ...mapActions(["getMovieList", "search"]),
+    ...mapActions(["getMovieListPage", "search"]),
     getMovie: function () {
       const params = {
-        filter_by: 'all',
-      }
-      this.getMovieList(params)
+        filter_by: "all",
+        page: this.page,
+      };
+      this.getMovieListPage(params)
         .then((res) => {
           // console.log(res);
           this.movies = res;
@@ -49,14 +65,11 @@ export default {
           console.log(err);
         });
     },
-    moveDetail: function (id) {
-      this.$router.push({
-        name: 'MovieDetail',
-        params: {
-          movieId: id
-        }
-      })
-    }
+  },
+  computed: {
+    pageCount: function () {
+      return Math.ceil(this.movies.length / this.dataPerPage);
+    },
   },
 };
 </script>

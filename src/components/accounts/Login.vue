@@ -63,7 +63,6 @@ export default {
         .then((res) => {
           console.log(res);
           localStorage.setItem("jwt", res.data.token);
-          this.$router.push({ name: "Home" });
           this.logIn();
         })
         .catch((err) => {
