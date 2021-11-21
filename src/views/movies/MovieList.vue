@@ -1,36 +1,44 @@
 <template>
   <div>
-    <button @click="getMovie">임시버튼</button>
     <input type="text" @keyup.enter="getSearch" v-model="query" />
-    <hr />
-    <div v-for="(movie, idx) in movies" :key="idx"
-    @click="moveDetail(movie.id)">
-    {{ movie.id }}
-    </div>
-    <div v-for="(result, idx) in results" :key="idx">
-      {{ result }}
+    <v-list v-for="(movieList, idx) in movies" :key='idx'>
+      
+      <MovieCardMatrix :movieList="movieList" />
+    </v-list>
+    <div class="text-center">
+      <v-pagination v-model="page" :length="pageCount"></v-pagination>
     </div>
   </div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
+import MovieCardMatrix from "../../components/movies/MovieCardMatrix.vue";
 
 export default {
   name: "MovieList",
   data: function () {
     return {
+      dataPerPage: 18,
+      page: 1,
+
       query: null,
       movies: [],
       results: [],
     };
   },
+  components: {
+    MovieCardMatrix,
+  },
+  created: function () {
+    this.getMovie();
+  },
   methods: {
     ...mapActions(["getMovieList", "search"]),
     getMovie: function () {
       const params = {
-        filter_by: 'all',
-      }
+        filter_by: "all",
+      };
       this.getMovieList(params)
         .then((res) => {
           // console.log(res);
@@ -49,14 +57,11 @@ export default {
           console.log(err);
         });
     },
-    moveDetail: function (id) {
-      this.$router.push({
-        name: 'MovieDetail',
-        params: {
-          movieId: id
-        }
-      })
-    }
+  },
+  computed: {
+    pageCount: function () {
+      return Math.ceil(this.movies.length / this.dataPerPage);
+    },
   },
 };
 </script>

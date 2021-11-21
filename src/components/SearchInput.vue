@@ -1,7 +1,23 @@
 <template>
-  <div>
-    <input type="text" style="color: white" v-model="query" @keyup.enter="search">
-    <button @click="search">검색</button>
+  <div class="d-flex justify-content-center">
+    <div class="ms-5">
+      <v-text-field
+        class="d-inline-flex ms-5"
+        v-model="query"
+        placeholder="영화, 감독, 인물을 검색하세요."
+        solo
+        clearable
+        filled
+        color="grey"
+        dense
+        background-color="white"
+        style="width: 300px"
+        @keyup.enter="search"
+      ></v-text-field>
+      <v-icon large color="white" @click="search" class="align-center ms-3"
+        >mdi-magnify</v-icon
+      >
+    </div>
   </div>
 </template>
 
@@ -11,19 +27,19 @@ export default {
   data: function () {
     return {
       query: null,
-    }
+    };
   },
   components: {},
   methods: {
     search: function () {
       this.$router.push({
-        name: 'MovieSearchResult',
+        name: "MovieSearchResult",
         params: {
-          query: this.query
-        }
-      })
-    }
-  }
+          query: this.query,
+        },
+      });
+    },
+  },
 };
 </script>
 

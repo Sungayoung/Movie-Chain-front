@@ -2,6 +2,8 @@
   <v-app style="background: rgba(0, 0, 0, 0.9);color:white;">
     <v-app-bar app color="teal darken-4" >
       <div class="d-flex align-center">
+        <router-link class="my-link mx-2" :to="{ name: 'MainPage' }"
+          >
         <v-img
           alt="MovieChain"
           class="shrink mt-1 hidden-sm-and-down"
@@ -10,7 +12,8 @@
           src="@/assets/movie_chain_no_text.png"
           width="80"
           height="50"
-        />
+        /></router-link
+        >
         <router-link class="my-link mx-2" :to="{ name: 'MainPage' }"
           >
           Main</router-link

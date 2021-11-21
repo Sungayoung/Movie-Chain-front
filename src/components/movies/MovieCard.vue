@@ -1,6 +1,6 @@
 <template>
   <div @click="moveDetail">
-    <img :src="imgURL" alt="" class="movie-img">
+    <img :src="imgURL? imgURL : './assets/no_image.png'" alt="영화포스터" class="movie-img">
   </div>
 </template>
 
@@ -35,7 +35,8 @@ export default {
 
 <style scoped>
   .movie-img {
-    width: 300px;
-    height: 500px;
+    width:120px;
+    height: 180px;
+    object-fit: fill;
   }
 </style>
