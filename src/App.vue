@@ -29,21 +29,26 @@
           <router-link class="my-link mx-2" :to="{ name: 'Signup' }"
             >Signup</router-link
           >
-        
         </div>
 
       </div>
 
       <v-spacer></v-spacer>
 
-      <v-btn
+      <!-- <v-btn
         href="https://github.com/vuetifyjs/vuetify/releases/latest"
         target="_blank"
         text
       >
         <span class="mr-2">Latest Release</span>
         <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      </v-btn> -->
+      <router-link :to="{ name: 'Profile' }">
+
+        <v-avatar>
+          <img :src="imgUrl" alt="">
+        </v-avatar>
+      </router-link>
     </v-app-bar>
 
     <v-main>
@@ -53,19 +58,46 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { mapState } from "vuex";
 import { mapActions } from "vuex";
 export default {
   name: "App",
+  data: function () {
+    return {
+      userProfile: null,
+      imgUrl: null,
+    }
+  },
+  created: function () {
+    this.getProfile()
+  },
   methods: {
     ...mapActions(["logOut"]),
     logout: function () {
       this.logOut();
     },
+    getProfile: function () {
+      const token = localStorage.getItem('jwt')
+      axios({
+        method: 'get',
+        url: `${process.env.VUE_APP_MCS_URL}/accounts/profile/`,
+        headers: { Authorization: `JWT ${token}` },
+      })
+      .then( res => {
+        console.log(res)
+        this.userProfile = res.data
+        this.imgUrl = `${process.env.VUE_APP_MCS_URL}${this.userProfile.profile_img}`
+      })
+      .catch( err => {
+        console.log(err)
+      })
+    },
   },
   computed: {
     ...mapState(["isLogin"]),
   },
+
 };
 </script>
 

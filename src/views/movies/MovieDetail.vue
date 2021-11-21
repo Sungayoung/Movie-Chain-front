@@ -1,56 +1,28 @@
 <template>
   <div>
-    <Review />
     {{ movie }}
-    
-      <v-rating
-        color="warning"
-        background-color="warning lighten-1"
-        empty-icon="mdi-heart-outline"
-        full-icon="mdi-heart"
-        half-icon="mdi-heart-half-full"
-        half-increments
-        hover
-        length="5"
-        size="50"
-        v-model="value"
-      ></v-rating>
-      {{ value }}
-      <v-icon
-      large
-      color="green darken-2"
-    >
-      mdi-domain
-    </v-icon>
-    <v-icon
-      large
-      color="green darken-2"
-    >
-      mdi-heart-outline
-     
-    </v-icon>
-    
-    <input type="text" v-model="reviewInput" @keyup.enter="setReview()" />
-    <hr />
-    <div v-for="(review, idx) in reviewList" :key="idx">
-      <div>
-        <input
-          type="text"
-          v-model="review.content"
-          @keyup.enter="editReview(review.id, review.content)"
-        />
-        <button @click="delReview(review.id)">삭제</button>
-        <input
-          type="text"
-          v-model="commentInput"
-          @keyup.enter="setComment(review.id)"
-        />
-      </div>
-    </div>
+
+    <v-rating
+      color="warning"
+      background-color="warning lighten-1"
+      empty-icon="mdi-heart-outline"
+      full-icon="mdi-heart"
+      half-icon="mdi-heart-half-full"
+      half-increments
+      hover
+      length="5"
+      size="50"
+      v-model="value"
+    ></v-rating>
+    {{ value }}
+    <v-icon large color="green darken-2"> mdi-domain </v-icon>
+    <v-icon large color="green darken-2"> mdi-heart-outline </v-icon>
+    <review-list :movieId="movieId"> </review-list>
   </div>
 </template>
 
 <script>
+import ReviewList from "@/components/reviews/ReviewList.vue";
 import { mapActions } from "vuex";
 
 export default {
@@ -64,6 +36,9 @@ export default {
       reviewList: [],
       value: null,
     };
+  },
+  components: {
+    ReviewList,
   },
   props: { movieId: String },
   mounted: function () {

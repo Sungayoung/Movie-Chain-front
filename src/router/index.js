@@ -5,7 +5,9 @@ import Login from "@/components/accounts/Login.vue";
 import MainPage from "../views/MainPage.vue";
 import MovieList from "../views/movies/MovieList";
 import MovieDetail from "../views/movies/MovieDetail";
-import Chatting from "../views/accounts/Chatting"
+import UserProfile from "../views/profile/UserProfile";
+import PeopleProfile from "../views/profile/PeopleProfile";
+import MovieSearchResult from "@/views/movies/MovieSearchResult";
 
 Vue.use(VueRouter);
 
@@ -37,9 +39,20 @@ const routes = [
     props: true,
   },
   {
-    path: "/accounts/chatting",
-    name: "Chatting",
-    component: Chatting,
+    path: "/accounts/peopleProfile",
+    name: "peopleProfile",
+    component: PeopleProfile
+  },
+  {
+    path: "/search/:query",
+    name: 'MovieSearchResult',
+    component: MovieSearchResult,
+    props: true,
+  },
+  {
+    path: "/accounts/profile",
+    name: "Profile",
+    component: UserProfile,
   }
 ];
 
