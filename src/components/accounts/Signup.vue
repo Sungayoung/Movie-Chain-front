@@ -94,14 +94,19 @@
         <!-- 3 페이지: 나만의 영화 3개 -->
         <v-window-item :onboarding="3">
           <v-card-text>
-            <v-text-field label="Password" type="password"></v-text-field>
-            <v-text-field
-              label="Confirm Password"
-              type="password"
-            ></v-text-field>
-            <span class="text-caption grey--text text--darken-1">
-              Please enter a password for your account
-            </span>
+            <h1 class="text-h6 font-weight-light mb-2 align-self-center">
+              {{ credentials.nickname }}
+            </h1>
+            <v-autocomplete
+            v-model="values"
+            :items="items"
+            dense
+            chips
+            small-chips
+            label="Solo"
+            multiple
+            solo
+          ></v-autocomplete>
           </v-card-text>
         </v-window-item>
 
@@ -117,6 +122,7 @@
               height="128"
               src="@/assets/movie_chain_no_text.png"
             ></v-img>
+            <p>MovieChain과 연결되었습니다.</p>
           </div>
         </v-window-item>
       </v-window>
