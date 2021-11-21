@@ -1,7 +1,6 @@
 <template>
   <div>
     {{ movie }}
-
     <v-rating
       color="warning"
       background-color="warning lighten-1"
