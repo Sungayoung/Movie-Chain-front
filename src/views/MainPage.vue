@@ -1,15 +1,15 @@
 <template>
   <div class="container justify-content-center">
-    <v-img
-      alt="Vuetify Logo"
-      class="shrink mt-1 mx-auto"
-      contain
+    <img
+      alt="MovieChain Logo"
+      class="d-flex justif mx-auto"
       src="@/assets/movie_chain.png"
-      transition="scale-transition"
       width="200"
     />
     <div v-if="isLogin">
-      <router-view/>
+      <MovieCard/>
+      <SearchInput/>
+      
     </div>
     <div v-else>
       <Login />
@@ -18,12 +18,16 @@
 </template>
 
 <script>
-import Login from "./Login.vue";
 import { mapState } from "vuex";
+import Login from '../components/accounts/Login.vue';
+import MovieCard from '../components/movies/MovieCard.vue';
+import SearchInput from '../components/SearchInput.vue';
 export default {
   name: "MainPage",
   components: {
     Login,
+    SearchInput,
+    MovieCard
   },
   computed: {
     ...mapState(["isLogin"]),

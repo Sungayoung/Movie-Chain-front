@@ -1,30 +1,35 @@
 <template>
-  <v-app style="background: rgba(255, 255, 255m 0.9)">
-    <v-app-bar app color="teal darken-4" dark>
+  <v-app style="background: rgba(0, 0, 0, 0.9)">
+    <v-app-bar app color="teal darken-4" >
       <div class="d-flex align-center">
         <v-img
-          alt="Vuetify Name"
+          alt="MovieChain"
           class="shrink mt-1 hidden-sm-and-down"
           contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
+          min-width="50"
+          src="@/assets/movie_chain_no_text.png"
+          width="80"
+          height="50"
         />
-        <router-link class="my-link" to="/">Home</router-link> |
-        <router-link class="my-link" :to="{ name: 'MainPage' }"
-          >Main</router-link
+        <router-link class="my-link mx-2" :to="{ name: 'MainPage' }"
+          >
+          Main</router-link
         >
-        |
+        
         <div v-if="isLogin">
-          <router-link class="my-link" @click.native="logout" to="#">Logout</router-link> |
-          <router-link class="my-link" :to="{ name: 'MovieList' }">MovieList</router-link> | 
-          <router-link :to="{name: 'Chatting'}">Chatting</router-link>
+          <router-link class="my-link mx-2" @click.native="logout" to="#"
+            >Logout</router-link
+          >
+        
+          <router-link class="my-link mx-2" :to="{ name: 'MovieList' }"
+            >MovieList</router-link
+          >
         </div>
         <div v-else>
-          <router-link class="my-link" :to="{ name: 'Signup' }"
+          <router-link class="my-link mx-2" :to="{ name: 'Signup' }"
             >Signup</router-link
           >
-          |
+        
         </div>
 
       </div>
@@ -42,20 +47,16 @@
     </v-app-bar>
 
     <v-main>
-      <MainPage />
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import MainPage from "./views/accounts/MainPage.vue";
 import { mapState } from "vuex";
 import { mapActions } from "vuex";
 export default {
   name: "App",
-  components: {
-    MainPage,
-  },
   methods: {
     ...mapActions(["logOut"]),
     logout: function () {
@@ -76,6 +77,7 @@ html {
   background-color: rgba(0, 0, 0, 0.5);
 }
 .my-link {
-  text-decoration: aliceblue;
+  text-decoration: none;
+  color: white !important;
 }
 </style>
