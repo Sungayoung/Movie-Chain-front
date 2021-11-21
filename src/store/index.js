@@ -51,6 +51,33 @@ export default new Vuex.Store({
           });
       });
     },
+    getMovieListPage: function ({ commit }, params) {
+      /**
+       * params: {
+       *  filter_by : all, actor, crew, keyword, genre
+       *  filter_id : actor/crew/keyword/genre's id
+       *  order_by : release_date, vote_average, title, -release_date, -vote_average, -title
+       * }
+       */
+      commit;
+      const token = localStorage.getItem("jwt");
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "get",
+          url: `${process.env.VUE_APP_MCS_URL}/movies/page/`,
+          headers: { Authorization: `JWT ${token}` },
+          params,
+        })
+          .then((res) => {
+            // console.log(res.data)
+            resolve(res.data);
+          })
+          .catch((err) => {
+            // console.log(err.data)
+            reject(err.data);
+          });
+      });
+    },
     search: function ({ commit }, query) {
       commit;
       const token = localStorage.getItem("jwt");

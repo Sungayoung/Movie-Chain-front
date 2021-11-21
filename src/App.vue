@@ -46,6 +46,10 @@
         <span class="mr-2">Latest Release</span>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn> -->
+      <div class="my-auto">
+
+      <SearchInput class="my-auto"/>
+      </div>
       <router-link :to="{ name: 'Profile' }">
 
         <v-avatar>
@@ -64,6 +68,8 @@
 import axios from 'axios'
 import { mapState } from "vuex";
 import { mapActions } from "vuex";
+import SearchInput from './components/SearchInput.vue';
+
 export default {
   name: "App",
   data: function () {
@@ -71,6 +77,9 @@ export default {
       userProfile: null,
       imgUrl: null,
     }
+  },
+  components: {
+    SearchInput,
   },
   created: function () {
     this.getProfile()

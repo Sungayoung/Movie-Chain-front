@@ -27,7 +27,5 @@ export default {
 </script>
 
 <style>
-.d {
-  margin:auto
-}
+
 </style>
