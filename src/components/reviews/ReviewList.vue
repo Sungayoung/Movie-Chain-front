@@ -1,11 +1,16 @@
 <template>
   <div>
-    <input type="text" v-model="reviewInput" style="color: white" @keyup.enter="setReview">
-    <review
-    v-for="review in reviewList"
-    :key="review.id"
-    :review="review"
-    @reloadReview="getReviewList"></review>
+    <v-text-field 
+    v-model="reviewInput"
+    @keyup.enter="setReview()"
+    ></v-text-field>
+    <v-list>
+      <review
+      v-for="review in reviewList"
+      :key="review.id"
+      :review="review"
+      @reload-review="getReviewList"></review>
+    </v-list>  
   </div>
 </template>
 
@@ -38,6 +43,7 @@ export default {
       this.getReview(this.movieId)
       .then( res => {
         this.reviewList = res
+        console.log(this.reviewList)
       })
     },
     setReview: function () {

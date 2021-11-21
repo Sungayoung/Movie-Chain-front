@@ -51,7 +51,6 @@
       <SearchInput class="my-auto"/>
       </div>
       <router-link :to="{ name: 'Profile' }">
-
         <v-avatar>
           <img :src="imgUrl" alt="">
         </v-avatar>
