@@ -10,29 +10,31 @@
         class="pa-4"
         show-arrows
       >
-        <movie-card
+        <people-card
         v-for="idx in maxLength"
         :key="idx"
-        :movie="movies[idx-1]"
+        :person="people[idx-1]"
         class="ma-4">
-        </movie-card>
+        </people-card>
       </v-slide-group>
     </v-sheet>
   </div>
 </template>
 
 <script>
-import MovieCard from "./MovieCard.vue";
+import PeopleCard from "./PeopleCard.vue";
 export default {
-  name: "MovieCardList",
+  name: "PeopleCardList",
   props: {
-      movies: Array,
-      maxLength: Number,
+    people: Array,
+    maxLength: Number,
   },
   components: {
-    MovieCard,
+    PeopleCard,
   },
 };
 </script>
 
-<style></style>
+<style>
+
+</style>
