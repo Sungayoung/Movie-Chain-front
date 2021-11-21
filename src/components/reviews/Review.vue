@@ -19,6 +19,11 @@
             {{ review.content }}
           </v-list-item-subtitle>
         </v-list-item-content>
+         
+        <!-- 좋아요 버튼 : 해당 리뷰를 좋아요 한다 -->
+        <v-list-item-icon @click="likeReview">
+          <v-icon class="m-2" color="red" large v-text="review.isLiked ? 'mdi-heart' : 'mdi-heart-outline'"></v-icon>
+        </v-list-item-icon>
         
         <!-- 수정버튼 : editMode 값을 토글시킨다 -->
         <v-list-item-icon v-if="review.isWriter" @click="modeChange">
@@ -41,6 +46,7 @@
 <script>
 import CommentList from "./CommentList.vue";
 import { mapActions } from 'vuex'
+import axios from 'axios'
 export default {
   name: "Review",
   components: {
@@ -83,8 +89,19 @@ export default {
         this.review.content = res.content
         this.editMode = false
       })
+    },
+    likeReview: function () {
+      const token = localStorage.getItem("jwt");
+      axios({
+        method: 'post',
+        url: `${process.env.VUE_APP_MCS_URL}/movies/like-review/`,
+        headers: {Authorization : `JWT ${token}`},
+        data: { reviewId: this.review.id }
+      })
+      .then( res => {
+        this.review = res.data
+      })
     }
-
   },
   computed: {
     imgUrl: function () {
