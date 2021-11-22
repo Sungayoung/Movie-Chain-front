@@ -40,9 +40,9 @@
             <div class="d-flex">
               <div class="container">
 
-            <router-link :to="{ name: 'Profile' }">
+            <router-link v-if="userInfo" :to="{ name: 'Profile' , params: {nickname: userInfo.userNickname}}">
               <v-avatar>
-                <img :src="imgUrl" alt="" />
+                <img :src="imgUrl" alt="">
               </v-avatar>
             </router-link>
               </div>
@@ -50,6 +50,10 @@
           </div>
         </div>
       </div>
+      
+    </v-app-bar>
+
+    <v-main>
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -74,32 +78,29 @@ export default {
     SearchInput,
   },
   created: function () {
-    this.getProfile();
+    if(this.isLogin) {
+      this.logIn()
+    }
   },
   methods: {
-    ...mapActions(["logOut"]),
+    ...mapActions(["logOut", 'logIn']),
     logout: function () {
       this.logOut();
-    },
-    getProfile: function () {
-      const token = localStorage.getItem("jwt");
-      axios({
-        method: "get",
-        url: `${process.env.VUE_APP_MCS_URL}/accounts/profile/`,
-        headers: { Authorization: `JWT ${token}` },
-      })
-        .then((res) => {
-          console.log(res);
-          this.userProfile = res.data;
-          this.imgUrl = `${process.env.VUE_APP_MCS_URL}${this.userProfile.profile_img}`;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
   },
   computed: {
     ...mapState(["isLogin"]),
+    ...mapGetters(['userInfo']),
+    imgUrl: function () {
+      console.log(this.userInfo)
+      if (this.userInfo){
+
+        return `${process.env.VUE_APP_MCS_URL}${this.userInfo.profile_img}`
+      }
+      else{
+        return null
+      }
+    },
   },
 };
 

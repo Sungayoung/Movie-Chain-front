@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="movie">
     {{ movie }}
     <v-rating
       color="warning"
@@ -7,20 +7,36 @@
       empty-icon="mdi-heart-outline"
       full-icon="mdi-heart"
       half-icon="mdi-heart-half-full"
-      half-increments
       hover
+      half-increments
       length="5"
       size="50"
-      v-model="value"
+      v-model="rank"
+      @input="setRank"
     ></v-rating>
-    {{ value }}
-    <v-icon large color="green darken-2"> mdi-domain </v-icon>
-    <v-icon large color="green darken-2"> mdi-heart-outline </v-icon>
-    <review-list :movieId="movieId"> </review-list>
+    {{ rank }}
+    <v-btn color="primary" dark @click="saveMovie">
+      {{ movie.saveCnt }}
+      <v-icon dark right v-text="movie.isSaved ? 'mdi-bookmark-check' : 'mdi-bookmark-check-outline'"></v-icon>
+    </v-btn>
+    <v-btn color="red" dark @click="likeMovie">
+      {{ movie.likeCnt }}
+      <v-icon dark right v-text="movie.isLiked ? 'mdi-heart' : 'mdi-heart-outline'"></v-icon>
+    </v-btn>
+
+    
+    <v-icon large color="red lighten-2">  </v-icon>
+    <review-list 
+      :reviewList="reviewList"
+      :myReview="myReview"
+      :reviewCnt="reviewCnt"
+      :movieId="movieId"
+      @reload-review="getReviewList"> </review-list>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 import ReviewList from "@/components/reviews/ReviewList.vue";
 import { mapActions } from "vuex";
 
@@ -29,29 +45,40 @@ export default {
   data: function () {
     return {
       movie: null,
-      reviewInput: null,
-      commentInput: null,
-      reviewEditInput: null,
-      reviewList: [],
-      value: null,
+      rank: null,
+      myReview: null,
+      reviewList: null,
+      reviewCnt: null,
     };
   },
   components: {
     ReviewList,
+    // movieCard,
   },
   props: { movieId: String },
-  mounted: function () {
+  created: function () {
     this.getMovie(), this.getReviewList();
   },
   methods: {
     ...mapActions([
       "getMovieDetail",
-      "createReview",
-      "getReview",
-      "createComment",
-      "deleteReview",
-      "updateReview",
+      'getReview',
+      'createReview',
+      'updateReview',
     ]),
+    getReviewList: function () {
+      this.getReview(this.movieId)
+      .then( res => {
+        this.myReview = res.myReview
+        if (res.myRank.length != 0) {
+          console.log(res.myRank)
+          this.rank = res.myRank[0].rank / 2
+        }
+        this.reviewList = res.reviews
+        this.reviewCnt = res.reviewCnt
+        console.log(res)
+      })
+    },
     getMovie: function () {
       console.log(this.movieId);
       this.getMovieDetail(this.movieId)
@@ -63,67 +90,62 @@ export default {
           console.log(err);
         });
     },
-    setReview: function () {
-      const data = {
-        movieId: this.movieId,
-        params: {
-          content: this.reviewInput,
-        },
-      };
-      this.createReview(data).then((res) => {
-        console.log(res);
-        this.getReviewList();
-      });
+    likeMovie: function () {
+      const token = localStorage.getItem("jwt");
+      axios({
+        method: 'post',
+        url: `${process.env.VUE_APP_MCS_URL}/movies/like-movie/`,
+        headers: {Authorization : `JWT ${token}`},
+        data: { movieId: this.movie.id }
+      })
+      .then( res => {
+        this.movie.likeCnt = res.data.likeCnt
+        this.movie.isLiked = res.data.isLiked
+      })
     },
-    getReviewList: function () {
-      this.getReview(this.movieId)
-        .then((res) => {
-          this.reviewList = res;
+    saveMovie: function () {
+      const token = localStorage.getItem("jwt");
+      axios({
+        method: 'post',
+        url: `${process.env.VUE_APP_MCS_URL}/movies/bookmark-movie/`,
+        headers: {Authorization : `JWT ${token}`},
+        data: { movieId: this.movie.id }
+      })
+      .then( res => {
+        this.movie.saveCnt = res.data.saveCnt
+        this.movie.isSaved = res.data.isSaved
+      })
+    },
+    setRank: function () {
+      console.log('hello')
+      if(this.myReview.length == 0) {
+        let data = {
+          movieId: this.movieId,
+          params: {
+            rank: this.rank * 2
+          }
+        }
+        this.createReview(data)
+        .then( () => {
+          this.getReviewList()
         })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    setComment: function (reviewId) {
-      const data = {
-        reviewId: reviewId,
-        params: {
-          content: this.commentInput,
-        },
-      };
-      this.createComment(data)
-        .then((res) => {
-          console.log(res);
+      }
+      else {
+        let data = {
+          reviewId: this.myReview[0].id,
+          params: {
+            rank: this.rank * 2
+          }
+        }
+        if (this.rank === this.myReview[0].rank / 2) {
+          data.params.rank = null
+        }
+        this.updateReview(data)
+        .then ( () => {
+          this.getReviewList()
         })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    delReview: function (reviewId) {
-      this.deleteReview(reviewId)
-        .then((res) => {
-          this.getReviewList();
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    editReview: function (reviewId, content) {
-      const data = {
-        reviewId,
-        params: {
-          content,
-        },
-      };
-      this.updateReview(data)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
+      }
+    }
   },
 };
 </script>

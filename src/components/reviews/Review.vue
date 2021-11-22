@@ -3,7 +3,7 @@
       <v-list-item>
       <!-- 리뷰와 댓글 리스트를 보여준다 -->
       <template>
-        <v-list-item-avatar>
+        <v-list-item-avatar @click="goToProfile">
           <v-img :src="imgUrl"></v-img>
         </v-list-item-avatar>
         <v-list-item-content>
@@ -67,6 +67,9 @@ export default {
       'createComment',
       'updateReview'
     ]),
+    goToProfile: function () {
+      this.$router.push({ name: 'Profile' , params: {nickname: this.review.user.nickname}})
+    },
     removeReview: function () {
       this.deleteReview(this.review.id)
       .then( () => {

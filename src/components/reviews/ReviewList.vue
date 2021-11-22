@@ -1,15 +1,24 @@
 <template>
-  <div>
-    <v-text-field 
-    v-model="reviewInput"
-    @keyup.enter="setReview()"
-    ></v-text-field>
+  <div v-if="reviewList">
     <v-list>
+      <v-list-item>
+        {{ reviewCnt }}개의 리뷰가 있습니다.
+      </v-list-item>
+      <v-text-field
+      v-if="myReview.length == 0"
+      v-model="reviewInput"
+      @keyup.enter="setReview()"
+      ></v-text-field>
+      <review v-if="myReview.length != 0 && myReview[0].content != null"
+      :review="myReview[0]"
+      @reload-review="sendParent">
+      </review>
+      <hr>
       <review
       v-for="review in reviewList"
       :key="review.id"
       :review="review"
-      @reload-review="getReviewList"></review>
+      @reload-review="sendParent"></review>
     </v-list>  
   </div>
 </template>
@@ -25,27 +34,18 @@ export default {
   data: function () {
     return {
       reviewInput: null,
-      reviewList: null,
     }
   },
   props: {
+    reviewCnt: Number,
     movieId: String,
-  },
-  created: function () {
-    this.getReviewList()
+    myReview: Array,
+    reviewList: Array,
   },
   methods: {
     ...mapActions([
-      'getReview',
       'createReview',
     ]),
-    getReviewList: function () {
-      this.getReview(this.movieId)
-      .then( res => {
-        this.reviewList = res
-        console.log(this.reviewList)
-      })
-    },
     setReview: function () {
       const data = {
         movieId: this.movieId,
@@ -56,8 +56,11 @@ export default {
       this.createReview(data)
       .then( res => {
         console.log(res)
-        this.getReviewList()
+        this.$emit('reload-review')
       })
+    },
+    sendParent: function () {
+      this.$emit('reload-review')
     }
   }
 

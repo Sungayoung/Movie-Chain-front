@@ -50,9 +50,10 @@ const routes = [
     props: true,
   },
   {
-    path: "/accounts/profile",
+    path: "/accounts/profile/:nickname",
     name: "Profile",
     component: UserProfile,
+    props: true
   }
 ];
 
