@@ -50,19 +50,14 @@
           </div>
         </div>
       </div>
-      
-    </v-app-bar>
-
-    <v-main>
       <router-view></router-view>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import axios from "axios";
-import { mapState } from "vuex";
-import { mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
+
 import SearchInput from "./components/SearchInput.vue";
 
 export default {
@@ -70,7 +65,6 @@ export default {
   data: function () {
     return {
       userProfile: null,
-      imgUrl: null,
       show: true,
     };
   },
