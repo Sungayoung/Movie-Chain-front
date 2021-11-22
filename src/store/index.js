@@ -26,8 +26,6 @@ export default new Vuex.Store({
     LOG_OUT: function (state) {
       state.isLogin = false;
       localStorage.removeItem("jwt")
-      this.$router.push({ name: "MainPage" });
-      console.log('--------------')
     },
     SET_PROFILE: function (state, res) {
       state.userNickname = res.nickname
