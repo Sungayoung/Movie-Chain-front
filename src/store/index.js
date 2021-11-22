@@ -7,8 +7,6 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     isLogin: localStorage.getItem('jwt') ? true : false,
-    userNickname: null,
-    profile_img: null,
   },
   mutations: {
     LOG_IN: function (state) {
@@ -26,10 +24,14 @@ export default new Vuex.Store({
     LOG_OUT: function (state) {
       state.isLogin = false;
       localStorage.removeItem("jwt")
+      localStorage.removeItem('userInfo')
     },
     SET_PROFILE: function (state, res) {
-      state.userNickname = res.nickname
-      state.profile_img = res.profile_img
+      const data = {
+        nickname: res.nickname,
+        profile_img: res.profile_img
+      }
+      localStorage.setItem('userInfo', JSON.stringify(data))
     }
   },
   actions: {
@@ -344,14 +346,6 @@ export default new Vuex.Store({
       })
     }
 
-  },
-  getters: {
-    userInfo: state => {
-      return {
-        profile_img: state.profile_img,
-        userNickname: state.userNickname
-      }
-    }
   },
   modules: {},
 });

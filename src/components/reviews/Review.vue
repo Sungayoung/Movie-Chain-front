@@ -68,7 +68,7 @@ export default {
       'updateReview'
     ]),
     goToProfile: function () {
-      this.$router.push({ name: 'Profile' , params: {nickname: this.review.user.nickname}})
+      this.$router.push({ name: 'Profile' , params: {'nickname': this.review.user.nickname}})
     },
     removeReview: function () {
       this.deleteReview(this.review.id)
