@@ -1,5 +1,5 @@
 <template>
-  <div @click="moveDetail">
+  <button @click="moveDetail">
     <v-img
       v-if="noImage"
       src="@/assets/no_image.png"
@@ -7,7 +7,7 @@
       class="movie-img"
     ></v-img>
     <v-img v-else :src="imgURL" alt="영화포스터" class="movie-img"></v-img>
-  </div>
+  </button>
 </template>
 
 <script>
