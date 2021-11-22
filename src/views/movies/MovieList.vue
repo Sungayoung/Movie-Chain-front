@@ -1,35 +1,64 @@
 <template>
-  <div class="my-5">
-    <div class="text-center" mandatory>
-      <span v-for="n in 5" :key="`btn-${n}`">
-        <span @click="page = n">
-          <v-icon v-if="page === n" color="teal darken-2">mdi-record</v-icon>
-          <v-icon v-else color="white">mdi-record</v-icon>
-        </span>
-      </span>
+  <div class="my-5 container">
+    <div class="justify-content-around d-flex" mandatory>
+      <!-- 사이드바 -->
+      <div class="my-sidebar">
+        <div style="width: 200px">
+          <v-combobox class="d-flex" clearable solo width="10"></v-combobox>
+        </div>
+      </div>
+
+      <!-- N개씩 보기 버튼 -->
+      <v-select
+        v-model="movie_cnt"
+        :items="movie_cnt_items"
+        label="Standard"
+        background-color="white"
+        @change="getMovie"
+        hide-details
+      ></v-select>
+
+      <div style="width: 200px">
+        <v-combobox class="d-flex" clearable solo width="10"></v-combobox>
+      </div>
     </div>
+
+    <!-- 영화 보여주는 곳 -->
     <div class="d-flex">
-      <button id="left-btn">
-        <v-icon size="100" color="white" @click="prev">
-          mdi-chevron-left
-        </v-icon>
+      <button @click="prev" id="left-btn" class="left-btn-bg">
+        <v-icon size="64" color="white"> mdi-chevron-left </v-icon>
       </button>
       <MovieCardMatrix :movieList="movies" />
-      <button id="right-btn">
-        <v-icon
-          :disabled="page === 1000"
-          size="100"
-          color="white"
-          depressed
-          @click="next"
-        >
+      <button @click="next" id="right-btn" class="right-btn-bg">
+        <v-icon :disabled="page === 1000" size="64" color="white" depressed>
           mdi-chevron-right
         </v-icon>
       </button>
-      <v-dialog
-        transition="dialog-top-transition"
-        max-width="600"
-      >으앙</v-dialog>
+      <v-dialog transition="dialog-top-transition" max-width="600"
+        >으앙</v-dialog
+      >
+    </div>
+
+    <!-- 페이지네이션 버튼 -->
+    <div>
+      <span><v-icon color="white">mdi-dots-horizontal</v-icon></span>
+      <span v-for="p in nowPageList" :key="p" class="mx-2">
+        <span>
+          <v-btn
+            small
+            @click="page = p"
+            fab
+            v-if="page === p"
+            color="rgb(41, 88, 78)"
+            style="color: white"
+            >{{ p }}</v-btn
+          >
+          <v-btn small @click="page = p" fab v-else color="white">{{
+            p
+          }}</v-btn>
+        </span>
+      </span>
+      <span><v-icon color="white">mdi-dots-horizontal</v-icon></span>
     </div>
   </div>
 </template>
@@ -42,9 +71,14 @@ export default {
   name: "MovieList",
   data: function () {
     return {
-      dataPerPage: 18,
       page: 1,
-
+      movie_cnt: 18,
+      movie_cnt_items: [
+        { text: "18개씩 보기", value: 18 },
+        { text: "36개씩 보기", value: 36 },
+        { text: "72개씩 보기", value: 72 },
+        { text: "144개씩 보기", value: 144 },
+      ],
       movies: [],
       results: [],
     };
@@ -65,6 +99,7 @@ export default {
       const params = {
         filter_by: "all",
         page: this.page,
+        movie_cnt: this.movie_cnt,
       };
       this.getMovieListPage(params)
         .then((res) => {
@@ -91,6 +126,24 @@ export default {
       this.page = this.page - 1 < 1 ? 1 : this.page - 1;
     },
   },
+  computed: {
+    nowPageList: function () {
+      if (this.page < 5) {
+        return [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      }
+      return [
+        this.page - 4,
+        this.page - 3,
+        this.page - 2,
+        this.page - 1,
+        this.page,
+        this.page + 1,
+        this.page + 2,
+        this.page + 3,
+        this.page + 4,
+      ];
+    },
+  },
   watch: {
     page: function () {
       this.getMovie();
@@ -100,14 +153,38 @@ export default {
 </script>
 
 <style>
-.left-btn {
-  transition-delay: 500ms;
+.left-btn,
+.right-btn {
+  position: fixed;
   transition-duration: 500ms;
+  transition-property: position;
+  top: 50vh;
+  z-index: 100;
+}
+
+.left-btn {
   transform: translateX(9vw);
+  left: 0;
 }
 .right-btn {
-  transition-delay: 500ms;
-  transition-duration: 500ms;
   transform: translateX(-9vw);
+  right: 0;
+}
+.left-btn-bg,
+.right-btn-bg{
+  background-color: rgb(87, 94, 94);
+}
+.left-btn-bg:hover,
+.right-btn-bg:hover {
+  transition-property: background-color;
+  transition-duration: 500ms;
+  background-color: rgb(163, 200, 202);
+}
+
+.my-sidebar {
+  background-color: red;
+  height: 100vh;
+  position: fixed;
+  left: 0px;
 }
 </style>
