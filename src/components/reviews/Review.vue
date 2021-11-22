@@ -99,7 +99,7 @@ export default {
         data: { reviewId: this.review.id }
       })
       .then( res => {
-        this.review = res.data
+        this.review.isLiked = res.data.isLiked
       })
     }
   },
