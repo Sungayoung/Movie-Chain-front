@@ -40,7 +40,7 @@
             <div class="d-flex">
               <div class="container">
 
-            <router-link v-if="userInfo" :to="{ name: 'Profile' , params: {nickname: userInfo.userNickname}}">
+            <router-link v-if="userInfo" :to="{ name: 'Profile' , params: {'nickname': userInfo.nickname}}">
               <v-avatar>
                 <img :src="imgUrl" alt="">
               </v-avatar>
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 import SearchInput from "./components/SearchInput.vue";
 
@@ -64,8 +64,8 @@ export default {
   name: "App",
   data: function () {
     return {
-      userProfile: null,
       show: true,
+      userInfo: JSON.parse(localStorage.getItem('userInfo'))
     };
   },
   components: {
@@ -75,6 +75,7 @@ export default {
     if(this.isLogin) {
       this.logIn()
     }
+    this.userInfo = JSON.parse(localStorage.getItem('userInfo'))
   },
   methods: {
     ...mapActions(["logOut", 'logIn']),
@@ -84,12 +85,11 @@ export default {
   },
   computed: {
     ...mapState(["isLogin"]),
-    ...mapGetters(['userInfo']),
     imgUrl: function () {
-      console.log(this.userInfo)
-      if (this.userInfo){
-
-        return `${process.env.VUE_APP_MCS_URL}${this.userInfo.profile_img}`
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+      if (userInfo){
+        console.log(userInfo.profile_img)
+        return `${process.env.VUE_APP_MCS_URL}${userInfo.profile_img}`
       }
       else{
         return null

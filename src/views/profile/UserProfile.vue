@@ -1,29 +1,12 @@
 <template>
-  <div>
+  <div v-if="profile">
     <v-row justify="center">
-      <div>
-        <v-avatar
-          class="m-3"
-          size="128"
-        ><img :src="imgUrl">
-        </v-avatar>
-        <v-fab-transition>
-          <v-btn
-            color="pink"
-            dark
-            absolute
-            fab
-            small
-          >
-          <v-icon>mdi-plus</v-icon>
-          </v-btn>
-        </v-fab-transition>
-      </div>
+      <v-avatar
+        class="m-3"
+        size="128"
+      ><img :src="imgUrl">
+      </v-avatar>
     </v-row>
-    <h3>프로필 이미지 변경</h3>
-    {{ nickname }}
-    <v-file-input v-model="profileImg" name="profileImg"></v-file-input>
-    <button @click="sendProfile()">전송</button>
     <v-row justify="center">
       <v-dialog
         scrollable
@@ -37,44 +20,69 @@
             dark
             v-bind="attrs"
             v-on="on"
-            style="width: 150px"
+            style="width: 120px"
             v-text="isLoginUser ? '쪽지 확인' : '쪽지 보내기'"
+            @click="getChatList"
           >
-            Open Dialog
           </v-btn>
         </template>
-        <chat-pop
-        :isLoginUser="isLoginUser"></chat-pop>
+        <chat-list-pop
+        v-if="isLoginUser"
+        :chatList="chatList"
+        @reload-chat="getChatList"
+        ></chat-list-pop>
+        <chat-input-pop
+        v-else
+        :toUser="profile">
+
+        </chat-input-pop>
       </v-dialog>
     </v-row>
+    <v-row>
+    <movie-card-list-personal
+     :movieList="profile.personal_movies"
+     @reload-profile="getProfileInfo()"></movie-card-list-personal>
+    </v-row>
+    <h3>프로필 이미지 변경</h3>
+    {{ nickname }}
+    <v-file-input v-model="profileImg" name="profileImg"></v-file-input>
+    <button @click="sendProfile()">전송</button>
+    <v-row>
+
     <movie-card-list></movie-card-list>
+    </v-row>
   </div>
 </template>
 
 <script>
-import MovieCardList from '@/components/movies/MovieCardList'
-import ChatPop from '@/components/popups/ChatPop'
-// import axios from 'axios'
+import axios from 'axios'
 import { mapActions, mapState } from 'vuex'
+import MovieCardList from '@/components/movies/MovieCardList'
+import ChatListPop from '@/components/popups/ChatListPop'
+import MovieCardListPersonal from '@/components/movies/MovieCardListPersonal'
+import ChatInputPop from '../../components/popups/ChatInputPop.vue'
 export default {
   name: "UserProfile",
   components: {
     MovieCardList,
-    ChatPop,
+    ChatListPop,
+    ChatInputPop,
+    MovieCardListPersonal,
   },
   data: function () {
     return {
       profile: null,
       profileImg: null,
-      isLoginUser: null
+      isLoginUser: null,
+      chatList: null,
     }
   },
   mounted: function () {
     if(this.nickname){
-      this.getProfileInfo(this.nickname)
       console.log(this.nickname)
-      console.log(this.userNickname)
-      this.isLoginUser = this.nickname == this.userNickname
+      this.getProfileInfo(this.nickname)
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+      this.isLoginUser = this.nickname == userInfo.nickname
     }
   },
   props: {
@@ -85,7 +93,8 @@ export default {
       'getProfile',
       'setProfile'
     ]),
-    getProfileInfo: function () {
+    getProfileInfo: function (inputData) {
+      inputData
       this.getProfile(this.nickname)
       .then(res=> {
         this.profile = res
@@ -98,12 +107,24 @@ export default {
       this.setProfile(data)
       .then( () => {
         this.getProfileInfo()
+        this.$router.go()
       })
-    }
-  },
-  watch: {
-    nickname: function () {
-      this.$router.go()
+    },
+    getChatList: function (inputData) {
+      inputData
+      const token = localStorage.getItem('jwt')
+      axios({
+        method: 'get',
+        url: `${process.env.VUE_APP_MCS_URL}/accounts/chatting/`,
+        headers: { Authorization: `JWT ${token}` },
+      })
+      .then( res => {
+        console.log(res.data)
+        this.chatList = res.data
+      })
+      .catch( err => {
+        console.log(err)
+      })
     }
   },
   computed: {
@@ -119,7 +140,7 @@ export default {
       }
     }
   }
-};
+}
 </script>
 
 <style></style>
