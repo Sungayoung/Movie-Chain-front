@@ -1,6 +1,6 @@
 <template>
   <v-app style="background: rgba(0, 0, 0, 0.9); color: white">
-    <v-app-bar app color="teal darken-4" >
+    <v-main>
       <div
         class="my-navbar sticky-top"
         :class="{ 'not-login': !isLogin, login: isLogin }"
@@ -50,18 +50,14 @@
           </div>
         </div>
       </div>
-      
-    </v-app-bar>
-    <v-main>
       <router-view></router-view>
     </v-main>
   </v-app>
 </template>
 
 <script>
-// import axios from "axios";
-import { mapState } from "vuex";
-import { mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
+
 import SearchInput from "./components/SearchInput.vue";
 
 export default {
