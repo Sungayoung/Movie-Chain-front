@@ -1,6 +1,6 @@
 <template>
   <v-app style="background: rgba(0, 0, 0, 0.9); color: white">
-    <v-main>
+    <v-app-bar app color="teal darken-4" >
       <div
         class="my-navbar sticky-top"
         :class="{ 'not-login': !isLogin, login: isLogin }"
@@ -52,7 +52,6 @@
       </div>
       
     </v-app-bar>
-
     <v-main>
       <router-view></router-view>
     </v-main>
@@ -60,7 +59,7 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 import { mapState } from "vuex";
 import { mapActions } from "vuex";
 import SearchInput from "./components/SearchInput.vue";
@@ -70,7 +69,6 @@ export default {
   data: function () {
     return {
       userProfile: null,
-      imgUrl: null,
       show: true,
     };
   },
@@ -90,7 +88,6 @@ export default {
   },
   computed: {
     ...mapState(["isLogin"]),
-    ...mapGetters(['userInfo']),
     imgUrl: function () {
       console.log(this.userInfo)
       if (this.userInfo){
