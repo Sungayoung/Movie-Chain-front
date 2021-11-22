@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div >
-      <div class="row row-cols-6 g-2 m-0 mx-auto" style="width: 760px">
+      <div class="row row-cols-6 g-3 m-0 mx-auto" style="width: 1020px">
         <div v-for="(movie, idx) in movieList" :key="idx" class="p-0">
           <MovieCard :movie="movie" />
         </div>

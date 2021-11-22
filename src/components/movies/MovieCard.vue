@@ -47,8 +47,8 @@ export default {
 
 <style scoped>
 .movie-img {
-  width: 120px;
-  height: 180px;
+  width: 160px;
+  height: 240px;
   object-fit: fill;
 }
 </style>
