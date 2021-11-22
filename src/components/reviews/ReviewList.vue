@@ -1,12 +1,15 @@
 <template>
   <div v-if="reviewList">
-    <v-text-field
-    v-if="myReview.length == 0"
-    v-model="reviewInput"
-    @keyup.enter="setReview()"
-    ></v-text-field>
     <v-list>
-      <review v-if="myReview.length != 0"
+      <v-list-item>
+        {{ reviewCnt }}개의 리뷰가 있습니다.
+      </v-list-item>
+      <v-text-field
+      v-if="myReview.length == 0"
+      v-model="reviewInput"
+      @keyup.enter="setReview()"
+      ></v-text-field>
+      <review v-if="myReview.length != 0 && myReview[0].content != null"
       :review="myReview[0]"
       @reload-review="sendParent">
       </review>
@@ -30,33 +33,19 @@ export default {
   },
   data: function () {
     return {
-      // myReview: null,
       reviewInput: null,
-      // reviewList: null,
     }
   },
   props: {
+    reviewCnt: Number,
     movieId: String,
     myReview: Array,
     reviewList: Array,
   },
-  // created: function () {
-  //   this.getReviewList()
-  // },
   methods: {
     ...mapActions([
-      // 'getReview',
       'createReview',
     ]),
-    // getReviewList: function () {
-    //   this.getReview(this.movieId)
-    //   .then( res => {
-    //     this.myReview = res.my_review
-    //     this.reviewList = res.reviews
-    //     console.log(this.myReview)
-    //     // console.log(res)
-    //   })
-    // },
     setReview: function () {
       const data = {
         movieId: this.movieId,

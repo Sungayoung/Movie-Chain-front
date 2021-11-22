@@ -29,6 +29,8 @@
     <review-list 
       :reviewList="reviewList"
       :myReview="myReview"
+      :reviewCnt="reviewCnt"
+      :movieId="movieId"
       @reload-review="getReviewList"> </review-list>
   </div>
 </template>
@@ -46,10 +48,12 @@ export default {
       rank: null,
       myReview: null,
       reviewList: null,
+      reviewCnt: null,
     };
   },
   components: {
     ReviewList,
+    // movieCard,
   },
   props: { movieId: String },
   created: function () {
@@ -65,12 +69,14 @@ export default {
     getReviewList: function () {
       this.getReview(this.movieId)
       .then( res => {
-        this.myReview = res.my_review
-        if (this.myReview.length != 0) {
-          this.rank = this.myReview[0].rank / 2
+        this.myReview = res.myReview
+        if (res.myRank.length != 0) {
+          console.log(res.myRank)
+          this.rank = res.myRank[0].rank / 2
         }
         this.reviewList = res.reviews
-        console.log(this.myReview)
+        this.reviewCnt = res.reviewCnt
+        console.log(res)
       })
     },
     getMovie: function () {
@@ -113,7 +119,7 @@ export default {
     setRank: function () {
       console.log('hello')
       if(this.myReview.length == 0) {
-        const data = {
+        let data = {
           movieId: this.movieId,
           params: {
             rank: this.rank * 2
@@ -125,11 +131,14 @@ export default {
         })
       }
       else {
-        const data = {
+        let data = {
           reviewId: this.myReview[0].id,
           params: {
             rank: this.rank * 2
           }
+        }
+        if (this.rank === this.myReview[0].rank / 2) {
+          data.params.rank = null
         }
         this.updateReview(data)
         .then ( () => {

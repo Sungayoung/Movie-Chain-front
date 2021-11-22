@@ -7,10 +7,21 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     isLogin: localStorage.getItem('jwt') ? true : false,
+    userNickname: null,
+    profile_img: null,
   },
   mutations: {
     LOG_IN: function (state) {
       state.isLogin = true;
+      const token=localStorage.getItem('jwt')
+      axios({
+        method: 'get',
+        url: `${process.env.VUE_APP_MCS_URL}/accounts/profile/`,
+        headers: {Authorization: `JWT ${token}`}
+      })
+      .then( res => {
+        this.commit('SET_PROFILE', res.data)
+      })
     },
     LOG_OUT: function (state) {
       state.isLogin = false;
@@ -18,6 +29,10 @@ export default new Vuex.Store({
       this.$router.push({ name: "MainPage" });
       console.log('--------------')
     },
+    SET_PROFILE: function (state, res) {
+      state.userNickname = res.nickname
+      state.profile_img = res.profile_img
+    }
   },
   actions: {
     logIn: function ({ commit }) {
@@ -291,6 +306,54 @@ export default new Vuex.Store({
           });
       });
     },
+    getProfile: function ({ commit }, nickname) {
+      commit;
+      const token = localStorage.getItem('jwt')
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          url: `${process.env.VUE_APP_MCS_URL}/accounts/profile/`,
+          headers: {Authorization: `JWT ${token}`},
+          params: {nickname}
+        })
+        .then(res => {
+          resolve(res.data)
+        })
+        .catch(err => {
+          reject(err)
+        })
+      })
+    },
+    setProfile: function ({commit}, data){
+      const token = localStorage.getItem('jwt')
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'post',
+          url: `${process.env.VUE_APP_MCS_URL}/accounts/profile/`,
+          data: data,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `JWT ${token}`,
+          }
+        })
+        .then( res => {
+          commit('SET_PROFILE', res.data)
+          resolve(res.data)
+        })
+        .catch( err => {
+          reject(err.data)
+        })
+      })
+    }
+
+  },
+  getters: {
+    userInfo: state => {
+      return {
+        profile_img: state.profile_img,
+        userNickname: state.userNickname
+      }
+    }
   },
   modules: {},
 });
