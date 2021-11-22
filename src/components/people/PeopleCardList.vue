@@ -1,17 +1,21 @@
 <template>
   <div>
     <v-sheet
+      
       class="mx-auto"
       elevation="8"
       max-width="85%"
-      style="background: gray;"
+      style="background: gray; border-radius:25px"
     >
       <v-slide-group
-        class="pa-4"
+      
         show-arrows
+        next-icon="mdi-chevron-right"
+        prev-icon="mdi-chevron-left"
+
       >
         <people-card
-        v-for="idx in maxLength"
+        v-for="idx in people.length"
         :key="idx"
         :person="people[idx-1]"
         class="ma-4">
@@ -27,7 +31,6 @@ export default {
   name: "PeopleCardList",
   props: {
     people: Array,
-    maxLength: Number,
   },
   components: {
     PeopleCard,
