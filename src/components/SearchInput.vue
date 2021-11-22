@@ -1,11 +1,12 @@
 <template>
-  <div class="d-flex justify-content-center">
-    <div class="ms-5">
+  <div class="container my-auto">
+    <div class="ms-5"> 
       <v-text-field
         class="d-inline-flex ms-5"
         v-model="query"
         placeholder="영화, 감독, 인물을 검색하세요."
         solo
+        hide-details
         clearable
         filled
         color="grey"

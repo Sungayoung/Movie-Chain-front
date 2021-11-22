@@ -1,73 +1,65 @@
 <template>
-  <v-app style="background: rgba(0, 0, 0, 0.9);color:white;">
-    <v-app-bar app color="teal darken-4" >
-      <div class="d-flex align-center">
-        <router-link class="my-link mx-2" :to="{ name: 'MainPage' }"
-          >
-        <v-img
-          alt="MovieChain"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="50"
-          src="@/assets/movie_chain_no_text.png"
-          width="80"
-          height="50"
-        /></router-link
-        >
-        <router-link class="my-link mx-2" :to="{ name: 'MainPage' }"
-          >
-          Main</router-link
-        >
-        
-        <div v-if="isLogin">
-          <router-link class="my-link mx-2" @click.native="logout" to="#"
-            >Logout</router-link
-          >
-        
-          <router-link class="my-link mx-2" :to="{ name: 'MovieList' }"
-            >MovieList</router-link
-          >
-        </div>
-        <div v-else>
-          <router-link class="my-link mx-2" :to="{ name: 'Signup' }"
-            >Signup</router-link
-          >
-        </div>
-
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <!-- <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn> -->
-      <div class="my-auto">
-
-      <SearchInput class="my-auto"/>
-      </div>
-      <router-link :to="{ name: 'Profile' }">
-        <v-avatar>
-          <img :src="imgUrl" alt="">
-        </v-avatar>
-      </router-link>
-    </v-app-bar>
-
+  <v-app style="background: rgba(0, 0, 0, 0.9); color: white">
     <v-main>
+      <div
+        class="my-navbar sticky-top"
+        :class="{ 'not-login': !isLogin, login: isLogin }"
+      >
+        <div class="d-flex justify-content-between">
+          <div class="d-flex align-center">
+            <router-link class="my-link mx-2" :to="{ name: 'MainPage' }">
+              <v-img
+                alt="MovieChain"
+                class="shrink mt-1 hidden-sm-and-down"
+                contain
+                min-width="50"
+                src="@/assets/movie_chain_no_text.png"
+                width="80"
+                height="50"
+            /></router-link>
+            <router-link class="my-link mx-2" :to="{ name: 'MainPage' }">
+              Main</router-link
+            >
+
+            <router-link
+              class="my-link mx-2"
+              @click.native="logout()"
+              :to="{ name: 'MainPage' }"
+              >Logout</router-link
+            >
+
+            <router-link class="my-link mx-2" :to="{ name: 'MovieList' }"
+              >MovieList</router-link
+            >
+          </div>
+
+          <div class="my-auto d-flex mx-5">
+            <div class="d-flex">
+              <SearchInput />
+            </div>
+            <div class="d-flex">
+              <div class="container">
+
+            <router-link :to="{ name: 'Profile' }">
+              <v-avatar>
+                <img :src="imgUrl" alt="" />
+              </v-avatar>
+            </router-link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <router-view></router-view>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 import { mapState } from "vuex";
 import { mapActions } from "vuex";
-import SearchInput from './components/SearchInput.vue';
+import SearchInput from "./components/SearchInput.vue";
 
 export default {
   name: "App",
@@ -75,13 +67,14 @@ export default {
     return {
       userProfile: null,
       imgUrl: null,
-    }
+      show: true,
+    };
   },
   components: {
     SearchInput,
   },
   created: function () {
-    this.getProfile()
+    this.getProfile();
   },
   methods: {
     ...mapActions(["logOut"]),
@@ -89,27 +82,32 @@ export default {
       this.logOut();
     },
     getProfile: function () {
-      const token = localStorage.getItem('jwt')
+      const token = localStorage.getItem("jwt");
       axios({
-        method: 'get',
+        method: "get",
         url: `${process.env.VUE_APP_MCS_URL}/accounts/profile/`,
         headers: { Authorization: `JWT ${token}` },
       })
-      .then( res => {
-        console.log(res)
-        this.userProfile = res.data
-        this.imgUrl = `${process.env.VUE_APP_MCS_URL}${this.userProfile.profile_img}`
-      })
-      .catch( err => {
-        console.log(err)
-      })
+        .then((res) => {
+          console.log(res);
+          this.userProfile = res.data;
+          this.imgUrl = `${process.env.VUE_APP_MCS_URL}${this.userProfile.profile_img}`;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
   computed: {
     ...mapState(["isLogin"]),
   },
-
 };
+
+
+
+
+
+
 </script>
 
 <style>
@@ -123,5 +121,19 @@ html {
   text-decoration: none;
   color: white !important;
 }
-
+.my-navbar {
+  background-color: rgb(30, 104, 114);
+  position: fixed;
+}
+/* 트랜지션 용 스타일 */
+.login {
+  transform: none;
+  transition-property: all;
+  transition-delay: 1s;
+  transition-duration: 1s;
+}
+.not-login {
+  transform: translateY(-100px);
+  transition-duration: 1s;
+}
 </style>
