@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="movie">
     {{ movie }}
     <v-rating
       color="warning"
@@ -15,8 +15,17 @@
       @input="setRank"
     ></v-rating>
     {{ rank }}
-    <v-icon large color="green darken-2"> mdi-domain </v-icon>
-    <v-icon large color="green darken-2"> mdi-heart-outline </v-icon>
+    <v-btn color="primary" dark @click="saveMovie">
+      {{ movie.saveCnt }}
+      <v-icon dark right v-text="movie.isSaved ? 'mdi-bookmark-check' : 'mdi-bookmark-check-outline'"></v-icon>
+    </v-btn>
+    <v-btn color="red" dark @click="likeMovie">
+      {{ movie.likeCnt }}
+      <v-icon dark right v-text="movie.isLiked ? 'mdi-heart' : 'mdi-heart-outline'"></v-icon>
+    </v-btn>
+
+    
+    <v-icon large color="red lighten-2">  </v-icon>
     <review-list 
       :reviewList="reviewList"
       :myReview="myReview"
@@ -25,6 +34,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import ReviewList from "@/components/reviews/ReviewList.vue";
 import { mapActions } from "vuex";
 
@@ -73,6 +83,32 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    likeMovie: function () {
+      const token = localStorage.getItem("jwt");
+      axios({
+        method: 'post',
+        url: `${process.env.VUE_APP_MCS_URL}/movies/like-movie/`,
+        headers: {Authorization : `JWT ${token}`},
+        data: { movieId: this.movie.id }
+      })
+      .then( res => {
+        this.movie.likeCnt = res.data.likeCnt
+        this.movie.isLiked = res.data.isLiked
+      })
+    },
+    saveMovie: function () {
+      const token = localStorage.getItem("jwt");
+      axios({
+        method: 'post',
+        url: `${process.env.VUE_APP_MCS_URL}/movies/bookmark-movie/`,
+        headers: {Authorization : `JWT ${token}`},
+        data: { movieId: this.movie.id }
+      })
+      .then( res => {
+        this.movie.saveCnt = res.data.saveCnt
+        this.movie.isSaved = res.data.isSaved
+      })
     },
     setRank: function () {
       console.log('hello')
