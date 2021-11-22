@@ -1,15 +1,21 @@
 <template>
-  <div>
-    <v-text-field 
+  <div v-if="reviewList">
+    <v-text-field
+    v-if="myReview.length == 0"
     v-model="reviewInput"
     @keyup.enter="setReview()"
     ></v-text-field>
     <v-list>
+      <review v-if="myReview.length != 0"
+      :review="myReview[0]"
+      @reload-review="sendParent">
+      </review>
+      <hr>
       <review
       v-for="review in reviewList"
       :key="review.id"
       :review="review"
-      @reload-review="getReviewList"></review>
+      @reload-review="sendParent"></review>
     </v-list>  
   </div>
 </template>
@@ -24,28 +30,33 @@ export default {
   },
   data: function () {
     return {
+      // myReview: null,
       reviewInput: null,
-      reviewList: null,
+      // reviewList: null,
     }
   },
   props: {
     movieId: String,
+    myReview: Array,
+    reviewList: Array,
   },
-  created: function () {
-    this.getReviewList()
-  },
+  // created: function () {
+  //   this.getReviewList()
+  // },
   methods: {
     ...mapActions([
-      'getReview',
+      // 'getReview',
       'createReview',
     ]),
-    getReviewList: function () {
-      this.getReview(this.movieId)
-      .then( res => {
-        this.reviewList = res
-        console.log(this.reviewList)
-      })
-    },
+    // getReviewList: function () {
+    //   this.getReview(this.movieId)
+    //   .then( res => {
+    //     this.myReview = res.my_review
+    //     this.reviewList = res.reviews
+    //     console.log(this.myReview)
+    //     // console.log(res)
+    //   })
+    // },
     setReview: function () {
       const data = {
         movieId: this.movieId,
@@ -56,8 +67,11 @@ export default {
       this.createReview(data)
       .then( res => {
         console.log(res)
-        this.getReviewList()
+        this.$emit('reload-review')
       })
+    },
+    sendParent: function () {
+      this.$emit('reload-review')
     }
   }
 
