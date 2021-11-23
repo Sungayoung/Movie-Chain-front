@@ -18,11 +18,21 @@
             hide-details
           ></v-select>
         </div>
+        <div class="d-flex">
+          <v-select
+            v-model="orderBy"
+            :items="orderItems"
+            background-color="white"
+            @change="getMovie"
+            width="10"
+            solo
+            hide-details
+          ></v-select>
+        </div>
         <!-- 필터지정 -->
         <div style="width: 15vw">
           <v-select
             class="d-flex"
-            clearable
             solo
             width="10"
             :items="filterItems"
@@ -31,11 +41,9 @@
           ></v-select>
         </div>
         <!-- 필터에서 내용선택 -->
-
         <v-autocomplete
           @change="getMovieMovie"
           chips
-          clearable
           deletable-chips
           multiple
           :items="filterIdItems"
@@ -99,6 +107,11 @@ import axios from "axios";
 
 export default {
   name: "MovieList",
+  props: {
+    propFilterBy: String,
+    propFilterId: Number,
+    propOrderBy: String
+  },
   data: function () {
     return {
       page: 1,
@@ -119,7 +132,15 @@ export default {
         { text: "해시태그", value: "keyword" },
         { text: "장르", value: "genre" },
       ],
-      orderItems: [],
+      orderItems: [
+        { text: "기본값", value: null },
+        { text: "제목 오름차순", value: "title" },
+        { text: "제목 내림차순", value: "-title" },
+        { text: "최신순", value: "-release_date" },
+        { text: "오래된순", value: "release_date" },
+        { text: "평점낮은순", value: "vote_average" },
+        { text: "평점높은순", value: "-vote_average" },
+      ],
       filterBy: "all",
       orderBy: null,
       filterId: null,
@@ -135,28 +156,41 @@ export default {
     document.querySelector("#right-btn").classList.add("right-btn");
   },
   created: function () {
-    this.getMovie();
+    if (this.propFilterBy) {
+      this.filterBy = this.propFilterBy;
+      this.getList(this.propFilterBy);
+      this.filterId = this.propFilterId;
+      this.filterIdList.push(this.propFilterId);
+      this.getMovieMovie();
+    } else {
+      this.getMovie();
+    }
   },
   methods: {
     ...mapActions(["getMovieListPage", "search"]),
     getList: function (value) {
-      const token = localStorage.getItem("jwt");
-
-      axios({
-        method: "get",
-        url: `${process.env.VUE_APP_MCS_URL}/movies/${value}s/`,
-        headers: { Authorization: `JWT ${token}` },
-      })
-        .then((res) => {
-          this.filterIdItems = res.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (value) {
+        if (value === "all") {
+          this.getMovie();
+        } else {
+          const token = localStorage.getItem("jwt");
+          axios({
+            method: "get",
+            url: `${process.env.VUE_APP_MCS_URL}/movies/${value}s/`,
+            headers: { Authorization: `JWT ${token}` },
+          })
+            .then((res) => {
+              this.filterIdItems = res.data;
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      }
     },
     getMovieMovie: function () {
       const params = {
-        filter_id: this.filterIdList.join(','),
+        filter_id: this.filterIdList.join(","),
         filter_by: this.filterBy,
         order_by: this.orderBy,
         page: this.page,
@@ -166,8 +200,8 @@ export default {
       this.getMovieListPage(params)
         .then((res) => {
           // console.log(res);
-          this.movies = res.serialized_data
-          console.log(res)
+          this.movies = res.serialized_data;
+          console.log(res);
           this.totalPages = res.total_page_cnt;
         })
         .catch((err) => {
@@ -195,6 +229,7 @@ export default {
           console.log(err);
         });
     },
+
     getSearch: function () {
       this.search(this.query)
         .then((res) => {

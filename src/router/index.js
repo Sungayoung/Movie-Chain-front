@@ -31,6 +31,7 @@ const routes = [
     path: "/movielist",
     name: "MovieList",
     component: MovieList,
+    props: true,
   },
   {
     path: "/moviedetail/:movieId",
