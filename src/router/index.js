@@ -40,9 +40,10 @@ const routes = [
     props: true,
   },
   {
-    path: "/accounts/peopleProfile",
-    name: "peopleProfile",
-    component: PeopleProfile
+    path: "/accounts/peopleProfile/:personId",
+    name: "PeopleProfile",
+    component: PeopleProfile,
+    props: true,
   },
   {
     path: "/search/:query",

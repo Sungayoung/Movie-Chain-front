@@ -13,6 +13,8 @@ export default new Vuex.Store({
     SfilterBy: "all",
     SfilterId: null,
     SfilterIdList: [],
+    profile_img: null,
+    nickname: null,
   },
   mutations: {
     LOG_IN: function (state) {
@@ -32,20 +34,19 @@ export default new Vuex.Store({
       localStorage.removeItem("userInfo");
     },
     SET_PROFILE: function (state, res) {
-      const data = {
-        nickname: res.nickname,
-        profile_img: res.profile_img,
-      };
-      localStorage.setItem("userInfo", JSON.stringify(data));
+      state.profile_img = `${res.profile_img}?_=${new Date().getTime()}`;
+      state.nickname = res.nickname;
+      console.log(state.nickname);
     },
-    UPDATE_INFO: function(state, info) {
-      state.Spage = info.page
-      state.SmovieCnt = info.movieCnt
-      state.SorderBy = info.orderBy
-      state.SfilterBy = info.filterBy
-      state.SfilterId = info.filterId
-      state.SfilterIdList = info.filterIdList
-    }
+    UPDATE_INFO: function (state, info) {
+      state.Spage = info.page;
+      state.SmovieCnt = info.movieCnt;
+      state.SorderBy = info.orderBy;
+      state.SfilterBy = info.filterBy;
+      state.SfilterId = info.filterId;
+      state.SfilterIdList = info.filterIdList;
+      localStorage.removeItem("jwt");
+    },
   },
   actions: {
     logIn: function ({ commit }) {
@@ -337,7 +338,7 @@ export default new Vuex.Store({
           });
       });
     },
-    setProfile: function ({ commit }, data) {
+    setProfileImg: function ({ commit }, data) {
       const token = localStorage.getItem("jwt");
       return new Promise((resolve, reject) => {
         axios({
@@ -358,9 +359,9 @@ export default new Vuex.Store({
           });
       });
     },
-    updateInfo: function({ commit }, info) {
-      commit("UPDATE_INFO", info)
-    }
+    updateInfo: function ({ commit }, info) {
+      commit("UPDATE_INFO", info);
+    },
   },
   modules: {},
 });

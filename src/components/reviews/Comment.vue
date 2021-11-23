@@ -16,15 +16,22 @@
           {{ comment.content }}
         </v-list-item-subtitle>
       </v-list-item-content>
-      <!-- 수정버튼 : editMode 값을 토글시킨다 -->
-      <v-list-item-icon v-if="comment.isWriter" @click="modeChange">
-        <v-icon class="m-2">mdi-pencil</v-icon>
-      </v-list-item-icon>
-      
-      <!-- 삭제버튼 : 클릭시 삭제된다. -->
-      <v-list-item-icon v-if="comment.isWriter" @click="removeComment">
-        <v-icon class ="m-2" color="red lighten-2">mdi-delete</v-icon>
-      </v-list-item-icon>
+      <v-list-item-action>
+        <v-list-item-action-text>{{ comment.created_at | moment('YY-MM-DD HH:mm') }}</v-list-item-action-text>
+        <v-list-item-icon>
+        <!-- 수정버튼 : editMode 값을 토글시킨다 -->
+          <v-icon 
+            @click="modeChange" 
+            v-if="comment.isWriter" 
+            >mdi-pencil</v-icon>
+        <!-- 삭제버튼 : 클릭시 삭제된다. -->
+          <v-icon 
+            v-if="comment.isWriter" 
+            @click="removeComment" 
+            color="red lighten-2" 
+            >mdi-delete</v-icon>
+        </v-list-item-icon>
+      </v-list-item-action>
     </v-list-item>
   </div>
 </template>

@@ -18,7 +18,7 @@ export default {
   methods: {
     peopleProfile: function () {
       this.$router.push({
-        name: "PeopleProfile",
+        name: "PeopleProfile", params: { 'personId': String(this.person.id) }
       });
     },
   },

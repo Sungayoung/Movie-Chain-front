@@ -7,35 +7,26 @@
       offset-x="30"
       offset-y="25">
 
-      <v-list-item-avatar @click="goToProfile">
+      <v-list-item-avatar @click="goToProfile" size="60">
         <img :src="imgUrl">
       </v-list-item-avatar>
       </v-badge>
       <v-list-item-content>
         <v-list-item-title>{{ chat.from_user.nickname }}</v-list-item-title>
         <v-list-item-subtitle>
-            <v-dialog
-              width="400px"
-            >
-            <template 
-              v-slot:activator="{ on, attrs }"
-              >
-              <v-list-item
-                v-bind="attrs"
-                v-on="on"
-                v-text="chat.content"
-                @click="updateRead"
-              >
-              </v-list-item>
-            </template>
+            <!-- 쪽지 세부내용 팝업 -->
             <chat-detail-pop
-            :chat="chat"></chat-detail-pop>
-          </v-dialog>
+            :chat="chat"
+            @update-read="updateRead(chat)"
+            @reload-chat="reloadChat"></chat-detail-pop>
         </v-list-item-subtitle>
       </v-list-item-content>
-      <v-list-item-icon @click="removeChatting">
-        <v-icon class ="m-2" color="red lighten-2">mdi-delete</v-icon>
-      </v-list-item-icon>
+      <v-list-item-action>
+        <v-list-item-action-text> {{ chat.created_at | moment('YY-MM-DD HH:mm')}}</v-list-item-action-text>
+        <v-list-item-icon @click="removeChatting">
+          <v-icon class ="m-2" color="red lighten-2">mdi-delete</v-icon>
+        </v-list-item-icon>
+      </v-list-item-action>
     </v-list-item>
   </div>
 </template>
@@ -60,36 +51,26 @@ export default {
         headers: {Authorization : `JWT ${token}`},
         data: { chatId : this.chat.id }
       })
-      .then( res => {
-        console.log(res.data)
-        this.chat.is_read = false
+      .then( () => {
         this.$emit('reload-chat')
       })
-    },
-    updateRead: function () {
-      if(!this.chat.is_read){
-        const token = localStorage.getItem('jwt')
-        axios({
-          method: 'put',
-          url: `${process.env.VUE_APP_MCS_URL}/accounts/chatting/`,
-          headers: {Authorization : `JWT ${token}`},
-          data: { chatId : this.chat.id }
-        })
-        .then( res => {
-          console.log(res.data)
-          this.$emit('reload-chat')
-        })
-      } 
     },
     goToProfile: function () {
       this.$router.push({ name: 'Profile' , params: {'nickname': this.chat.from_user.nickname}})
       this.$router.go()
     },
+    updateRead: function (chat) {
+      chat.is_read = false
+      this.$emit('reload-chat')
+    },
+    reloadChat: function (inputData) {
+      inputData
+      this.$emit('reload-chat')
+    }
   },
   computed: {
     imgUrl: function () {
       if (this.chat){
-        console.log(this.chat.from_user.profile_img)
         return `${process.env.VUE_APP_MCS_URL}${this.chat.from_user.profile_img}`
       }
       else {

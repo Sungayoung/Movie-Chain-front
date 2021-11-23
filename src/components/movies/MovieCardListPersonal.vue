@@ -175,7 +175,7 @@ export default {
         console.log(this.movieList[this.cur_idx].pk)
         axios({
           method: "put",
-          url: `${process.env.VUE_APP_MCS_URL}/accounts/set-personal-movie/`,
+          url: `${process.env.VUE_APP_MCS_URL}/accounts/personal-movie/`,
           headers: { Authorization: `JWT ${token}` },
           data: data,
         }).then((res) => {
@@ -191,7 +191,7 @@ export default {
         console.log(movie);
         axios({
           method: "post",
-          url: `${process.env.VUE_APP_MCS_URL}/accounts/set-personal-movie/`,
+          url: `${process.env.VUE_APP_MCS_URL}/accounts/personal-movie/`,
           headers: { Authorization: `JWT ${token}` },
           data: data,
         }).then((res) => {
