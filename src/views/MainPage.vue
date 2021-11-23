@@ -133,7 +133,7 @@ export default {
         };
         this.getMovieListPage(params)
           .then((res) => {
-            res.forEach((mov) => {
+            res.serialized_data.forEach((mov) => {
               this.movies.push(mov);
             });
             this.nowPage++;

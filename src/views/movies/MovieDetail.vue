@@ -32,8 +32,10 @@
             :key="idx"
             class="mx-2"
           >
-            <v-icon left> mdi-movie-open-outline </v-icon>
-            {{ gnr.name }}
+            <button @click.stop="moveGenreList(gnr.name)">
+              <v-icon left> mdi-movie-open-outline </v-icon>
+              {{ gnr.name }}
+            </button>
           </v-chip>
           <v-chip
             light
@@ -43,8 +45,10 @@
             :key="idx"
             class="mx-2"
           >
-            <v-icon left> mdi-pound </v-icon>
-            {{ kwd.name }}
+            <button @click.stop="moveKeywordList(kwd.name)">
+              <v-icon left> mdi-pound </v-icon>
+              {{ kwd.name }}
+            </button>
           </v-chip>
         </div>
       </div>
@@ -168,6 +172,20 @@ export default {
       "createReview",
       "updateReview",
     ]),
+    search: function (query) {
+      this.$router.push({
+        name: "MovieSearchResult",
+        params: {
+          query: query,
+        },
+      });
+    },
+    moveGenreList: function (gnr) {
+      this.search(gnr);
+    },
+    moveKeywordList: function (kwd) {
+      this.search(kwd);
+    },
     magnify: function () {},
     getReviewList: function () {
       this.getReview(this.movieId).then((res) => {

@@ -2,8 +2,7 @@
   <div @click="peopleProfile">
     <div>
       <div class="profile-box" >
-        <v-img style="border-radius:25px" v-if="noImage" src="@/assets/no_image.png"></v-img>
-        <v-img style="border-radius:25px" v-else :src="imgURL" alt="" class="movie-img"></v-img>
+        <v-img style="border-radius:25px" :src="imgURL" alt="" class="movie-img"></v-img>
       </div>
       <div class="text-center">{{ person.name }}</div>
     </div>
@@ -29,17 +28,10 @@ export default {
         if (this.person.profile_path) {
           return `https://image.tmdb.org/t/p/w500${this.person.profile_path}`;
         } else {
-          return require("@/assets/no_image.png");
+          return `${process.env.VUE_APP_MCS_URL}/media/images/profile/person_default.jpg`
         }
       } else {
         return null;
-      }
-    },
-    noImage: function () {
-      if (this.person.profile_path) {
-        return false;
-      } else {
-        return true;
       }
     },
   },

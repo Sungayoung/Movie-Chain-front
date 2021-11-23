@@ -41,6 +41,9 @@ export default {
       actors: null,
       crews: null,
       movies: null,
+      genres:null,
+      keywords:null,
+
     }
   },
   created: function () {
@@ -50,6 +53,8 @@ export default {
       this.actors = res.actors
       this.crews = res.crews
       this.movies = res.movies
+      this.genres = res.genres
+      this.keywords = res.keywords
     })
     .catch( err => {
       console.log(err)
