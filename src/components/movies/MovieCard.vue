@@ -4,7 +4,6 @@
     @mouseleave="posterRerotate"
     class="poster-box mx-1 justify-content-center"
     :class="{ 'liked-movie': movie.isLiked, 'not-like-movie': !movie.isLiked }"
-    
   >
     <!-- 영화 이미지 -->
     <v-img
@@ -32,27 +31,44 @@
     </div>
 
     <!-- 카드내용 -->
-    <div :id="'my-content-' + movie.id" class="my-content d-flex align-items-center justify-content-center" @click="moveDetail">
-      <div class="container">
+    <div
+      :id="'my-content-' + movie.id"
+      class="my-content d-flex align-items-center justify-content-center"
+      @click="moveDetail"
+    >
+      <div class="container ">
+        <div>
 
-          <p>{{ movie.title }}</p>
-          <p>{{ movie.release_date }}</p>
-          <hr />
-<div class="my-5 py-5">s</div>
-          <hr />
-          <div>
+        <p>{{ movie.title }}</p>
+        <p>{{ movie.release_date }}</p>
+        </div>
+        <hr />
+        <div>
 
-        <v-icon
-          @click="likeMovie"
-          dark
-          right
-          v-text="movie.isLiked ? 'mdi-heart' : 'mdi-heart-outline'"
-        ></v-icon>
-              <v-icon dark right v-text="movie.isSaved ? 'mdi-bookmark-check' : 'mdi-bookmark-outline'"></v-icon>
-          </div>
+        <div class="my-5 py-5"></div>
+        </div>
+        <hr />
+        <div>
+          <button>
+            <v-icon
+              @click="likeMovie"
+              dark
+              right
+              v-text="movie.isLiked ? 'mdi-heart' : 'mdi-heart-outline'"
+            ></v-icon>
+          </button>
+          <button>
+            <v-icon
+              dark
+              right
+              v-text="
+                movie.isSaved ? 'mdi-bookmark-check' : 'mdi-bookmark-outline'
+              "
+            ></v-icon>
+          </button>
+        </div>
       </div>
-
-      </div>
+    </div>
   </button>
 </template>
 
@@ -68,15 +84,14 @@ export default {
     saveMovie: function () {
       const token = localStorage.getItem("jwt");
       axios({
-        method: 'post',
+        method: "post",
         url: `${process.env.VUE_APP_MCS_URL}/movies/bookmark-movie/`,
-        headers: {Authorization : `JWT ${token}`},
-        data: { movieId: this.movie.id }
-      })
-      .then( res => {
-        this.movie.saveCnt = res.data.saveCnt
-        this.movie.isSaved = res.data.isSaved
-      })
+        headers: { Authorization: `JWT ${token}` },
+        data: { movieId: this.movie.id },
+      }).then((res) => {
+        this.movie.saveCnt = res.data.saveCnt;
+        this.movie.isSaved = res.data.isSaved;
+      });
     },
     likeMovie: function () {
       const token = localStorage.getItem("jwt");
@@ -99,7 +114,7 @@ export default {
       });
     },
     posterRotate: function () {
-      localStorage.setItem('hoveringPosterURL',this.movie.poster_path)
+      localStorage.setItem("hoveringPosterURL", this.movie.poster_path);
       document
         .querySelector(`#my-img-${this.movie.id}`)
         .classList.add("poster-on-mouse");
@@ -114,7 +129,7 @@ export default {
         .classList.add("curtain-on-mouse");
     },
     posterRerotate: function () {
-      localStorage.removeItem('hoveringPosterURL')
+      localStorage.removeItem("hoveringPosterURL");
       document
         .querySelector(`#my-img-${this.movie.id}`)
         .classList.remove("poster-on-mouse");

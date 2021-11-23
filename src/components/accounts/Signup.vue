@@ -1,8 +1,5 @@
 <template>
   <transition
-    name="router-transition"
-    enter-active-class="animated animate__fadeInDown"
-    leave-active-class="animated animated animate__fadeOutUp"
   >
     <div class="text-center">
       <div class="alert-box">
@@ -10,7 +7,7 @@
           <transition
             name="custom-classes-transition"
             enter-active-class="animated animate__fadeInDown"
-            leave-active-class="animated animated animate__fadeOutUp"
+            leave-active-class="animated animate__fadeOutUp"
           >
             <v-alert v-if="validAlert" type="error" class="alert d-flex">
               형식이 맞지않습니다.
@@ -190,8 +187,8 @@
                       <transition name="my-movie-card">
                         <div
                           v-if="nowHoverMyMovieNum === n - 1 && tempPersonalMovies[n - 1]"
-                          class="del-movie-curtain"
-                        ></div>
+                          class="del-movie-curtain d-flex justify-content-center align-items-center"
+                        ><v-icon color="white" size="64" class="my-auto">mdi-minus-circle-outline</v-icon></div>
                       </transition>
 
                       <v-img
@@ -208,15 +205,15 @@
             <v-card class="grey m-3">
               <div class="mx-auto p-3">
                 <v-autocomplete
-                  class="d-inline-flex ms-5"
-                  solo
+                  class="d-inline-flex ms-5 mt-5"
                   hide-details
+                  rounded
+                  filled
                   clearable
                   open-on-clear
-                  filled
-                  dense
+                  color="black"
                   background-color="white"
-                  style="width: 300px"
+                  style="width: 400px"
                   :items="movies"
                   item-text="title"
                   item-value="id"
@@ -243,8 +240,8 @@
                       <transition name="movie-card-transition">
                         <div
                           v-if="nowHoverMovieId === movie.id"
-                          class="add-movie-curtain"
-                        ></div>
+                          class="add-movie-curtain d-flex justify-content-center align-items-center"
+                        ><v-icon color="white" size="64" class="my-auto">mdi-plus-circle-outline</v-icon></div>
                       </transition>
                       <v-img class="movie-img" :src="imgURL(movie)" />
                     </button>
@@ -253,19 +250,6 @@
               </div>
               <v-divider></v-divider>
             </v-card>
-            <!-- <v-card-text>
-              <h1 class="text-h6 font-weight-light mb-2 align-self-center">
-                {{ credentials.nickname }}
-              </h1>
-
-              <h1
-                v-for="movie in tempPersonalMovies"
-                :key="movie"
-                @click="delMovie"
-              >
-                {{ movie }}
-              </h1>
-            </v-card-text> -->
           </v-window-item>
 
           <!-- 4 페이지: 회원가입 완료 -->
@@ -439,7 +423,7 @@ export default {
         .then((res) => {
           // console.log(res);
           this.movies = res;
-          this.filteredMovies = this.movies.slice(0, 102);
+          this.filteredMovies = this.movies.slice(0, 100);
         })
         .catch((err) => {
           console.log(err);
@@ -546,13 +530,13 @@ export default {
 <style scoped>
 .del-movie-curtain {
   position: absolute;
-  background-color: red;
+  background-color: rgba(255, 0, 0, 0.3);
   z-index: 100;
 }
 
 .add-movie-curtain {
   position: absolute;
-  background-color: red;
+  background-color: rgba(72, 117, 72, 0.5);
   z-index: 100;
 }
 .del-movie-curtain,

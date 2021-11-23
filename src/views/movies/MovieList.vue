@@ -1,99 +1,101 @@
 <template>
-  <div class="my-5 container">
-    <div class="justify-content-around row" mandatory>
-      <!-- 사이드바 -->
-      <div class="my-sidebar col-2">
-        <v-btn>
-          <v-icon size="200"> mdi-filter-menu-outline </v-icon>
-        </v-btn>
-        <!-- N개씩 보기 버튼 -->
-        <div class="d-flex">
-          <v-select
-            v-model="movieCnt"
-            :items="movieCntItems"
-            background-color="white"
-            @change="getMovie"
-            width="10"
-            solo
-            hide-details
-          ></v-select>
-        </div>
-        <div class="d-flex">
-          <v-select
-            v-model="orderBy"
-            :items="orderItems"
-            background-color="white"
-            @change="getMovie"
-            width="10"
-            solo
-            hide-details
-          ></v-select>
-        </div>
-        <!-- 필터지정 -->
-        <div style="width: 15vw">
-          <v-select
-            class="d-flex"
-            solo
-            width="10"
-            :items="filterItems"
-            v-model="filterBy"
-            @change="getList(filterBy)"
-          ></v-select>
-        </div>
-        <!-- 필터에서 내용선택 -->
-        <v-autocomplete
-          @change="getMovieMovie"
-          chips
-          deletable-chips
-          multiple
-          :items="filterIdItems"
-          item-text="name"
-          item-value="id"
-          v-model="filterIdList"
-        ></v-autocomplete>
-      </div>
-    </div>
+  <div>
+    <!-- 화면에 고정되야 할 것들 -->
+    <!-- 좌우버튼 -->
+    <button @click="prev" id="left-btn" class="left-btn-bg">
+      <v-icon size="64" color="white"> mdi-chevron-left </v-icon>
+    </button>
+    <button @click="next" id="right-btn" class="right-btn-bg">
+      <v-icon :disabled="page === 1000" size="64" color="white" depressed>
+        mdi-chevron-right
+      </v-icon>
+    </button>
 
-    <div class="content-area offset-1 col-9">
-      <!-- 사이드바 배경부분 -->
-      <div class=""></div>
-      <!-- 영화 보여주는 곳 -->
-      <div>
-        <div class="d-flex">
-          <button @click="prev" id="left-btn" class="left-btn-bg">
-            <v-icon size="64" color="white"> mdi-chevron-left </v-icon>
-          </button>
-          <MovieCardMatrix :movieList="movies" />
-          <button @click="next" id="right-btn" class="right-btn-bg">
-            <v-icon :disabled="page === 1000" size="64" color="white" depressed>
-              mdi-chevron-right
-            </v-icon>
-          </button>
-          <v-dialog transition="dialog-top-transition" max-width="600"
-            >으앙</v-dialog
-          >
+    <div>
+      <div class="my-5 container">
+        <div class="justify-content-around row" mandatory>
+          <!-- 사이드바 -->
+          <div class="my-sidebar col-2">
+            <v-btn>
+              <v-icon size="200"> mdi-filter-menu-outline </v-icon>
+            </v-btn>
+            <!-- N개씩 보기 버튼 -->
+            <div class="d-flex">
+              <v-select
+                v-model="movieCnt"
+                :items="movieCntItems"
+                background-color="white"
+                @change="getMovie"
+                width="10"
+                solo
+                hide-details
+              ></v-select>
+            </div>
+            <div class="d-flex">
+              <v-select
+                v-model="orderBy"
+                :items="orderItems"
+                background-color="white"
+                @change="getMovie"
+                width="10"
+                solo
+                hide-details
+              ></v-select>
+            </div>
+            <!-- 필터지정 -->
+            <div style="width: 15vw">
+              <v-select
+                class="d-flex"
+                solo
+                width="10"
+                :items="filterItems"
+                v-model="filterBy"
+                @change="getList(filterBy), (filterIdList = [])"
+              ></v-select>
+            </div>
+            <!-- 필터에서 내용선택 -->
+            <v-autocomplete
+              :disabled="filterBy === 'all'"
+              @change="getMovieMovie"
+              chips
+              deletable-chips
+              multiple
+              :items="filterIdItems"
+              item-text="name"
+              item-value="id"
+              v-model="filterIdList"
+            ></v-autocomplete>
+          </div>
         </div>
 
-        <!-- 페이지네이션 버튼 -->
-        <div>
-          <span><v-icon color="white">mdi-dots-horizontal</v-icon></span>
-          <span v-for="p in nowPageList" :key="p" class="mx-2">
-            <span>
-              <v-btn
-                small
-                @click="page = p"
-                fab
-                v-if="page === p"
-                color="rgb(41, 88, 78)"
-                style="color: white"
-                >{{ p }}</v-btn
-              >
-              <v-btn small @click="page = p" fab v-else color="white">
-                {{ p }}</v-btn
-              >
-            </span>
-          </span>
-          <span><v-icon color="white">mdi-dots-horizontal</v-icon></span>
+        <div class="content-area offset-1 col-9">
+          <!-- 사이드바 배경부분 -->
+          <div class=""></div>
+          <!-- 영화 보여주는 곳 -->
+          <div class="container">
+            <!-- 페이지네이션 버튼 -->
+
+            <div
+              style="
+                height: 1px;
+                width: 100%;
+                position: fixed;
+                top: 300px;
+                z-index: 50;
+              "
+              class="d-flex justify-content-center text-center"
+            >
+              <div class="page-slot justify-content-evenly d-flex">
+                <span v-for="n in 5" :key="`btn-${n}`" class="d-flex">
+                  <v-icon v-if="pageIdx === n" color="white">mdi-record</v-icon>
+                  <v-icon v-else color="grey darken-2">mdi-record</v-icon>
+                </span>
+              </div>
+            </div>
+            <div class="d-flex">
+              <MovieCardMatrix :movieList="movies" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -101,7 +103,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 import MovieCardMatrix from "../../components/movies/MovieCardMatrix.vue";
 import axios from "axios";
 
@@ -110,13 +112,17 @@ export default {
   props: {
     propFilterBy: String,
     propFilterId: Number,
-    propOrderBy: String
+    propOrderBy: String,
   },
   data: function () {
     return {
       page: 1,
-      totalPages: 100,
+      pageIdx: 1,
       movieCnt: 18,
+      orderBy: null,
+      filterId: null,
+
+      totalPages: 100,
       movieCntItems: [
         { text: "18개씩 보기", value: 18 },
         { text: "36개씩 보기", value: 36 },
@@ -142,8 +148,6 @@ export default {
         { text: "평점높은순", value: "-vote_average" },
       ],
       filterBy: "all",
-      orderBy: null,
-      filterId: null,
       filterIdList: [],
       filterIdItems: [],
     };
@@ -151,23 +155,41 @@ export default {
   components: {
     MovieCardMatrix,
   },
+  beforeDistroy: function () {},
   updated: function () {
+    console.log("111111111111111111");
+    const info = {
+      page: this.page,
+      movieCnt: this.movieCnt,
+      orderBy: this.orderBy,
+      filterBy: this.filterBy,
+      filterId: this.filterId,
+      filterIdList: this.filterIdList,
+    };
+    this.updateInfo(info);
     document.querySelector("#left-btn").classList.add("left-btn");
     document.querySelector("#right-btn").classList.add("right-btn");
   },
   created: function () {
+    this.page = this.Spage;
+    this.movieCnt = this.SmovieCnt;
+    this.orderBy = this.SorderBy;
+    this.filterBy = this.SfilterBy;
+    this.filterId = this.SfilterId;
+    this.filterIdList = this.SfilterIdList;
     if (this.propFilterBy) {
       this.filterBy = this.propFilterBy;
       this.getList(this.propFilterBy);
       this.filterId = this.propFilterId;
-      this.filterIdList.push(this.propFilterId);
+      this.filterIdList = [this.propFilterId];
       this.getMovieMovie();
     } else {
+      this.getList(this.SfilterBy);
       this.getMovie();
     }
   },
   methods: {
-    ...mapActions(["getMovieListPage", "search"]),
+    ...mapActions(["getMovieListPage", "search", "updateInfo"]),
     getList: function (value) {
       if (value) {
         if (value === "all") {
@@ -240,29 +262,32 @@ export default {
         });
     },
     next: function () {
-      this.page = this.page + 1 === 1000 ? 1000 - 1 : this.page + 1;
+      this.page =
+        this.page + 1 === this.totalPages ? this.totalPages - 1 : this.page + 1;
+      if (this.page === this.totalPages) {
+        this.pageIdx = 5;
+      } else if (this.pageIdx < 4) {
+        this.pageIdx++;
+      }
     },
     prev: function () {
       this.page = this.page - 1 < 1 ? 1 : this.page - 1;
+      if (this.page === 1) {
+        this.pageIdx = 1;
+      } else if (this.pageIdx > 2) {
+        this.pageIdx--;
+      }
     },
   },
   computed: {
-    nowPageList: function () {
-      if (this.page < 5) {
-        return [1, 2, 3, 4, 5, 6, 7, 8, 9];
-      }
-      return [
-        this.page - 4,
-        this.page - 3,
-        this.page - 2,
-        this.page - 1,
-        this.page,
-        this.page + 1,
-        this.page + 2,
-        this.page + 3,
-        this.page + 4,
-      ];
-    },
+    ...mapState([
+      "Spage",
+      "SmovieCnt",
+      "SorderBy",
+      "SfilterBy",
+      "SfilterId",
+      "SfilterIdList",
+    ]),
   },
   watch: {
     page: function () {
@@ -309,5 +334,11 @@ export default {
   top: 72px;
   left: 0px;
   transition-duration: 1s;
+}
+.page-slot {
+  width: 300px;
+  height: 50px;
+  border-radius: 25px;
+  background-color: rgb(0, 0, 0, 0.6);
 }
 </style>
