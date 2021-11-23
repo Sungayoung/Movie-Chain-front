@@ -1,12 +1,18 @@
 <template>
   <div v-if="chat">
     <v-list-item>
-      <v-list-item-avatar>
+      <v-badge
+      :value="!chat.is_read"
+      color="red"
+      offset-x="30"
+      offset-y="25">
+
+      <v-list-item-avatar @click="goToProfile">
         <img :src="imgUrl">
       </v-list-item-avatar>
+      </v-badge>
       <v-list-item-content>
         <v-list-item-title>{{ chat.from_user.nickname }}</v-list-item-title>
-        <!-- 수정모드면 input, 아니면 text를 보여준다. -->
         <v-list-item-subtitle>
             <v-dialog
               width="400px"
@@ -18,6 +24,7 @@
                 v-bind="attrs"
                 v-on="on"
                 v-text="chat.content"
+                @click="updateRead"
               >
               </v-list-item>
             </template>
@@ -26,8 +33,6 @@
           </v-dialog>
         </v-list-item-subtitle>
       </v-list-item-content>
-      
-      <!-- 삭제버튼 : 클릭시 삭제된다. -->
       <v-list-item-icon @click="removeChatting">
         <v-icon class ="m-2" color="red lighten-2">mdi-delete</v-icon>
       </v-list-item-icon>
@@ -42,7 +47,6 @@ export default {
   name: "ChatPop",
   props: {
     chat: Object,
-    key: Number,
   },
   components: {
     ChatDetailPop
@@ -58,9 +62,29 @@ export default {
       })
       .then( res => {
         console.log(res.data)
+        this.chat.is_read = false
         this.$emit('reload-chat')
       })
-    }
+    },
+    updateRead: function () {
+      if(!this.chat.is_read){
+        const token = localStorage.getItem('jwt')
+        axios({
+          method: 'put',
+          url: `${process.env.VUE_APP_MCS_URL}/accounts/chatting/`,
+          headers: {Authorization : `JWT ${token}`},
+          data: { chatId : this.chat.id }
+        })
+        .then( res => {
+          console.log(res.data)
+          this.$emit('reload-chat')
+        })
+      } 
+    },
+    goToProfile: function () {
+      this.$router.push({ name: 'Profile' , params: {'nickname': this.chat.from_user.nickname}})
+      this.$router.go()
+    },
   },
   computed: {
     imgUrl: function () {

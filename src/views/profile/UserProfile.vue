@@ -7,6 +7,13 @@
       ><img :src="imgUrl">
       </v-avatar>
     </v-row>
+
+    <!-- 유저 정보 수정 -->
+    <user-update
+      :profile="profile"
+       @reload-profile="reloadProfile"
+    ></user-update>
+
     <v-row justify="center">
       <v-dialog
         scrollable
@@ -54,8 +61,13 @@
     <v-file-input v-model="profileImg" name="profileImg"></v-file-input>
     <button @click="sendProfile()">전송</button>
     <v-row>
+    <h4 style="text-align: center">좋아하는 영화</h4>
+    <movie-card-list
+    :movies="profile.favorite_movies"></movie-card-list>
 
-    <movie-card-list></movie-card-list>
+    <h4 style="text-align: center">저장한 영화</h4>
+    <movie-card-list
+    :movies="profile.bookmark_movies"></movie-card-list>
     </v-row>
   </div>
 </template>
@@ -67,6 +79,7 @@ import MovieCardList from '@/components/movies/MovieCardList'
 import ChatListPop from '@/components/popups/ChatListPop'
 import MovieCardListPersonal from '@/components/movies/MovieCardListPersonal'
 import ChatInputPop from '../../components/popups/ChatInputPop.vue'
+import UserUpdate from '@/components/accounts/UserUpdate.vue'
 export default {
   name: "UserProfile",
   components: {
@@ -74,6 +87,7 @@ export default {
     ChatListPop,
     ChatInputPop,
     MovieCardListPersonal,
+    UserUpdate
   },
   data: function () {
     return {
@@ -83,7 +97,7 @@ export default {
       chatList: null,
     }
   },
-  mounted: function () {
+  created: function () {
     if(this.nickname){
       this.getProfileInfo(this.nickname)
       const userInfo = JSON.parse(localStorage.getItem('userInfo'))
@@ -140,7 +154,7 @@ export default {
         method: 'post',
         url: `${process.env.VUE_APP_MCS_URL}/accounts/follow/`,
         headers: { Authorization: `JWT ${token}` },
-        data: {user_id: this.profile.pk}
+        data: {user_id: this.profile.id}
       })
       .then( res => {
         this.profile.is_following = !this.profile.is_following

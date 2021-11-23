@@ -3,22 +3,19 @@
     <h3>영화</h3>
     <movie-card-list
     v-if="movies"
-    :movies="movies"
-    :maxLength="movies.length">
+    :movies="movies">
     </movie-card-list>
     
     <h3>배우</h3>
     <people-card-list
     v-if="actors"
-    :people="actors"
-    :maxLength="actors.length">
+    :people="actors">
     </people-card-list>
 
     <h3>감독</h3>
     <people-card-list
     v-if="crews"
-    :people="crews"
-    :maxLength="crews.length">
+    :people="crews">
     </people-card-list>
   </div>
 </template>

@@ -4,16 +4,17 @@
       class="mx-auto"
       elevation="8"
       max-width="85%"
-      style="background: gray;"
+      style="background: gray; border-radius:25px"
     >
       <v-slide-group
-        class="pa-4"
         show-arrows
+        next-icon="mdi-chevron-right"
+        prev-icon="mdi-chevron-left"
       >
         <movie-card
-        v-for="idx in maxLength"
+        v-for="(movie, idx) in movies"
         :key="idx"
-        :movie="movies[idx-1]"
+        :movie="movie"
         class="ma-4">
         </movie-card>
       </v-slide-group>
@@ -27,7 +28,6 @@ export default {
   name: "MovieCardList",
   props: {
       movies: Array,
-      maxLength: Number,
   },
   components: {
     MovieCard,
