@@ -1,7 +1,7 @@
 <template>
   <v-item-group v-if="movieList">
     <v-container>
-      <v-row>
+      <v-row v-if="isLoginUser">
         <v-dialog
           color="grey"
           scrollable
@@ -40,8 +40,8 @@
                 <v-card
                   :color="active ? 'primary' : 'grey'"
                   class="d-flex align-center mx-auto"
-                  width="300"
-                  height="400"
+                  width="200"
+                  height="300"
                   v-bind="attrs"
                   v-on="on"
                   @click="getIdx(idx)"
@@ -63,10 +63,8 @@
               영화 선택
             </v-card-title>
             <div class="mx-auto">
-              <v-text-field
+              <v-autocomplete
                 class="d-inline-flex ms-5"
-                v-model="query"
-                placeholder="영화, 감독, 인물을 검색하세요."
                 solo
                 hide-details
                 clearable
@@ -75,8 +73,11 @@
                 dense
                 background-color="white"
                 style="width: 300px"
-                @keyup.enter="search"
-              ></v-text-field>
+                :items="movies"
+                item-text="title"
+                item-value="id"
+                :search-input.sync="query"
+              ></v-autocomplete>
               <v-icon
                 large
                 color="white"
@@ -91,7 +92,7 @@
                   class="row row-cols-4 g-3 m-0 mx-auto"
                   style="height: 500px; background=grey"
                 >
-                  <div v-for="(movie, idx) in movies" :key="idx" class="p-0">
+                  <div v-for="(movie, idx) in filteredMovies" :key="idx" class="p-0">
                     <img
                       class="movie-img"
                       :src="imgURL(movie)"
@@ -112,6 +113,21 @@
           </v-card>
         </v-dialog>
       </v-row>
+      <v-row v-else>
+        <v-col v-for="(movie, idx) in movieList" :key="idx" cols="4" md="4">
+          <v-card
+            class="d-flex align-center mx-auto"
+            width="200"
+            height="300"
+          >
+            <v-img
+            width="200"
+            height="300"
+            :src="imgURL(movie)"
+            ></v-img>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-container>
   </v-item-group>
 </template>
@@ -124,6 +140,7 @@ export default {
   name: "MovieCardListPersonal",
   props: {
     movieList: Array,
+    isLoginUser: Boolean
   },
 
   data: function () {
@@ -132,6 +149,7 @@ export default {
       dialog: false,
       cur_idx: 1,
       movies: [],
+      filteredMovies: [],
     };
   },
   mounted: function () {
@@ -141,6 +159,7 @@ export default {
     this.getMovieList(params)
       .then((res) => {
         this.movies = res;
+        this.filteredMovies = this.movies
       })
       .catch((err) => {
         console.log(err);
@@ -202,6 +221,18 @@ export default {
       }
     },
   },
+  watch: {
+    query(val) {
+      if (val) {
+        this.filteredMovies = this.movies.filter( movie => {
+           return movie.title.toLocaleLowerCase().indexOf(val.toLocaleLowerCase()) > -1
+        })
+      }
+      else {
+        this.filteredMovies = this.movies
+      }
+    }
+  }
 };
 </script>
 

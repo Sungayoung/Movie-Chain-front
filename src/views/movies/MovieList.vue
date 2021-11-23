@@ -156,27 +156,23 @@ export default {
     },
     getMovieMovie: function () {
       const params = {
-        filter_id: this.filterId,
+        filter_id: this.filterIdList.join(','),
         filter_by: this.filterBy,
         order_by: this.orderBy,
         page: this.page,
         movie_cnt: this.movieCnt,
       };
       this.movies = [];
-      for (let i = 0; i < this.filterIdList.length; i++) {
-        params.filter_id = this.filterIdList[i];
-        this.getMovieListPage(params)
-          .then((res) => {
-            // console.log(res);
-            res.serialized_data.forEach((mov) => {
-              this.movies.push(mov);
-            });
-            this.totalPages = res.total_page_cnt;
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
+      this.getMovieListPage(params)
+        .then((res) => {
+          // console.log(res);
+          this.movies = res.serialized_data
+          console.log(res)
+          this.totalPages = res.total_page_cnt;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     getMovie: function () {
       const params = {
