@@ -12,11 +12,10 @@
         show-arrows
         next-icon="mdi-chevron-right"
         prev-icon="mdi-chevron-left"
-
       >
         <people-card
         v-for="idx in people.length"
-        :key="idx"
+        :key="people[idx-1].id"
         :person="people[idx-1]"
         class="ma-4">
         </people-card>

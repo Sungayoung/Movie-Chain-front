@@ -41,11 +41,10 @@
         ><img :src="imgUrl">
         </v-avatar>
       </v-row>
-      <v-divider inset></v-divider>
+      
       <v-row justify="center">
         <h3 style="color: white; text-align: center" >{{ profile.nickname }} 님</h3>
       </v-row>
-      <v-divider></v-divider>
       <v-row justify="center">
         <div class="py-3">
           <div style="color: white; text-align: center" >{{ profile.introduce_content }}</div>
@@ -60,16 +59,18 @@
      :movieList="profile.personal_movies"
      :isLoginUser="isLoginUser"
      @reload-profile="reloadProfile"></movie-card-list-personal>
+     <v-divider></v-divider>
     </v-row>
-
     <v-row>
     <h4 style="text-align: center">좋아하는 영화</h4>
     <movie-card-list
-    :movies="profile.favorite_movies"></movie-card-list>
-
+    :movies="profile.favorite_movies"
+    class="my-3"></movie-card-list>
+    <v-divider></v-divider>
     <h4 style="text-align: center">저장한 영화</h4>
     <movie-card-list
-    :movies="profile.bookmark_movies"></movie-card-list>
+    :movies="profile.bookmark_movies"
+    class="my-3"></movie-card-list>
     </v-row>
     </div>
     </v-sheet>
@@ -144,7 +145,7 @@ export default {
         method: 'post',
         url: `${process.env.VUE_APP_MCS_URL}/accounts/follow/`,
         headers: { Authorization: `JWT ${token}` },
-        data: {user_id: this.profile.id}
+        data: {follow: 'user', follow_id: this.profile.id,}
       })
       .then( res => {
         this.profile.is_following = !this.profile.is_following
@@ -159,7 +160,5 @@ export default {
 </script>
 
 <style scoped>
-.profile-background {
 
-}
 </style>
