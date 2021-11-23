@@ -79,6 +79,7 @@ export default {
     },
     goToProfile: function () {
       this.$router.push({ name: 'Profile' , params: {'nickname': this.nickname}})
+      this.$router.go()
     },
   },
   computed: {

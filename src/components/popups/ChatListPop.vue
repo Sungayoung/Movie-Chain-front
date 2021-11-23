@@ -12,13 +12,13 @@
         v-bind="attrs"
         v-on="on"
         style="width: 100px"
-        v-text="isLoginUser ? '쪽지 확인' : '쪽지 보내기'"
+        v-text="btnName"
         class="m-2"
         @click="getChatList"
       >
       </v-btn>
     </template>
-    <v-card v-if="isLoginUser">
+    <v-card>
       <v-toolbar
         color="cyan"
         dark
@@ -64,11 +64,7 @@
         </v-tab-item>
       </v-tabs-items>
       </v-card>
-    <chat-input-pop
-    v-else
-    :toUser="profile">
 
-    </chat-input-pop>
   </v-dialog>
   
 </template>
@@ -76,7 +72,6 @@
 <script>
 import axios from 'axios'
 import ChatPop from './ChatPop.vue'
-import ChatInputPop from '../../components/popups/ChatInputPop.vue'
 export default {
   name: "ChatListPop",
   data: function () {
@@ -87,12 +82,11 @@ export default {
     }
   },
   props: {
+    btnName: String,
     profile: Object,
-    isLoginUser: Boolean
   },
   components: {
     ChatPop,
-    ChatInputPop,
   },
   methods: {
     getChatList: function (inputData) {
@@ -103,8 +97,7 @@ export default {
         url: `${process.env.VUE_APP_MCS_URL}/accounts/chatting/`,
         headers: { Authorization: `JWT ${token}` },
       })
-      .then( res => {
-        console.log(res.data)
+      .then(res => {
         this.chatList = res.data
       })
       .catch( err => {

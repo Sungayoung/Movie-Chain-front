@@ -19,21 +19,28 @@
             {{ review.content }}
           </v-list-item-subtitle>
         </v-list-item-content>
-         
-        <!-- 좋아요 버튼 : 해당 리뷰를 좋아요 한다 -->
-        <v-list-item-icon @click="likeReview">
-          <v-icon class="m-2" color="red" large v-text="review.isLiked ? 'mdi-heart' : 'mdi-heart-outline'"></v-icon>
-        </v-list-item-icon>
-        
-        <!-- 수정버튼 : editMode 값을 토글시킨다 -->
-        <v-list-item-icon v-if="review.isWriter" @click="modeChange">
-          <v-icon class="m-2" large>mdi-pencil</v-icon>
-        </v-list-item-icon>
-        
-        <!-- 삭제버튼 : 클릭시 삭제된다. -->
-        <v-list-item-icon v-if="review.isWriter" @click="removeReview">
-          <v-icon class ="m-2" color="red lighten-2" large>mdi-delete</v-icon>
-        </v-list-item-icon>
+        <v-list-item-action>
+          <v-list-item-action-text>{{ review.created_at | moment('YY-MM-DD HH:mm') }}</v-list-item-action-text>
+            <v-list-item-icon>
+            <!-- 좋아요 버튼 : 해당 리뷰를 좋아요 한다 -->
+              <v-icon
+                @click="likeReview"
+                color="red" 
+                large v-text="review.isLiked ? 'mdi-heart' : 'mdi-heart-outline'"
+              ></v-icon>
+            <!-- 수정버튼 : editMode 값을 토글시킨다 -->
+              <v-icon 
+                @click="modeChange" 
+                v-if="review.isWriter" 
+                large>mdi-pencil</v-icon>
+            <!-- 삭제버튼 : 클릭시 삭제된다. -->
+              <v-icon 
+                v-if="review.isWriter" 
+                @click="removeReview" 
+                color="red lighten-2" 
+                large>mdi-delete</v-icon>
+            </v-list-item-icon>
+        </v-list-item-action>
       </template>
       </v-list-item>
     <v-list-group class="px-3">

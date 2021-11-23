@@ -28,14 +28,22 @@
           ></user-update>
           
           <!-- 쪽지 확인 버튼 -->
+
           <chat-list-pop
+            v-if="isLoginUser"
             :profile="profile"
-            :isLoginUser="isLoginUser"
+            :btnName="'쪽지 확인'"
           ></chat-list-pop>
+          <chat-input-pop
+            v-else
+            :toUser="profile"
+            :btnName="'쪽지 보내기'"
+          ></chat-input-pop>
 
           <!-- 팔로우 버튼 -->
           <v-btn
             dark
+            class="m-2"
             v-if="!isLoginUser"
             @click="followUser"
             width="120px"
@@ -98,6 +106,7 @@ import MovieCardList from '@/components/movies/MovieCardList'
 import ChatListPop from '@/components/popups/ChatListPop'
 import MovieCardListPersonal from '@/components/movies/MovieCardListPersonal'
 import UserUpdate from '@/components/accounts/UserUpdate.vue'
+import ChatInputPop from '../../components/popups/ChatInputPop.vue'
 export default {
   name: "UserProfile",
   components: {
@@ -105,7 +114,8 @@ export default {
     ChatListPop,
     MovieCardListPersonal,
     UserUpdate,
-    FollowListPop
+    FollowListPop,
+    ChatInputPop
   },
   data: function () {
     return {
