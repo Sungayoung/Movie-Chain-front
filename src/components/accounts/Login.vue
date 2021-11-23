@@ -26,10 +26,10 @@
           ></v-text-field>
         </div>
         <div class="d-flex justify-end mx-3">
+          <v-btn text class="mx-2" @click="moveSignup" dense
+            >Signup</v-btn
+          >
           <v-icon @click.stop="login">mdi-chevron-right</v-icon>
-          <router-link class="my-link mx-2" :to="{ name: 'Signup' }"
-              >Signup</router-link
-            >
         </div>
       </div>
     </div>
@@ -57,6 +57,9 @@ export default {
   },
   methods: {
     ...mapActions(["logIn"]),
+    moveSignup: function () {
+      this.$router.push({ name: "Signup" });
+    },
     login: function () {
       axios({
         method: "POST",

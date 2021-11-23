@@ -1,200 +1,278 @@
 <template>
-  <div>
-    <h1>Signup</h1>
-    <!-- 점 페이지네이션 -->
-    <v-item-group v-model="onboarding" class="text-center" mandatory>
-      <v-item v-for="n in length" :key="`btn-${n}`">
-        <v-icon v-if="onboarding === n - 1" color="teal darken-2"
-          >mdi-record</v-icon
-        >
-        <v-icon v-else color="white">mdi-record</v-icon>
-      </v-item>
-    </v-item-group>
-    <v-card class="mx-auto" max-width="500">
-      <v-card-title class="text-h6 font-weight-regular justify-space-between">
-        <span>Movie Chain과 연결하기</span>
-      </v-card-title>
-
-      <v-window v-model="onboarding">
-        <!-- 1 페이지: 기본정보 -->
-        <v-window-item :onboarding="1">
-          <div class="container p-3">
-            <div>
-              <v-text-field
-                :rules="[rules.required]"
-                label="ID"
-                type="text"
-                v-model="credentials.username"
-              />
-            </div>
-            <div>
-              <v-text-field
-                :rules="[rules.required]"
-                label="Nickname"
-                type="text"
-                v-model="credentials.nickname"
-              />
-            </div>
-            <div>
-              <v-text-field
-                :rules="[rules.required]"
-                label="e-mail"
-                type="text"
-                v-model="credentials.email"
-              />
-            </div>
-            <div>
-              <v-text-field
-                :rules="[rules.required]"
-                label="Password"
-                type="password"
-                v-model="credentials.password"
-              />
-            </div>
-            <div>
-              <v-text-field
-                :rules="[rules.required, rules.notConfirmed]"
-                label="Password Confirmation"
-                type="password"
-                v-model="credentials.passwordConfirmation"
-              />
-            </div>
-          </div>
-        </v-window-item>
-
-        <!-- 2 페이지: 선호장르 -->
-        <v-window-item :onboarding="2">
-          <v-card-text>
-            <div class="d-flex row">
-              <div
-                class="col-3 text-center p-1"
-                v-for="(genre, idx) in genreList"
-                :key="idx"
-              >
-                <v-chip
-                  @click="addOrDelGenre(genre.id)"
-                  v-if="credentials.like_genres.includes(genre.id)"
-                  color="teal darken-2 "
-                  text-color="white"
-                  pill="true"
-                  :ripple="{ class: 'red--text' }"
-                  >{{ genre.name }}</v-chip
-                >
-
-                <v-chip v-else @click="addOrDelGenre(genre.id)">
-                  {{ genre.name }}</v-chip
-                >
-              </div>
-            </div>
-            <hr />
-            <div>
-              {{ credentials.like_genres }}
-            </div>
-          </v-card-text>
-        </v-window-item>
-
-        <!-- 3 페이지: 나만의 영화 3개 -->
-        <v-window-item :onboarding="3">
-          <v-autocomplete
-          color='green'
-            hint="몰라욤"
-            height="150"
-            width='150'
-            class="d-flex row"
-            :disabled="isUpdating"
-            v-model="nowMovie"
-            :items="movieList"
-            item-text="title"
-            return-object
-            :change="searchMatrix"
-            label="My Movies"
-            hide-spin-buttons
+  <transition
+    name="router-transition"
+    enter-active-class="animated animate__fadeInDown"
+    leave-active-class="animated animated animate__fadeOutUp"
+  >
+    <div class="text-center">
+      <div class="alert-box">
+        <div class="d-flex justify-content-center">
+          <transition
+            name="custom-classes-transition"
+            enter-active-class="animated animate__fadeInDown"
+            leave-active-class="animated animated animate__fadeOutUp"
           >
-            
-            <template v-slot:item="data">
-              <div style="width:300px">
-                <template>
-                  <div >
-                    <v-list-item-image>
-                      <v-img
-                        :src="
-                          'https://image.tmdb.org/t/p/w500' +
-                          data.item.poster_path
-                        "
-                        width="100"
-                      />
-                    </v-list-item-image>
-                    <v-list-item-content>
-                      <v-list-item-title
-                        v-html="data.item.title"
-                      ></v-list-item-title>
-                    </v-list-item-content>
-                  </div>
-                </template>
+            <v-alert v-if="validAlert" type="error" class="alert d-flex">
+              형식이 맞지않습니다.
+            </v-alert>
+          </transition>
+        </div>
+      </div>
+      <!-- 점 페이지네이션 -->
+      <v-item-group v-model="onboarding" class="text-center" mandatory>
+        <v-item v-for="n in length" :key="`btn-${n}`">
+          <v-icon v-if="onboarding === n - 1" color="teal darken-2"
+            >mdi-record</v-icon
+          >
+          <v-icon v-else color="white">mdi-record</v-icon>
+        </v-item>
+      </v-item-group>
+      <v-card class="mx-auto" max-width="500">
+        <v-card-title class="text-h6 font-weight-regular justify-space-between">
+          <span>Movie Chain과 연결하기</span>
+        </v-card-title>
+
+        <v-window v-model="onboarding">
+          <!-- 1 페이지: 기본정보 -->
+          <v-window-item :onboarding="1">
+            <div class="container p-3">
+              <!-- 아이디 -->
+              <div>
+                <v-text-field
+                  :rules="rules.usernameRule"
+                  label="ID"
+                  type="text"
+                  v-model="credentials.username"
+                />
               </div>
-            </template>
-          </v-autocomplete>
-
-          <v-card-text>
-            <h1 class="text-h6 font-weight-light mb-2 align-self-center">
-              {{ credentials.nickname }}
-            </h1>
-
-            <h1
-              v-for="movie in credentials.personal_movies"
-              :key="movie"
-              @click="delMovie"
-            >
-              {{ movie }}
-            </h1>
-          </v-card-text>
-        </v-window-item>
-
-        <!-- 4 페이지: 회원가입 완료 -->
-        <v-window-item :onboarding="4">
-            <div class='text-center'>
-              MovieChain과 연결되었습니다.
+              <!-- 비밀번호 -->
+              <div>
+                <v-text-field
+                  :rules="rules.passwordRule"
+                  label="Password"
+                  type="password"
+                  v-model="credentials.password"
+                />
               </div>
-          <div class="pa-4 d-flex justify-content-around">
-            <div class="text-h6 font-weight-light mb-2 align-self-center" style="width:150px">
-              {{ credentials.nickname }} 강동옥
+              <!-- 비밀번호 확인 -->
+              <div>
+                <v-text-field
+                  :rules="rules.passwordConfirmationRule"
+                  label="Password Confirmation"
+                  type="password"
+                  v-model="credentials.passwordConfirmation"
+                />
+              </div>
+              <hr />
+              <!-- 닉네임 -->
+              <div>
+                <v-text-field
+                  :rules="rules.nicknameRule"
+                  label="Nickname"
+                  type="text"
+                  v-model="credentials.nickname"
+                />
+              </div>
+              <!-- 이메일 -->
+              <div>
+                <v-text-field
+                  :rules="rules.emailRule"
+                  label="e-mail"
+                  type="text"
+                  v-model="credentials.email"
+                />
+              </div>
+              <!-- 생년월일 -->
+              <div>
+                <v-menu
+                  ref="menu"
+                  v-model="menu"
+                  :close-on-content-click="false"
+                  :return-value.sync="credentials.birth"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-combobox
+                      v-model="credentials.birth"
+                      readonly
+                      label="생년월일을 선택해주세요"
+                      prepend-icon="mdi-calendar"
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-combobox>
+                  </template>
+                  <v-date-picker
+                    v-model="credentials.birth"
+                    no-title
+                    scrollable
+                  >
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="menu = false">
+                      Cancel
+                    </v-btn>
+                    <v-btn
+                      text
+                      color="primary"
+                      @click="$refs.menu.save(credentials.birth)"
+                    >
+                      OK
+                    </v-btn>
+                  </v-date-picker>
+                </v-menu>
+              </div>
             </div>
-            <img
-            style='width: 150px;'
-              src="@/assets/movie_chain_no_text.png"
-            />
-          </div>
+          </v-window-item>
 
-        </v-window-item>
-      </v-window>
+          <!-- 2 페이지: 선호장르 -->
+          <v-window-item :onboarding="2">
+            <v-card-text>
+              <div class="d-flex row">
+                <div
+                  class="col-3 text-center p-1"
+                  v-for="(genre, idx) in genreList"
+                  :key="idx"
+                >
+                  <v-chip
+                    @click="addOrDelGenre(genre.id)"
+                    v-if="credentials.like_genres.includes(genre.id)"
+                    color="teal darken-2 "
+                    text-color="white"
+                    :pill="true"
+                    :ripple="{ class: 'red--text' }"
+                    >{{ genre.name }}</v-chip
+                  >
 
-      <v-divider></v-divider>
+                  <v-chip v-else @click="addOrDelGenre(genre.id)">
+                    {{ genre.name }}</v-chip
+                  >
+                </div>
+              </div>
+              <hr />
+              <div>
+                {{ credentials.like_genres }}
+              </div>
+            </v-card-text>
+          </v-window-item>
 
-      <v-card-actions>
-        <v-icon :disabled="onboarding === 0" text @click="prev">
-          mdi-chevron-left
-        </v-icon>
-        <v-spacer></v-spacer>
+          <!-- 3 페이지: 나만의 영화 3개 -->
+          <v-window-item :onboarding="3">
+            <v-autocomplete
+              color="green"
+              height="150"
+              width="150"
+              class="d-flex row"
+              v-model="nowMovie"
+              :items="movieList"
+              item-text="title"
+              return-object
+              :change="searchMatrix"
+              label="My Movies"
+              hide-spin-buttons
+            >
+              <template v-slot:item="data">
+                <div style="width: 300px">
+                  <template>
+                    <div>
+                      <v-list-item-image>
+                        <v-img
+                          :src="
+                            'https://image.tmdb.org/t/p/w500' +
+                            data.item.poster_path
+                          "
+                          width="100"
+                        />
+                      </v-list-item-image>
+                      <v-list-item-content>
+                        <v-list-item-title
+                          v-html="data.item.title"
+                        ></v-list-item-title>
+                      </v-list-item-content>
+                    </div>
+                  </template>
+                </div>
+              </template>
+            </v-autocomplete>
 
-        <v-spacer></v-spacer>
-        <v-icon
-          :disabled="onboarding === length"
-          color="primary"
-          depressed
-          @click="next"
-        >
-          mdi-chevron-right
-        </v-icon>
-      </v-card-actions>
-    </v-card>
+            <v-card-text>
+              <h1 class="text-h6 font-weight-light mb-2 align-self-center">
+                {{ credentials.nickname }}
+              </h1>
 
-    <button @click.stop="signup">Signup</button>
-  </div>
+              <h1
+                v-for="movie in credentials.personal_movies"
+                :key="movie"
+                @click="delMovie"
+              >
+                {{ movie }}
+              </h1>
+            </v-card-text>
+          </v-window-item>
+
+          <!-- 4 페이지: 회원가입 완료 -->
+          <v-window-item :onboarding="4">
+            <div class="text-center">MovieChain과 연결되었습니다.</div>
+            <div class="pa-4 d-flex justify-content-around">
+              <div
+                class="text-h6 font-weight-light mb-2 align-self-center"
+                style="width: 150px"
+              >
+                {{ credentials.nickname }}
+              </div>
+              <img
+                style="width: 150px"
+                src="@/assets/movie_chain_no_text.png"
+              />
+            </div>
+          </v-window-item>
+        </v-window>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <!-- 페이지별 이전버튼 구성 -->
+          <v-icon v-if="0 < onboarding && onboarding < 3" @click="prev">
+            mdi-chevron-left
+          </v-icon>
+
+          <v-spacer></v-spacer>
+          <!-- 페이지별 다음버튼 구성 -->
+          <v-icon
+            v-if="onboarding === 0"
+            :disabled="onboarding === length"
+            color="primary"
+            depressed
+            @click="signup(false)"
+          >
+            mdi-chevron-right
+          </v-icon>
+          <v-icon
+            v-if="onboarding === 1"
+            color="primary"
+            depressed
+            @click="next"
+          >
+            mdi-chevron-right
+          </v-icon>
+          <v-icon
+            v-if="onboarding === 2"
+            :disabled="onboarding === length"
+            color="primary"
+            depressed
+            @click="signup(true)"
+          >
+            mdi-check
+          </v-icon>
+        </v-card-actions>
+      </v-card>
+    </div>
+  </transition>
 </template>
 
 <script>
 import axios from "axios";
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "Signup",
@@ -229,18 +307,44 @@ export default {
 
       // 유효성 검증
       rules: {
-        required: (value) => !!value || "Required.",
-        lengthValid: (value) =>
-          (value && value.length >= 5) || "Min 5 characters",
-        notConfirmed: (value) =>
-          !(value === this.password) || "비밀번호가 일치하지 않습니다.",
+        usernameRule: [
+          (v) => !!v || " 아이디를 입력해주세요.",
+          (v) =>
+            /^[a-zA-Z0-9]*$/.test(v) || "아이디는 영문+숫자만 입력 가능합니다.",
+          (v) =>
+            !(v && v.length >= 15) || "아이디는 15자 이상 입력할 수 없습니다.",
+        ],
+        nicknameRule: [
+          (v) => !!v || " 닉네임을 입력해주세요.",
+          (v) =>
+            !(v && v.length >= 30) || "닉네임은 30자 이상 입력할 수 없습니다.",
+          (v) =>
+            !/[~!@#$%^&*()_+|<>?:{}]/.test(v) ||
+            "닉네임에는 특수문자를 사용할 수 없습니다.",
+        ],
+        emailRule: [
+          (v) => !!v || " 이메일을 입력해주세요.",
+          (v) =>
+            /^([0-9a-zA-Z_.-]+)@([0-9a-zA-Z_-]+).(.[0-9a-zA-Z_-]+){1,2}$/.test(
+              v
+            ) || "이메일 형식에 맞지 않습니다.",
+        ],
+        passwordRule: [(v) => !!v || " 비밀번호를 입력해주세요."],
+        passwordConfirmationRule: [
+          (v) => !!v || " 비밀번호 확인을 입력해주세요.",
+          (v) =>
+            !(v && v.length >= 30) ||
+            "패스워드는 30자 이상 입력할 수 없습니다.",
+          (v) =>
+            v === this.credentials.password || "패스워드가 일치하지 않습니다.",
+        ],
       },
 
       // 회원가입 절차 페이지네이션
       length: 4,
       onboarding: 0,
 
-      // 회원가입에 필요한 정보들 
+      // 회원가입에 필요한 정보들
       credentials: {
         username: null,
         nickname: null,
@@ -249,12 +353,18 @@ export default {
         passwordConfirmation: null,
         like_genres: [],
         personal_movies: [],
+        validCheck: true,
       },
+      validAlert: false,
     };
   },
   created: function () {
-    const params = {
-      filter_by: "all",
+    if (this.isLogin) {
+      this.$router.push({name:"MainPage"})
+    } else {
+
+      const params = {
+        filter_by: "all",
     };
     this.getMovieList(params)
       .then((res) => {
@@ -264,6 +374,7 @@ export default {
       .catch((err) => {
         console.log(err);
       });
+        }
   },
   methods: {
     ...mapActions(["getMovieList"]),
@@ -288,40 +399,32 @@ export default {
       }
     },
     next: function () {
-      this.onboarding =
-        this.onboarding + 1 === this.length
-          ? this.length - 1
-          : this.onboarding + 1;
+      this.onboarding = this.onboarding++;
     },
     prev: function () {
-      this.onboarding = this.onboarding - 1 < 0 ? 0 : this.onboarding - 1;
+      this.onboarding--;
     },
-    signup: function () {
+    signup: function (validCheck) {
+      this.credentials.validCheck = validCheck;
       axios({
         method: "POST",
         url: "http://127.0.0.1:8000/accounts/signup/",
         data: this.credentials,
       })
         .then(() => {
-          axios({
-            method: "POST",
-            url: "http://127.0.0.1:8000/accounts/api-token-auth/",
-            data: this.credentials,
-          })
-            .then((res) => {
-              localStorage.setItem("jwt", res.data.token);
-              this.$router.push({ name: "Home" });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+          this.onboarding++;
         })
         .catch((err) => {
+          this.validAlert = true;
+          setTimeout(() => (this.validAlert = false), 2000);
+
           console.log(err);
         });
     },
   },
-
+  computed: {
+    ...mapState(["isLogin"]),
+  },
   watch: {
     nowMovie: function () {
       if (this.credentials.personal_movies.length < 3) {
@@ -332,4 +435,16 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.alert-box {
+  position: fixed;
+  top: 0;
+  height: 5vh;
+  width: 100%;
+}
+.alert {
+  position: relative;
+  width: 20vw;
+  top: 0;
+}
+</style>
