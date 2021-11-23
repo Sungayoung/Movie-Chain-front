@@ -41,6 +41,7 @@
     <v-row>
     <movie-card-list-personal
      :movieList="profile.personal_movies"
+     :isLoginUser="isLoginUser"
      @reload-profile="getProfileInfo()"></movie-card-list-personal>
     </v-row>
     <h3>프로필 이미지 변경</h3>
