@@ -38,11 +38,16 @@
         </chat-input-pop>
       </v-dialog>
     </v-row>
+      <v-btn
+        dark
+        v-if="!isLoginUser"
+        @click="followUser"
+      >{{ profile.is_following ? 'UNFOLLOW' : 'FOLLOW'}}</v-btn>
     <v-row>
     <movie-card-list-personal
      :movieList="profile.personal_movies"
      :isLoginUser="isLoginUser"
-     @reload-profile="getProfileInfo()"></movie-card-list-personal>
+     @reload-profile="reloadProfile"></movie-card-list-personal>
     </v-row>
     <h3>프로필 이미지 변경</h3>
     {{ nickname }}
@@ -80,7 +85,6 @@ export default {
   },
   mounted: function () {
     if(this.nickname){
-      console.log(this.nickname)
       this.getProfileInfo(this.nickname)
       const userInfo = JSON.parse(localStorage.getItem('userInfo'))
       this.isLoginUser = this.nickname == userInfo.nickname
@@ -98,8 +102,8 @@ export default {
       inputData
       this.getProfile(this.nickname)
       .then(res=> {
-        this.profile = res
         console.log(res)
+        this.profile = res
       })
     },
     sendProfile: function () {
@@ -107,8 +111,7 @@ export default {
       data.append('files', this.profileImg)
       this.setProfile(data)
       .then( () => {
-        this.getProfileInfo()
-        this.$router.go()
+        this.reloadProfile()
       })
     },
     getChatList: function (inputData) {
@@ -122,6 +125,26 @@ export default {
       .then( res => {
         console.log(res.data)
         this.chatList = res.data
+      })
+      .catch( err => {
+        console.log(err)
+      })
+    },
+    reloadProfile: function (inputData) {
+      inputData
+      this.$router.go()
+    },
+    followUser: function () {
+      const token = localStorage.getItem('jwt')
+      axios({
+        method: 'post',
+        url: `${process.env.VUE_APP_MCS_URL}/accounts/follow/`,
+        headers: { Authorization: `JWT ${token}` },
+        data: {user_id: this.profile.pk}
+      })
+      .then( res => {
+        this.profile.is_following = !this.profile.is_following
+        console.log(res.data)
       })
       .catch( err => {
         console.log(err)
