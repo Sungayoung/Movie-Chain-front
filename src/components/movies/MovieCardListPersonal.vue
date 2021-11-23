@@ -15,15 +15,15 @@
                 <v-card
                   :color="active ? 'primary' : 'grey'"
                   class="d-flex align-center mx-auto"
-                  width="300"
-                  height="400"
+                  width="200"
+                  height="300"
                   v-bind="attrs"
                   v-on="on"
                   @click="getIdx(idx)"
                 >
                   <v-img
-                  width="300"
-                  height="400"
+                  width="200"
+                  height="300"
                   :src="imgURL(movie)"
                   ></v-img>
                   <v-scroll-y-transition>
