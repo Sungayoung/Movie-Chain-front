@@ -62,7 +62,6 @@ export default {
   data: function () {
     return {
       show: true,
-      userInfo: JSON.parse(localStorage.getItem("userInfo")),
     };
   },
   components: {
@@ -72,7 +71,6 @@ export default {
     if (this.isLogin) {
       this.logIn();
     }
-    this.userInfo = JSON.parse(localStorage.getItem("userInfo"));
   },
   methods: {
     ...mapActions(["logOut", "logIn"]),
@@ -80,18 +78,14 @@ export default {
       this.logOut();
     },
     goToProfile: function () {
-      this.userInfo = JSON.parse(localStorage.getItem("userInfo"));
-      this.$router.push({ name: 'Profile' , params: {'nickname': this.userInfo.nickname}})
-      this.$router.go()
+      this.$router.push({ name: 'Profile' , params: {'nickname': this.nickname}})
     },
   },
   computed: {
-    ...mapState(["isLogin"]),
+    ...mapState(["isLogin", 'profile_img', 'nickname']),
     imgUrl: function () {
-      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-      if (userInfo) {
-        console.log(userInfo.profile_img);
-        return `${process.env.VUE_APP_MCS_URL}${userInfo.profile_img}`;
+      if(this.profile_img) {
+        return `${process.env.VUE_APP_MCS_URL}${this.profile_img}`;
       } else {
         return null;
       }

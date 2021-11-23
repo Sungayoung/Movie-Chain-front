@@ -1,65 +1,67 @@
 <template>
-  <div v-if="profile">
-    <v-row justify="center">
-      <v-avatar
-        class="m-3"
-        size="128"
-      ><img :src="imgUrl">
-      </v-avatar>
-    </v-row>
-
-    <!-- 유저 정보 수정 -->
-    <user-update
-      :profile="profile"
-       @reload-profile="reloadProfile"
-    ></user-update>
-
-    <v-row justify="center">
-      <v-dialog
-        scrollable
-        width="600px"
-      >
-        <template 
-          v-slot:activator="{ on, attrs }"
-          >
-          <v-btn
-            color="primary"
-            dark
-            v-bind="attrs"
-            v-on="on"
-            style="width: 120px"
-            v-text="isLoginUser ? '쪽지 확인' : '쪽지 보내기'"
-            @click="getChatList"
-          >
-          </v-btn>
-        </template>
+  <div v-if="profile" class="d-flex">
+    <v-sheet
+    rounded="xl"
+       color="grey lighten-3"
+      elevation="12"
+      width="70%"
+      class="mx-auto my-5"
+    >
+    <div style="background-color: #2E4D54; border-radius: 20px 20px 0px 0px" >
+      <v-row class="p-3" justify="end">
+        <!-- 유저 정보 수정 -->
+        <user-update
+          v-if="isLoginUser"
+          :profile="profile"
+          @reload-profile="reloadProfile"
+        ></user-update>
+        
+        <!-- 쪽지 확인 버튼 -->
         <chat-list-pop
-        v-if="isLoginUser"
-        :chatList="chatList"
-        @reload-chat="getChatList"
+          :profile="profile"
+          :isLoginUser="isLoginUser"
         ></chat-list-pop>
-        <chat-input-pop
-        v-else
-        :toUser="profile">
 
-        </chat-input-pop>
-      </v-dialog>
-    </v-row>
-      <v-btn
-        dark
-        v-if="!isLoginUser"
-        @click="followUser"
-      >{{ profile.is_following ? 'UNFOLLOW' : 'FOLLOW'}}</v-btn>
+        <!-- 팔로우 버튼 -->
+        <v-btn
+          dark
+          v-if="!isLoginUser"
+          @click="followUser"
+          width="120px"
+          
+        >{{ profile.is_following ? 'UNFOLLOW' : 'FOLLOW'}}</v-btn>
+      </v-row>
+      <v-row 
+        justify="center"
+        no-gutters 
+        class="p-1">
+        <v-avatar
+          class="m-3"
+          size="128"
+        ><img :src="imgUrl">
+        </v-avatar>
+      </v-row>
+      <v-divider inset></v-divider>
+      <v-row justify="center">
+        <h3 style="color: white; text-align: center" >{{ profile.nickname }} 님</h3>
+      </v-row>
+      <v-divider></v-divider>
+      <v-row justify="center">
+        <div class="py-3">
+          <div style="color: white; text-align: center" >{{ profile.introduce_content }}</div>
+        </div>
+      </v-row>
+    </div>
+
+    
+    <div class="my-3">
     <v-row>
     <movie-card-list-personal
      :movieList="profile.personal_movies"
      :isLoginUser="isLoginUser"
      @reload-profile="reloadProfile"></movie-card-list-personal>
     </v-row>
-    <h3>프로필 이미지 변경</h3>
-    {{ nickname }}
-    <v-file-input v-model="profileImg" name="profileImg"></v-file-input>
-    <button @click="sendProfile()">전송</button>
+
     <v-row>
     <h4 style="text-align: center">좋아하는 영화</h4>
     <movie-card-list
@@ -69,23 +71,23 @@
     <movie-card-list
     :movies="profile.bookmark_movies"></movie-card-list>
     </v-row>
+    </div>
+    </v-sheet>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import { mapActions, mapState } from 'vuex'
+import { mapActions } from 'vuex'
 import MovieCardList from '@/components/movies/MovieCardList'
 import ChatListPop from '@/components/popups/ChatListPop'
 import MovieCardListPersonal from '@/components/movies/MovieCardListPersonal'
-import ChatInputPop from '../../components/popups/ChatInputPop.vue'
 import UserUpdate from '@/components/accounts/UserUpdate.vue'
 export default {
   name: "UserProfile",
   components: {
     MovieCardList,
     ChatListPop,
-    ChatInputPop,
     MovieCardListPersonal,
     UserUpdate
   },
@@ -95,13 +97,15 @@ export default {
       profileImg: null,
       isLoginUser: null,
       chatList: null,
+      imgUrl: null
     }
   },
-  created: function () {
+  mounted: function () {
     if(this.nickname){
       this.getProfileInfo(this.nickname)
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-      this.isLoginUser = this.nickname == userInfo.nickname
+      
+      console.log(this.nickname)
+      console.log(this.$store.state.nickname)
     }
   },
   props: {
@@ -110,7 +114,6 @@ export default {
   methods: {
     ...mapActions([
       'getProfile',
-      'setProfile'
     ]),
     getProfileInfo: function (inputData) {
       inputData
@@ -118,35 +121,22 @@ export default {
       .then(res=> {
         console.log(res)
         this.profile = res
-      })
-    },
-    sendProfile: function () {
-      let data = new FormData()
-      data.append('files', this.profileImg)
-      this.setProfile(data)
-      .then( () => {
-        this.reloadProfile()
-      })
-    },
-    getChatList: function (inputData) {
-      inputData
-      const token = localStorage.getItem('jwt')
-      axios({
-        method: 'get',
-        url: `${process.env.VUE_APP_MCS_URL}/accounts/chatting/`,
-        headers: { Authorization: `JWT ${token}` },
-      })
-      .then( res => {
-        console.log(res.data)
-        this.chatList = res.data
-      })
-      .catch( err => {
-        console.log(err)
+        this.imgUrl = `${process.env.VUE_APP_MCS_URL}${res.profile_img}?_=${new Date().getTime()}`
+        this.isLoginUser = this.nickname == this.$store.state.nickname
       })
     },
     reloadProfile: function (inputData) {
-      inputData
-      this.$router.go()
+      if(inputData) {
+        if(inputData=='profile_img') {
+          this.imgUrl = `${process.env.VUE_APP_MCS_URL}${this.profile.profile_img}?_=${new Date().getTime()}`
+        }
+        else{
+          this.$router.push({name: 'Profile', params: {'nickname': inputData}})
+        }
+      }
+      else{
+        this.$router.go()
+      }
     },
     followUser: function () {
       const token = localStorage.getItem('jwt')
@@ -165,20 +155,11 @@ export default {
       })
     }
   },
-  computed: {
-    ...mapState([
-      'userNickname'
-    ]),
-    imgUrl: function () {
-      if (this.profile) {
-        return `${process.env.VUE_APP_MCS_URL}${this.profile.profile_img}`
-      }
-      else {
-        return this.nickname
-      }
-    }
-  }
 }
 </script>
 
-<style></style>
+<style scoped>
+.profile-background {
+
+}
+</style>

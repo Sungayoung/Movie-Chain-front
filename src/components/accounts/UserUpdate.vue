@@ -113,6 +113,7 @@ export default {
   },
   mounted: function () {
     this.userProfile = this.profile
+    this.imgUrl = `${process.env.VUE_APP_MCS_URL}${this.profile.profile_img}?_=${new Date().getTime()}`
   },
   data: function () {
     return {
@@ -121,6 +122,7 @@ export default {
       profileImg: null,
       password: null,
       passwordConfirmation: null,
+      imgUrl: null,
       rules: {
         nicknameRule: [
           (v) => !!v || " 닉네임을 입력해주세요.",
@@ -150,31 +152,37 @@ export default {
   },
   methods : {
     ...mapActions([
-      'setProfile',
+      'setProfileImg',
+      'getProfile',
     ]),
     sendProfile: function () {
       console.log('send')
       let data = new FormData()
       data.append('files', this.profileImg)
-      this.setProfile(data)
+      this.setProfileImg(data)
       .then( () => {
-        this.reloadProfile()
+        this.$emit('reload-profile', 'profile_img')
+        this.imgUrl = `${process.env.VUE_APP_MCS_URL}${this.profile.profile_img}?_=${new Date().getTime()}`
       })
     },
     updateUser: function () {
       const token = localStorage.getItem('jwt')
+      const data = {
+        ...this.userProfile
+      }
+      if (this.password) {
+        data['password'] = this.password
+      }
       axios({
         method: "put",
         url: "http://127.0.0.1:8000/accounts/update-user/",
         headers: { Authorization: `JWT ${token}`},
-        data: {
-          ...this.userProfile,
-          password: this.password
-        }
+        data: data
       })
-      .then(() => {
+      .then(( res ) => {
         this.dialog = false
-        this.$emit('reload-profile')
+        this.getProfile(res.data.nickname)
+        this.$emit('reload-profile', res.data.nickname)
       })
       .catch((err) => {
         this.validAlert = true;
@@ -182,18 +190,8 @@ export default {
 
         console.log(err.response);
       });
-    }
-  },
-  computed: {
-    imgUrl: function () {
-      if (this.profile) {
-        return `${process.env.VUE_APP_MCS_URL}${this.profile.profile_img}`
-      }
-      else {
-        return this.nickname
-      }
     },
-  }
+  },
 }
 </script>
 
