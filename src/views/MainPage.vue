@@ -165,7 +165,7 @@ export default {
   position: fixed;
   top: 0;
   background: rgba(151, 24, 24, 0.15);
-  width: 50vw;
+  width: 50%;
   height: 200vh;
   transition-delay: 1s;
   transition-duration: 1.1s;

@@ -39,12 +39,17 @@
             </div>
             <div class="d-flex">
               <div class="container">
-
-            <router-link v-if="userInfo" :to="{ name: 'Profile' , params: {'nickname': userInfo.nickname}}">
-              <v-avatar>
-                <img :src="imgUrl" alt="">
-              </v-avatar>
-            </router-link>
+                <router-link
+                  v-if="userInfo"
+                  :to="{
+                    name: 'Profile',
+                    params: { nickname: userInfo.nickname },
+                  }"
+                >
+                  <v-avatar>
+                    <img :src="imgUrl" alt="" />
+                  </v-avatar>
+                </router-link>
               </div>
             </div>
           </div>
@@ -65,20 +70,20 @@ export default {
   data: function () {
     return {
       show: true,
-      userInfo: JSON.parse(localStorage.getItem('userInfo'))
+      userInfo: JSON.parse(localStorage.getItem("userInfo")),
     };
   },
   components: {
     SearchInput,
   },
   created: function () {
-    if(this.isLogin) {
-      this.logIn()
+    if (this.isLogin) {
+      this.logIn();
     }
-    this.userInfo = JSON.parse(localStorage.getItem('userInfo'))
+    this.userInfo = JSON.parse(localStorage.getItem("userInfo"));
   },
   methods: {
-    ...mapActions(["logOut", 'logIn']),
+    ...mapActions(["logOut", "logIn"]),
     logout: function () {
       this.logOut();
     },
@@ -86,31 +91,25 @@ export default {
   computed: {
     ...mapState(["isLogin"]),
     imgUrl: function () {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-      if (userInfo){
-        console.log(userInfo.profile_img)
-        return `${process.env.VUE_APP_MCS_URL}${userInfo.profile_img}`
-      }
-      else{
-        return null
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      if (userInfo) {
+        console.log(userInfo.profile_img);
+        return `${process.env.VUE_APP_MCS_URL}${userInfo.profile_img}`;
+      } else {
+        return null;
       }
     },
   },
 };
-
-
-
-
-
-
 </script>
 
 <style>
 html {
+  transition-duration: 1s;
   background-color: black;
 }
 .bg {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0);
 }
 .my-link {
   text-decoration: none;
@@ -130,5 +129,23 @@ html {
 .not-login {
   transform: translateY(-100px);
   transition-duration: 1s;
+}
+
+/* 스크롤 바 설정 */
+html {
+  -ms-overflow-style: none; /* IE and Edge */
+}
+html::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  height:5%;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 25px;
+}
+::-webkit-scrollbar-track {
+  position: absolute;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0);
 }
 </style>
