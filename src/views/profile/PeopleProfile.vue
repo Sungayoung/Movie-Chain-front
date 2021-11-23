@@ -4,7 +4,7 @@
     rounded="xl"
        color="grey lighten-3"
       elevation="12"
-      width="70%"
+      width="50%"
       class="mx-auto my-5"
     >
       <div style="background-color: #EED360; border-radius: 20px 20px 0px 0px" >
@@ -24,7 +24,7 @@
           <v-avatar
             class="m-3"
             size="128"
-          ><img :src="imgURL">
+          ><img :src="imgURL" style="object-fit: cover">
           </v-avatar>
         </v-row>
         

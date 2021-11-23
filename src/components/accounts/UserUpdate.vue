@@ -7,13 +7,14 @@
   >
     <template v-slot:activator="{ on, attrs }">
       <v-btn
-        width="120"
-        color="primary"
+        width="100"
+        color="#89AFA5"
         dark
         v-bind="attrs"
         v-on="on"
+        class="m-2"
       >
-        유저 정보 수정
+        개인정보 수정
       </v-btn>
     </template>
     <v-card 

@@ -12,19 +12,18 @@
         v-bind="attrs"
         v-on="on"
         style="width: 100px"
-        v-text="isLoginUser ? '쪽지 확인' : '쪽지 보내기'"
         class="m-2"
-        @click="getChatList"
-      >
+        @click="getFollowList"
+      >팔로우 리스트
       </v-btn>
     </template>
-    <v-card v-if="isLoginUser">
+    <v-card>
       <v-toolbar
-        color="cyan"
+        color="grey"
         dark
         flat
       >
-        <v-toolbar-title>쪽지 목록</v-toolbar-title>
+        <v-toolbar-title>FOLLOW LIST</v-toolbar-title>
 
         <v-spacer></v-spacer>
         <template v-slot:extension>
@@ -32,7 +31,6 @@
             v-model="tab"
             align-with-title
           >
-          
             <v-tabs-slider color="yellow"></v-tabs-slider>
 
             <v-tab
@@ -46,73 +44,75 @@
       </v-toolbar>
       <v-tabs-items v-model="tab">
         <v-tab-item
-          v-for="(chats, idx) in chatList"
+          v-for="(follow, idx) in followList"
           :key="idx"
         >
           <v-card flat style="overflow-y: scroll">
             <v-card-text style="height: 600px;">
             <v-list>
-              <chat-pop
-              v-for="(chat, idx) in chats"
-              :key="idx"
-              :chat="chat"
-              @reload-chat="getChatList()"
-              ></chat-pop>
+              <follow-pop
+              v-for="(person, i) in follow"
+              :key="i"
+              :person="person"
+              :idx="idx"
+              @reload-follow="getFollowList()">
+
+              </follow-pop>
             </v-list>
           </v-card-text>
           </v-card>
         </v-tab-item>
       </v-tabs-items>
       </v-card>
-    <chat-input-pop
-    v-else
-    :toUser="profile">
-
-    </chat-input-pop>
   </v-dialog>
-  
 </template>
 
 <script>
+import FollowPop from './FollowPop.vue'
 import axios from 'axios'
-import ChatPop from './ChatPop.vue'
-import ChatInputPop from '../../components/popups/ChatInputPop.vue'
+
 export default {
-  name: "ChatListPop",
+  name: 'FollowListPop',
   data: function () {
     return {
-      items: ['받은 쪽지함', '보낸 쪽지함'],
       tab: null,
-      chatList: null,
+      items: ['유저 팔로워', '유저 팔로잉', '배우 팔로우', '감독 팔로우'],
+      followList: null
     }
   },
-  props: {
-    profile: Object,
-    isLoginUser: Boolean
-  },
   components: {
-    ChatPop,
-    ChatInputPop,
+    FollowPop
   },
   methods: {
-    getChatList: function (inputData) {
-      inputData
+    getFollowList: function () {
       const token = localStorage.getItem('jwt')
       axios({
         method: 'get',
-        url: `${process.env.VUE_APP_MCS_URL}/accounts/chatting/`,
+        url: `${process.env.VUE_APP_MCS_URL}/accounts/follow/`,
         headers: { Authorization: `JWT ${token}` },
       })
       .then( res => {
+        this.followList = res.data
         console.log(res.data)
-        this.chatList = res.data
       })
       .catch( err => {
         console.log(err)
       })
-    },
+    }
   }
-};
+}
 </script>
 
-<style></style>
+<style scoped>
+.box {
+    width: 150px;
+    height: 150px; 
+    border-radius: 70%;
+    overflow: hidden;
+}
+.profile {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+</style>

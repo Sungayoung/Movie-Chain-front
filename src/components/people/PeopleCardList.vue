@@ -1,14 +1,12 @@
 <template>
   <div>
     <v-sheet
-      
       class="mx-auto"
       elevation="8"
       max-width="85%"
       style="background: gray; border-radius:25px"
     >
       <v-slide-group
-      
         show-arrows
         next-icon="mdi-chevron-right"
         prev-icon="mdi-chevron-left"

@@ -4,32 +4,45 @@
     rounded="xl"
        color="grey lighten-3"
       elevation="12"
-      width="70%"
+      width="50%"
       class="mx-auto my-5"
     >
     <div style="background-color: #2E4D54; border-radius: 20px 20px 0px 0px" >
-      <v-row class="p-3" justify="end">
-        <!-- 유저 정보 수정 -->
-        <user-update
-          v-if="isLoginUser"
-          :profile="profile"
-          @reload-profile="reloadProfile"
-        ></user-update>
-        
-        <!-- 쪽지 확인 버튼 -->
-        <chat-list-pop
-          :profile="profile"
-          :isLoginUser="isLoginUser"
-        ></chat-list-pop>
+      <v-row class="p-3" justify="space-between">
+        <v-col>
+          <!-- 팔로우 리스트 확인 버튼 -->
+          <follow-list-pop
+            v-if="isLoginUser"
+            :profile="profile">
+            
+          </follow-list-pop>
+        </v-col>
+        <v-col>
+          <v-row justify="end">
 
-        <!-- 팔로우 버튼 -->
-        <v-btn
-          dark
-          v-if="!isLoginUser"
-          @click="followUser"
-          width="120px"
+          <!-- 유저 정보 수정 -->
+          <user-update
+            v-if="isLoginUser"
+            :profile="profile"
+            @reload-profile="reloadProfile"
+          ></user-update>
           
-        >{{ profile.is_following ? 'UNFOLLOW' : 'FOLLOW'}}</v-btn>
+          <!-- 쪽지 확인 버튼 -->
+          <chat-list-pop
+            :profile="profile"
+            :isLoginUser="isLoginUser"
+          ></chat-list-pop>
+
+          <!-- 팔로우 버튼 -->
+          <v-btn
+            dark
+            v-if="!isLoginUser"
+            @click="followUser"
+            width="120px"
+            
+          >{{ profile.is_following ? 'UNFOLLOW' : 'FOLLOW'}}</v-btn>
+          </v-row>
+        </v-col>
       </v-row>
       <v-row 
         justify="center"
@@ -80,6 +93,7 @@
 <script>
 import axios from 'axios'
 import { mapActions } from 'vuex'
+import FollowListPop from '@/components/popups/FollowListPop'
 import MovieCardList from '@/components/movies/MovieCardList'
 import ChatListPop from '@/components/popups/ChatListPop'
 import MovieCardListPersonal from '@/components/movies/MovieCardListPersonal'
@@ -90,7 +104,8 @@ export default {
     MovieCardList,
     ChatListPop,
     MovieCardListPersonal,
-    UserUpdate
+    UserUpdate,
+    FollowListPop
   },
   data: function () {
     return {
