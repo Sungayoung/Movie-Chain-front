@@ -78,13 +78,6 @@
                 item-value="id"
                 :search-input.sync="query"
               ></v-autocomplete>
-              <v-icon
-                large
-                color="white"
-                @click="search"
-                class="align-center ms-3"
-                >mdi-magnify</v-icon
-              >
             </div>
             <v-card-text>
               <div>

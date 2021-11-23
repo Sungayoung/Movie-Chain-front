@@ -25,13 +25,12 @@
         </v-tabs>
       </template>
     </v-toolbar>
-  <chat-pop></chat-pop>
     <v-tabs-items v-model="tab">
       <v-tab-item
         v-for="(chats, idx) in chatList"
         :key="idx"
       >
-        <v-card flat>
+        <v-card flat style="overflow-y: scroll">
           <v-card-text style="height: 300px;">
           <v-list>
             <chat-pop

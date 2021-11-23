@@ -39,17 +39,9 @@
             </div>
             <div class="d-flex">
               <div class="container">
-                <router-link
-                  v-if="userInfo"
-                  :to="{
-                    name: 'Profile',
-                    params: { nickname: userInfo.nickname },
-                  }"
-                >
-                  <v-avatar>
-                    <img :src="imgUrl" alt="" />
-                  </v-avatar>
-                </router-link>
+                <v-avatar @click="goToProfile">
+                  <img :src="imgUrl" alt="" />
+                </v-avatar>
               </div>
             </div>
           </div>
@@ -86,6 +78,11 @@ export default {
     ...mapActions(["logOut", "logIn"]),
     logout: function () {
       this.logOut();
+    },
+    goToProfile: function () {
+      this.userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      this.$router.push({ name: 'Profile' , params: {'nickname': this.userInfo.nickname}})
+      this.$router.go()
     },
   },
   computed: {

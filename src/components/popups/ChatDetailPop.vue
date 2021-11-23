@@ -24,12 +24,26 @@
       </v-card-text>
       <v-divider class="mx-4"></v-divider>
       <v-card-actions>
-        <v-btn
-          color="primary"
-          rounded
-        >
-          답장
-        </v-btn>
+      <!-- 답장 기능을 위한 dialog -->
+        <v-dialog
+              width="400px"
+            >
+            <template 
+              v-slot:activator="{ on, attrs }"
+              >
+              <v-btn
+                v-bind="attrs"
+                v-on="on"
+                color="primary"
+                rounded
+              >
+              답장
+              </v-btn>
+            </template>
+            <chat-input-pop
+            :toUser="chat.from_user"></chat-input-pop>
+          </v-dialog>
+        
         <v-btn
           color="error"
           rounded
@@ -38,30 +52,17 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <!-- <v-list-item>
-      <v-list-item-avatar>
-        
-      </v-list-item-avatar>
-      <v-list-item-content>
-        <v-list-item-title>{{ chat.from_user.nickname }}</v-list-item-title>
-        수정모드면 input, 아니면 text를 보여준다.
-        <v-list-item-subtitle>
-          {{ chat.content }}
-        </v-list-item-subtitle>
-      </v-list-item-content>
-      
-      삭제버튼 : 클릭시 삭제된다.
-      <v-list-item-icon @click="removeChatting">
-        <v-icon class ="m-2" color="red lighten-2">mdi-delete</v-icon>
-      </v-list-item-icon>
-    </v-list-item> -->
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import ChatInputPop from './ChatInputPop.vue'
 export default {
   name: "ChatDetailPop",
+  components: {
+    ChatInputPop
+  },
   props: {
     chat: Object
   },
