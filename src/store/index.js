@@ -7,6 +7,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     isLogin: localStorage.getItem('jwt') ? true : false,
+    profile_img: null,
+    nickname: null,
   },
   mutations: {
     LOG_IN: function (state) {
@@ -24,14 +26,11 @@ export default new Vuex.Store({
     LOG_OUT: function (state) {
       state.isLogin = false;
       localStorage.removeItem("jwt")
-      localStorage.removeItem('userInfo')
     },
     SET_PROFILE: function (state, res) {
-      const data = {
-        nickname: res.nickname,
-        profile_img: res.profile_img
-      }
-      localStorage.setItem('userInfo', JSON.stringify(data))
+      state.profile_img = `${res.profile_img}?_=${new Date().getTime()}`
+      state.nickname = res.nickname
+      console.log(state.nickname)
     }
   },
   actions: {
@@ -307,7 +306,7 @@ export default new Vuex.Store({
       });
     },
     getProfile: function ({ commit }, nickname) {
-      commit;
+      commit
       const token = localStorage.getItem('jwt')
       return new Promise((resolve, reject) => {
         axios({
@@ -324,7 +323,7 @@ export default new Vuex.Store({
         })
       })
     },
-    setProfile: function ({commit}, data){
+    setProfileImg: function ({commit}, data){
       const token = localStorage.getItem('jwt')
       return new Promise((resolve, reject) => {
         axios({
