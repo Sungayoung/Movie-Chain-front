@@ -63,9 +63,12 @@
             <h3 class="more-text"  style="z-index: 50">추천영화</h3>
             <v-icon class="more-text" size="48">mdi-chevron-double-down</v-icon>
           </div>
-          
           <div style="background-color:rgba(0,0,0,0.5)">
-            <h4 class="text-center mt-5">추천 영화</h4>
+            <div class="d-flex justify-content-center align-items-center mt-5" >
+
+              <h4 class="text-center my-5">추천 영화</h4>
+              <v-btn icon dark @click="reloadRecommend"><v-icon>mdi-reload</v-icon></v-btn>
+            </div>
             <img
               v-if="!(hoveringPosterURL === null)"
               :src="hoveringPosterURL"
@@ -169,6 +172,17 @@ export default {
         .querySelector(`#my-img-${this.movie.id}`)
         .classList.remove("card-on-mouse");
     },
+    reloadRecommend: function () {
+      this.nowLoading = !this.nowLoading
+      this.getRecommendMovie()
+        .then((res) => {
+          this.recommendMovies = res
+          this.nowLoading = !this.nowLoading
+        })
+        .catch( () => {
+          this.nowLoading = !this.nowLoading
+        })
+    },
     handleScroll() {
       const { clientHeight, scrollHeight, scrollTop } =
         document.documentElement;
@@ -202,6 +216,9 @@ export default {
             this.nowLoading = !this.nowLoading
             this.nowPage ++
           })
+          .catch(() => {
+            this.nowLoading = !this.nowLoading
+          })
         }
         else {
           const params = {
@@ -218,6 +235,7 @@ export default {
               console.log(this.movies);
             })
             .catch((err) => {
+              this.nowLoading = !this.nowLoading
               console.log(err);
             });
         }
@@ -247,6 +265,7 @@ export default {
           })
           .catch((err) => {
             console.log(err);
+            this.nowLoading = !this.nowLoading
           });
         this.getRecommendMovie()
         .then((res) => {

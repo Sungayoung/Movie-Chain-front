@@ -61,7 +61,7 @@ export default {
       const token = localStorage.getItem('jwt')
       console.log(this.toUser)
       const data = {
-        to_user: this.toUser.id,
+        to_user: this.toUser.pk,
         content: this.chattingInput,
       }
       console.log(data)
