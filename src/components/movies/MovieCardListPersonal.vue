@@ -237,10 +237,13 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .movie-img {
   width: 160px;
   height: 240px;
   object-fit: fill;
+}
+* ::-webkit-scrollbar {
+  display: none;
 }
 </style>

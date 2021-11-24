@@ -4,54 +4,73 @@
     <div class="curtain-left" :class="{ 'curtain-open': isLogin }"></div>
     <div class="curtain-right" :class="{ 'curtain-open': isLogin }"></div>
     <!-- 메인화면(로그인) -->
-
-    <div v-if="!isLogin" id="login-page" class="d-flex justify-content-center login-page">
-    <div class="my-auto">
-      <img
-        alt="MovieChain Logo"
-        class="d-flex justif mx-auto"
-        src="@/assets/movie_chain.png"
-        width="200"
-      />
-      <Login />
-    </div>
-    </div>
-
-      <div v-if="isLogin">
-    <!-- 메인화면(검색) -->
-    <div style="height: 80vh; z-index: 2" id="search-page">
-      <v-col class="d-flex align-center justify-center" style="height: 80vh">
-        <div>
-          <div v-if="isLogin" class="justify-content-center d-flex">
-            <div>
-              <img
-                alt="MovieChain Logo"
-                class="d-flex justif mx-auto"
-                src="@/assets/movie_chain.png"
-                width="200"
-              />
-
-              <div>
-                <SearchInput />
-              </div>
-            </div>
-          </div>
-        </div>
-      </v-col>
-      <!-- 추천페이지 -->
-        <div
-          id="more-text"
-          class="text-center"
-          style="height: 20vh; z-index: 0"
-        >
-          <h3 class="more-text">추천영화</h3>
-          <v-icon class="more-text" size="48">mdi-chevron-double-down</v-icon>
-        </div>
-        <div style="background-color: white">
-          <img v-if="!(hoveringPosterURL===null)" :src="hoveringPosterURL" alt="">
-          <MovieCardMatrix :movieList="movies" />
+    <transition name="fade">
+      <div
+        v-if="!isLogin"
+        id="login-page"
+        class="d-flex justify-content-center login-page"
+      >
+        <div class="my-auto">
+          <img
+            alt="MovieChain Logo"
+            class="d-flex justif mx-auto"
+            src="@/assets/movie_chain.png"
+            width="200"
+          />
+          <Login />
         </div>
       </div>
+    </transition>
+
+    <!-- 메인화면(검색) -->
+    <transition name="fade">
+      <div v-if="isLogin">
+        <div style="height: 80vh; z-index: 2" id="search-page">
+          <v-col
+            class="d-flex align-center justify-center"
+            style="height: 80vh"
+          >
+            <div>
+              <div v-if="isLogin" class="justify-content-center d-flex">
+                <div>
+                  <img
+                    alt="MovieChain Logo"
+                    class="d-flex justif mx-auto"
+                    src="@/assets/movie_chain.png"
+                    width="200"
+                  />
+
+                  <div>
+                    <SearchInput />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </v-col>
+          <!-- 추천페이지 -->
+          <div
+            id="more-text"
+            class="text-center"
+            style="height: 20vh; z-index: 0"
+          >
+            <h3 class="more-text">추천영화</h3>
+            <v-icon class="more-text" size="48">mdi-chevron-double-down</v-icon>
+          </div>
+          <div style="background-color: black">
+            <img
+              v-if="!(hoveringPosterURL === null)"
+              :src="hoveringPosterURL"
+              alt=""
+            />
+            <MovieCardMatrix :movieList="movies" />
+          </div>
+        </div>
+      </div>
+    </transition>
+    <div>
+      <a class="to-top-button" href="#" title="맨 위로" :class="{'display-button': !isTop}">
+        <v-icon color="white" size="64">mdi-arrow-up</v-icon>
+      </a>
     </div>
   </div>
 </template>
@@ -148,17 +167,42 @@ export default {
   },
   computed: {
     ...mapState(["isLogin", "hoveringPosterURL"]),
-    hoveringPosterURL: function() {
-      console.log(1111)
-      return localStorage.getItem('hoveringPosterURL')
-    }
+    hoveringPosterURL: function () {
+      return localStorage.getItem("hoveringPosterURL");
+    },
   },
 };
 </script>
 
 <style scoped>
-.login-page{
-  height:80vh;
+.to-top-button {
+  display: scroll;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 100;
+  color: rgba(104, 240, 217, 0.473);
+  transition-duration : 1s;
+  transform: translateY(100px);
+}
+.display-button {
+  transition-duration : 1s;
+  transform: none;
+
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 1s;
+}
+.fade-enter-active {
+  transition-delay: 1.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+.login-page {
+  height: 80vh;
 }
 .curtain-left,
 .curtain-right {

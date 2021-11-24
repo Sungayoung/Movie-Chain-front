@@ -32,7 +32,7 @@
             :key="idx"
             class="mx-2"
           >
-            <button @click.stop="moveGenreList(gnr.name)">
+            <button @click.stop="moveGenreList(gnr.id)">
               <v-icon left> mdi-movie-open-outline </v-icon>
               {{ gnr.name }}
             </button>
@@ -45,7 +45,7 @@
             :key="idx"
             class="mx-2"
           >
-            <button @click.stop="moveKeywordList(kwd.name)">
+            <button @click.stop="moveKeywordList(kwd.id)">
               <v-icon left> mdi-pound </v-icon>
               {{ kwd.name }}
             </button>
@@ -180,11 +180,17 @@ export default {
         },
       });
     },
-    moveGenreList: function (gnr) {
-      this.search(gnr);
+    moveGenreList: function (gnrId) {
+      this.$router.push({
+        name: "MovieList",
+        params: { propFilterBy: "genre", propFilterId: gnrId },
+      });
     },
-    moveKeywordList: function (kwd) {
-      this.search(kwd);
+    moveKeywordList: function (kwdId) {
+      this.$router.push({
+        name: "MovieList",
+        params: { propFilterBy: "keyword", propFilterId: kwdId },
+      });
     },
     magnify: function () {},
     getReviewList: function () {

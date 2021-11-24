@@ -6,32 +6,47 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    isLogin: localStorage.getItem('jwt') ? true : false,
+    isLogin: localStorage.getItem("jwt") ? true : false,
+    Spage: 1,
+    SmovieCnt: 18,
+    SorderBy: null,
+    SfilterBy: "all",
+    SfilterId: null,
+    SfilterIdList: [],
     profile_img: null,
     nickname: null,
   },
   mutations: {
     LOG_IN: function (state) {
       state.isLogin = true;
-      const token=localStorage.getItem('jwt')
+      const token = localStorage.getItem("jwt");
       axios({
-        method: 'get',
+        method: "get",
         url: `${process.env.VUE_APP_MCS_URL}/accounts/profile/`,
-        headers: {Authorization: `JWT ${token}`}
-      })
-      .then( res => {
-        this.commit('SET_PROFILE', res.data)
-      })
+        headers: { Authorization: `JWT ${token}` },
+      }).then((res) => {
+        this.commit("SET_PROFILE", res.data);
+      });
     },
     LOG_OUT: function (state) {
       state.isLogin = false;
-      localStorage.removeItem("jwt")
+      localStorage.removeItem("jwt");
+      localStorage.removeItem("userInfo");
     },
     SET_PROFILE: function (state, res) {
-      state.profile_img = `${res.profile_img}?_=${new Date().getTime()}`
-      state.nickname = res.nickname
-      console.log(state.nickname)
-    }
+      state.profile_img = `${res.profile_img}?_=${new Date().getTime()}`;
+      state.nickname = res.nickname;
+      console.log(state.nickname);
+    },
+    UPDATE_INFO: function (state, info) {
+      state.Spage = info.page;
+      state.SmovieCnt = info.movieCnt;
+      state.SorderBy = info.orderBy;
+      state.SfilterBy = info.filterBy;
+      state.SfilterId = info.filterId;
+      state.SfilterIdList = info.filterIdList;
+      localStorage.removeItem("jwt");
+    },
   },
   actions: {
     logIn: function ({ commit }) {
@@ -306,45 +321,47 @@ export default new Vuex.Store({
       });
     },
     getProfile: function ({ commit }, nickname) {
-      commit
-      const token = localStorage.getItem('jwt')
+      commit;
+      const token = localStorage.getItem("jwt");
       return new Promise((resolve, reject) => {
         axios({
-          method: 'get',
+          method: "get",
           url: `${process.env.VUE_APP_MCS_URL}/accounts/profile/`,
-          headers: {Authorization: `JWT ${token}`},
-          params: {nickname}
+          headers: { Authorization: `JWT ${token}` },
+          params: { nickname },
         })
-        .then(res => {
-          resolve(res.data)
-        })
-        .catch(err => {
-          reject(err)
-        })
-      })
+          .then((res) => {
+            resolve(res.data);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
     },
-    setProfileImg: function ({commit}, data){
-      const token = localStorage.getItem('jwt')
+    setProfileImg: function ({ commit }, data) {
+      const token = localStorage.getItem("jwt");
       return new Promise((resolve, reject) => {
         axios({
-          method: 'post',
+          method: "post",
           url: `${process.env.VUE_APP_MCS_URL}/accounts/profile/`,
           data: data,
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
             Authorization: `JWT ${token}`,
-          }
+          },
         })
-        .then( res => {
-          commit('SET_PROFILE', res.data)
-          resolve(res.data)
-        })
-        .catch( err => {
-          reject(err.data)
-        })
-      })
-    }
-
+          .then((res) => {
+            commit("SET_PROFILE", res.data);
+            resolve(res.data);
+          })
+          .catch((err) => {
+            reject(err.data);
+          });
+      });
+    },
+    updateInfo: function ({ commit }, info) {
+      commit("UPDATE_INFO", info);
+    },
   },
   modules: {},
 });

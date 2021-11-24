@@ -1,8 +1,5 @@
 <template>
   <transition
-    name="router-transition"
-    enter-active-class="animated animate__fadeInDown"
-    leave-active-class="animated animated animate__fadeOutUp"
   >
     <div class="text-center">
       <div class="alert-box">
@@ -10,10 +7,13 @@
           <transition
             name="custom-classes-transition"
             enter-active-class="animated animate__fadeInDown"
-            leave-active-class="animated animated animate__fadeOutUp"
+            leave-active-class="animated animate__fadeOutUp"
           >
             <v-alert v-if="validAlert" type="error" class="alert d-flex">
               형식이 맞지않습니다.
+            </v-alert>
+            <v-alert v-if="movieAlert" type="error" class="alert d-flex">
+              {{ movieAlertText }}
             </v-alert>
           </transition>
         </div>
@@ -27,9 +27,13 @@
           <v-icon v-else color="white">mdi-record</v-icon>
         </v-item>
       </v-item-group>
-      <v-card class="mx-auto" max-width="500">
-        <v-card-title class="text-h6 font-weight-regular justify-space-between">
-          <span>Movie Chain과 연결하기</span>
+
+      <!-- 회원가입 폼 -->
+      <v-card class="mx-auto" max-width="800">
+        <v-card-title
+          class="text-h6 d-flex justify-content-center font-weight-regular"
+        >
+          <span class="text-center">Movie Chain과 연결하기</span>
         </v-card-title>
 
         <v-window v-model="onboarding">
@@ -158,56 +162,94 @@
 
           <!-- 3 페이지: 나만의 영화 3개 -->
           <v-window-item :onboarding="3">
-            <v-autocomplete
-              color="green"
-              height="150"
-              width="150"
-              class="d-flex row"
-              v-model="nowMovie"
-              :items="movieList"
-              item-text="title"
-              return-object
-              :change="searchMatrix"
-              label="My Movies"
-              hide-spin-buttons
-            >
-              <template v-slot:item="data">
-                <div style="width: 300px">
-                  <template>
-                    <div>
-                      <v-list-item-image>
-                        <v-img
-                          :src="
-                            'https://image.tmdb.org/t/p/w500' +
-                            data.item.poster_path
-                          "
-                          width="100"
-                        />
-                      </v-list-item-image>
-                      <v-list-item-content>
-                        <v-list-item-title
-                          v-html="data.item.title"
-                        ></v-list-item-title>
-                      </v-list-item-content>
-                    </div>
-                  </template>
-                </div>
-              </template>
-            </v-autocomplete>
-
-            <v-card-text>
-              <h1 class="text-h6 font-weight-light mb-2 align-self-center">
-                {{ credentials.nickname }}
-              </h1>
-
-              <h1
-                v-for="movie in credentials.personal_movies"
-                :key="movie"
-                @click="delMovie"
+            <!-- 등록된 영화를 보여주는 부분 -->
+            <div class="img-box d-flex">
+              <div
+                class="d-flex col-3 justify-content-center align-items-center"
               >
-                {{ movie }}
-              </h1>
-            </v-card-text>
+                <h3 class="d-flex">{{ credentials.nickname }}강동옥 님</h3>
+              </div>
+              <div class="col-9 d-flex">
+                <div
+                  class="container d-flex"
+                  style="position: absolute; z-index: 4"
+                >
+                  <div
+                    v-for="n in 3"
+                    :key="n"
+                    class="d-flex col-3"
+                    @click.stop="delMovie(n)"
+                     @mouseover="nowHoverMyMovieNum = n - 1"
+                        @mouseleave="nowHoverMyMovieNum = null"
+                  ><button>
+
+                    <div class="movie-img d-flex">
+                      <transition name="my-movie-card">
+                        <div
+                          v-if="nowHoverMyMovieNum === n - 1 && tempPersonalMovies[n - 1]"
+                          class="del-movie-curtain d-flex justify-content-center align-items-center"
+                        ><v-icon color="white" size="64" class="my-auto">mdi-minus-circle-outline</v-icon></div>
+                      </transition>
+
+                      <v-img
+                       
+                        :src="imgURL(tempPersonalMovies[n - 1])"
+                      ></v-img>
+                    </div>
+                  </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- 영화등록하는 부분 -->
+            <v-card class="grey m-3">
+              <div class="mx-auto p-3">
+                <v-autocomplete
+                  class="d-inline-flex ms-5 mt-5"
+                  hide-details
+                  rounded
+                  filled
+                  clearable
+                  open-on-clear
+                  color="black"
+                  background-color="white"
+                  style="width: 400px"
+                  :items="movies"
+                  item-text="title"
+                  item-value="id"
+                  :search-input.sync="query"
+                  placeholder="여기를 눌러서 영화를 지정하세요."
+                ></v-autocomplete>
+              </div>
+              <div>
+                <v-card-text style="overflow-y: scroll">
+                  <div
+                    class="row row-cols-5 g-3 m-0 mx-auto"
+                    style="height: 500px; background=grey"
+                  >
+                    <button
+                      :id="'my-img-' + movie.id"
+                      @mouseover="nowHoverMovieId = movie.id"
+                      @mouseleave="nowHoverMovieId = null"
+                      @click="addMovie(movie)"
+                      v-for="(movie, idx) in filteredMovies"
+                      :key="idx"
+                      class="p-0"
+                      style="position: relative"
+                    >
+                      <transition name="movie-card-transition">
+                        <div
+                          v-if="nowHoverMovieId === movie.id"
+                          class="add-movie-curtain d-flex justify-content-center align-items-center"
+                        ><v-icon color="white" size="64" class="my-auto">mdi-plus-circle-outline</v-icon></div>
+                      </transition>
+                      <v-img class="movie-img" :src="imgURL(movie)" />
+                    </button>
+                  </div>
+                </v-card-text>
+              </div>
+              <v-divider></v-divider>
+            </v-card>
           </v-window-item>
 
           <!-- 4 페이지: 회원가입 완료 -->
@@ -279,8 +321,14 @@ export default {
   data: function () {
     return {
       // personal movie 선택창에 필요힌 변수들
-      movieList: [],
-      nowMovie: null,
+      movies: [],
+      filteredMovies: [],
+      tempPersonalMovies: [],
+      nowHoverMovieId: null,
+      nowHoverMyMovieNum: null,
+
+      query: null,
+      dialog: false,
 
       // 선호장르 종류
       genreList: [
@@ -353,40 +401,70 @@ export default {
         passwordConfirmation: null,
         like_genres: [],
         personal_movies: [],
-        validCheck: true,
+        valid_check: true,
       },
+
+      //  에러표시 위한 변수
       validAlert: false,
+      movieAlert: false,
+
+      // 생일 메뉴창을 위한 변수
+      menu: false,
     };
   },
   created: function () {
     if (this.isLogin) {
-      this.$router.push({name:"MainPage"})
+      this.$router.push({ name: "MainPage" });
     } else {
-
       const params = {
         filter_by: "all",
-    };
-    this.getMovieList(params)
-      .then((res) => {
-        // console.log(res);
-        this.movieList = res;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-        }
+      };
+      this.getMovieList(params)
+        .then((res) => {
+          // console.log(res);
+          this.movies = res;
+          this.filteredMovies = this.movies.slice(0, 100);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   },
   methods: {
     ...mapActions(["getMovieList"]),
-    searchMatrix: function () {
-      document.querySelectorAll(".v-list").classList.add("row");
-      document.querySelectorAll(".v-list-item").classList.add("col-3");
+    hoverMovieCard: function () {
+      document
+        .querySelector(`#my-img-${this.movie.id}`)
+        .classList.add("card-on-mouse");
     },
-    delMovie: function (movieId) {
-      const idx = this.credentials.personal_movies.findIndex(
-        (item) => item === movieId
-      );
-      this.credentials.personal_movies.splice(idx, 1);
+    leaveMovieCard: function () {
+      document
+        .querySelector(`#my-img-${this.movie.id}`)
+        .classList.remove("card-on-mouse");
+    },
+
+    imgURL: function (movie) {
+      if (movie && movie.poster_path != null) {
+        return `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+      } else {
+        return `${process.env.VUE_APP_MCS_URL}/media/images/profile/person_default.jpg`;
+      }
+    },
+    addMovie: function (mov) {
+      if (this.tempPersonalMovies.indexOf(mov) > -1) {
+        this.movieAlertText = "이미 담은 영화입니다.";
+        this.movieAlert = true;
+        setTimeout(() => (this.movieAlert = false), 2000);
+      } else if (this.tempPersonalMovies.length >= 3) {
+        this.movieAlertText = "Personal Movie는 3개까지 담을 수 있습니다.";
+        this.movieAlert = true;
+        setTimeout(() => (this.movieAlert = false), 2000);
+      } else {
+        this.tempPersonalMovies.push(mov);
+      }
+    },
+    delMovie: function (inListNum) {
+      this.tempPersonalMovies.splice(inListNum - 1, 1);
     },
     addOrDelGenre: function (genreId) {
       if (this.credentials.like_genres.includes(genreId)) {
@@ -399,13 +477,18 @@ export default {
       }
     },
     next: function () {
-      this.onboarding = this.onboarding++;
+      this.onboarding++;
     },
     prev: function () {
       this.onboarding--;
     },
     signup: function (validCheck) {
-      this.credentials.validCheck = validCheck;
+      this.credentials.valid_check = validCheck;
+      if (validCheck) {
+        this.tempPersonalMovies.forEach((mov) =>
+          this.credentials.personal_movies.push(mov.id)
+        );
+      }
       axios({
         method: "POST",
         url: "http://127.0.0.1:8000/accounts/signup/",
@@ -413,11 +496,13 @@ export default {
       })
         .then(() => {
           this.onboarding++;
+          if (validCheck) {
+            this.$router.push({ name: "MainPage" });
+          }
         })
         .catch((err) => {
           this.validAlert = true;
           setTimeout(() => (this.validAlert = false), 2000);
-
           console.log(err);
         });
     },
@@ -426,9 +511,16 @@ export default {
     ...mapState(["isLogin"]),
   },
   watch: {
-    nowMovie: function () {
-      if (this.credentials.personal_movies.length < 3) {
-        this.credentials.personal_movies.push(this.nowMovie.id);
+    query(val) {
+      if (val) {
+        this.filteredMovies = this.movies.filter((movie) => {
+          return (
+            movie.title.toLocaleLowerCase().indexOf(val.toLocaleLowerCase()) >
+            -1
+          );
+        });
+      } else {
+        this.filteredMovies = this.movies.slice(0, 102);
       }
     },
   },
@@ -436,15 +528,62 @@ export default {
 </script>
 
 <style scoped>
+.del-movie-curtain {
+  position: absolute;
+  background-color: rgba(255, 0, 0, 0.3);
+  z-index: 100;
+}
+
+.add-movie-curtain {
+  position: absolute;
+  background-color: rgba(72, 117, 72, 0.5);
+  z-index: 100;
+}
+.del-movie-curtain,
+.add-movie-curtain,
+.movie-img {
+  width: 150px;
+  height: 225px;
+  object-fit: fill;
+}
+.img-box {
+  width: 100%;
+  height: 300px;
+  object-fit: fill;
+}
+* ::-webkit-scrollbar {
+  display: none;
+}
+
+.my-movie-card-enter-active,
+.my-movie-card-leave-active {
+  transition-duration: 500ms;
+}
+.my-movie-card-enter,
+.my-movie-card-leave-to {
+  opacity: 0;
+}
+
+.movie-card-transition-enter-active,
+.movie-card-transition-leave-active {
+  transition-duration: 0.5s;
+  transition-property: all;
+}
+.movie-card-transition-enter,
+.movie-card-transition-leave-to {
+  opacity: 0;
+}
+
 .alert-box {
   position: fixed;
   top: 0;
   height: 5vh;
   width: 100%;
+  z-index: 10;
 }
 .alert {
   position: relative;
-  width: 20vw;
+  max-width: 30vw;
   top: 0;
 }
 </style>
