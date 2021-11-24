@@ -56,7 +56,19 @@
             <h3 class="more-text">추천영화</h3>
             <v-icon class="more-text" size="48">mdi-chevron-double-down</v-icon>
           </div>
+          
           <div style="background-color:rgba(0,0,0,0.5)">
+            <h4 class="text-center mt-5">추천 영화</h4>
+            <img
+              v-if="!(hoveringPosterURL === null)"
+              :src="hoveringPosterURL"
+              alt=""
+            />
+            <MovieCardMatrix :movieList="recommendMovies" />
+          </div>
+          <v-divider></v-divider>
+          <div style="background-color:rgba(0,0,0,0.5)">
+            <h4 class="text-center mt-5">더 많은 영화</h4>
             <img
               v-if="!(hoveringPosterURL === null)"
               :src="hoveringPosterURL"
@@ -94,6 +106,7 @@ export default {
       isTop: true,
       nowPage: 1,
       nowLoading: false,
+      recommendMovies: null,
       movies: [],
     };
   },
@@ -107,28 +120,38 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
 
     if (this.isLogin) {
-      const params = {
-        filter_by: "all",
-        page: this.nowPage,
-      };
-      this.getMovieListPage(params)
+
+      if (this.nowpage == 1) {
+        this.getRecommendMovie()
         .then((res) => {
-          res.forEach((mov) => {
-            this.movies.push(mov);
-          });
-          this.nowPage++;
-          console.log(this.movies);
+          this.recommendMovies = res
+          this.nowPage ++
         })
-        .catch((err) => {
-          console.log(err);
-        });
+      }
+      else {
+        const params = {
+          filter_by: "all",
+          page: this.nowPage-1,
+        };
+        this.getMovieListPage(params)
+          .then((res) => {
+            res.forEach((mov) => {
+              this.movies.push(mov);
+            });
+            this.nowPage++;
+            console.log(this.movies);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     }
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll);
   },
   methods: {
-    ...mapActions(["getMovieListPage", "search"]),
+    ...mapActions(["getMovieListPage", "search", 'getRecommendMovie']),
     hoverMovieCard: function () {
       document
         .querySelector(`#my-img-${this.movie.id}`)
@@ -165,22 +188,32 @@ export default {
       // 인피니티 스크롤용
       if (scrollHeight - scrollTop === clientHeight && !this.nowLoading) {
         this.nowLoading = !this.nowLoading;
-        const params = {
-          filter_by: "all",
-          page: this.nowPage,
-        };
-        this.getMovieListPage(params)
+        if (this.nowPage == 1) {
+          this.getRecommendMovie()
           .then((res) => {
-            res.serialized_data.forEach((mov) => {
-              this.movies.push(mov);
-            });
-            this.nowPage++;
-            this.nowLoading = !this.nowLoading;
-            console.log(this.movies);
+            this.recommendMovies = res
+            this.nowLoading = !this.nowLoading
+            this.nowPage ++
           })
-          .catch((err) => {
-            console.log(err);
-          });
+        }
+        else {
+          const params = {
+            filter_by: "all",
+            page: this.nowPage - 1,
+          };
+          this.getMovieListPage(params)
+            .then((res) => {
+              res.serialized_data.forEach((mov) => {
+                this.movies.push(mov);
+              });
+              this.nowPage++;
+              this.nowLoading = !this.nowLoading;
+              console.log(this.movies);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
       }
     },
   },
@@ -208,6 +241,11 @@ export default {
           .catch((err) => {
             console.log(err);
           });
+        this.getRecommendMovie()
+        .then((res) => {
+          console.log(res)
+          this.recommendMovies = res
+        })
       }
     },
   },

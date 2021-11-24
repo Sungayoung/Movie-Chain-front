@@ -53,6 +53,24 @@ export default new Vuex.Store({
     logOut: function ({ commit }) {
       commit("LOG_OUT");
     },
+    getRecommendMovie: function ({ commit }) {
+      commit;
+      const token = localStorage.getItem('jwt')
+
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          url: `${process.env.VUE_APP_MCS_URL}/movies/recommend/`,
+          headers: {Authorization : `JWT ${token}`}
+        })
+        .then((res) => {
+          resolve(res.data)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+      })
+    },
     getMovieList: function ({ commit }, params) {
       /**
        * params: {
