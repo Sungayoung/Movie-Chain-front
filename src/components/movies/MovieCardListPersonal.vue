@@ -33,7 +33,11 @@
                     ></div>
                   </v-scroll-y-transition>
                 </v-card>
+                
               </v-item>
+              <v-row justify="center">
+                <v-btn class="mx-auto" width="80px" rounded>추천</v-btn>
+              </v-row>
             </v-col>
             <v-col v-if="movieList.length < 3" cols="4" md="4">
               <v-item v-slot="{ active }">
@@ -91,6 +95,7 @@
                       :src="imgURL(movie)"
                       @click="setPersonalMovie(movie)"
                     />
+                    
                   </div>
                 </div>
               </div>
@@ -119,6 +124,9 @@
             :src="imgURL(movie)"
             ></v-img>
           </v-card>
+          <v-row justify="center">
+            <v-btn class="mx-auto" width="80px" rounded>추천</v-btn>
+          </v-row>
         </v-col>
       </v-row>
     </v-container>
