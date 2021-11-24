@@ -399,7 +399,6 @@ export default {
         username: null,
         nickname: null,
         email: null,
-        birth: null,
         password: null,
         passwordConfirmation: null,
         like_genres: [],

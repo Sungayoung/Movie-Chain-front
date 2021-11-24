@@ -56,7 +56,7 @@
             <h3 class="more-text">추천영화</h3>
             <v-icon class="more-text" size="48">mdi-chevron-double-down</v-icon>
           </div>
-          <div style="background-color: black">
+          <div style="background-color:rgba(0,0,0,0.5)">
             <img
               v-if="!(hoveringPosterURL === null)"
               :src="hoveringPosterURL"
@@ -68,7 +68,12 @@
       </div>
     </transition>
     <div>
-      <a class="to-top-button" href="#" title="맨 위로" :class="{'display-button': !isTop}">
+      <a
+        class="to-top-button"
+        href="#"
+        title="맨 위로"
+        :class="{ 'display-button': !isTop }"
+      >
         <v-icon color="white" size="36">mdi-arrow-up</v-icon>
       </a>
     </div>
@@ -85,6 +90,7 @@ export default {
   name: "MainPage",
   data: function () {
     return {
+      nowHoverMovieId: null,
       isTop: true,
       nowPage: 1,
       nowLoading: false,
@@ -99,27 +105,40 @@ export default {
   // 스크롤 인식
   created() {
     window.addEventListener("scroll", this.handleScroll);
-    const params = {
-      filter_by: "all",
-      page: this.nowPage,
-    };
-    this.getMovieListPage(params)
-      .then((res) => {
-        res.forEach((mov) => {
-          this.movies.push(mov);
+
+    if (this.isLogin) {
+      const params = {
+        filter_by: "all",
+        page: this.nowPage,
+      };
+      this.getMovieListPage(params)
+        .then((res) => {
+          res.forEach((mov) => {
+            this.movies.push(mov);
+          });
+          this.nowPage++;
+          console.log(this.movies);
+        })
+        .catch((err) => {
+          console.log(err);
         });
-        this.nowPage++;
-        console.log(this.movies);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    }
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll);
   },
   methods: {
     ...mapActions(["getMovieListPage", "search"]),
+    hoverMovieCard: function () {
+      document
+        .querySelector(`#my-img-${this.movie.id}`)
+        .classList.add("card-on-mouse");
+    },
+    leaveMovieCard: function () {
+      document
+        .querySelector(`#my-img-${this.movie.id}`)
+        .classList.remove("card-on-mouse");
+    },
     handleScroll() {
       const { clientHeight, scrollHeight, scrollTop } =
         document.documentElement;
@@ -171,6 +190,27 @@ export default {
       return localStorage.getItem("hoveringPosterURL");
     },
   },
+  watch: {
+    isLogin: function () {
+      if (this.isLogin) {
+        const params = {
+          filter_by: "all",
+          page: this.nowPage,
+        };
+        this.getMovieListPage(params)
+          .then((res) => {
+            res.forEach((mov) => {
+              this.movies.push(mov);
+            });
+            this.nowPage++;
+            console.log(this.movies);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    },
+  },
 };
 </script>
 
@@ -182,13 +222,12 @@ export default {
   right: 30px;
   z-index: 100;
   color: rgba(104, 240, 217, 0.473);
-  transition-duration : 1s;
+  transition-duration: 1s;
   transform: translateY(100px);
 }
 .display-button {
-  transition-duration : 1s;
+  transition-duration: 1s;
   transform: none;
-
 }
 .fade-enter-active,
 .fade-leave-active {
@@ -250,6 +289,7 @@ export default {
   animation-direction: alternate;
   animation-iteration-count: infinite;
 }
+
 @keyframes sparkle {
   from {
     color: rgb(255, 255, 255);
