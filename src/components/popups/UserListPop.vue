@@ -1,6 +1,15 @@
 <template>
+<<<<<<< HEAD
   <v-dialog scrollable width="700px">
     <template v-slot:activator="{ on, attrs }">
+=======
+<v-dialog
+    scrollable
+  >
+    <template 
+      v-slot:activator="{ on, attrs }"
+      >
+>>>>>>> c67da42e0632afe8abea7c92dcd7c155c082e373
       <v-btn
         color="white"
         rounded

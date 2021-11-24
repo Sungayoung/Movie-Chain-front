@@ -73,7 +73,7 @@
             <v-icon class="more-text" size="48">mdi-chevron-double-down</v-icon>
           </div>
           <div style="background-color:rgba(0,0,0,0.5)">
-            <div class="d-flex justify-content-center align-items-center pt-5" >
+            <div class="d-flex justify-content-center align-items-center" >
 
               <h4 class="text-center my-5">추천 영화</h4>
               <v-btn icon dark @click="reloadRecommend"><v-icon>mdi-reload</v-icon></v-btn>
@@ -342,7 +342,7 @@ export default {
 .not-top {
   transition-duration: 1s;
   transform: translateY(-90vh);
-  background-color: white;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 .is-top {
   transition-duration: 1s;
@@ -350,7 +350,7 @@ export default {
 }
 .color-change {
   transition-duration: 1s;
-  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.3);
 }
 .color-change-return {
   transition-duration: 1s;
