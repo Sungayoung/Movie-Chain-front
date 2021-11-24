@@ -406,7 +406,6 @@ export default {
         passwordConfirmation: null,
         like_genres: [],
         personal_movies: [],
-        birth: null,
         valid_check: true,
       },
 
