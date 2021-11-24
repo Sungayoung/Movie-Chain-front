@@ -137,12 +137,12 @@ html {
 html::-webkit-scrollbar {
   width: 6px;
 }
-::-webkit-scrollbar-thumb {
+* ::-webkit-scrollbar-thumb {
   height:5%;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 25px;
 }
-::-webkit-scrollbar-track {
+* ::-webkit-scrollbar-track {
   position: absolute;
   left: 0;
   background-color: rgba(0, 0, 0, 0);

@@ -166,7 +166,6 @@ export default {
   },
   beforeDistroy: function () {},
   updated: function () {
-    console.log("111111111111111111");
     const info = {
       page: this.page,
       movieCnt: this.movieCnt,

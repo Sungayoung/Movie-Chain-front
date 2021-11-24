@@ -6,50 +6,61 @@
         <div>
           <h3 class="d-inline-flex">{{ movie.title }}</h3>
 
-          <!-- 개봉일 -->
-          <v-chip light color="grey darken-3" text-color="white">
-            <v-icon left> mdi-calendar-month-outline </v-icon>
-            {{ releaseDate }}
-          </v-chip>
-
           <!-- 별 평점 -->
-          <span>
-            {{ voteAverage }}
-            <v-avatar size="64" color="white">
-              <v-icon size="50" color="warning">mdi-star</v-icon>
-            </v-avatar>
-          </span>
+          <div>
+            <v-icon size="50" color="warning">mdi-star</v-icon>
+            <span>
+              {{ voteAverage }}
+            </span>
+          </div>
         </div>
 
         <hr />
+        <!-- 개봉일 -->
+        <div>
+
+        <v-chip small light color="grey darken-3" text-color="white" class="mx-2 my-1">
+          <button>
+          <v-icon left> mdi-calendar-month-outline </v-icon>
+          {{ releaseDate }}
+          </button>
+        </v-chip>
+        </div>
+        
         <!-- 태그들(장르, 키워드) -->
         <div>
+          <div>
+
           <v-chip
-            light
+            small light
             color="grey darken-3"
             text-color="white"
             v-for="(gnr, idx) in movie.genre"
             :key="idx"
-            class="mx-2"
+            class="mx-2 my-1"
           >
             <button @click.stop="moveGenreList(gnr.id)">
               <v-icon left> mdi-movie-open-outline </v-icon>
               {{ gnr.name }}
             </button>
           </v-chip>
+          </div>
+          <div>
+
           <v-chip
-            light
+            small light
             color="grey darken-3"
             text-color="white"
             v-for="(kwd, idx) in movie.keyword"
             :key="idx"
-            class="mx-2"
+            class="mx-2 my-1"
           >
             <button @click.stop="moveKeywordList(kwd.id)">
               <v-icon left> mdi-pound </v-icon>
               {{ kwd.name }}
             </button>
           </v-chip>
+          </div>
         </div>
       </div>
       <hr />
@@ -124,7 +135,7 @@
       </v-dialog>
 
       <!-- 리뷰 -->
-      <div class="container">
+      <div>
         <v-icon large color="red lighten-2"> </v-icon>
         <review-list
           :reviewList="reviewList"

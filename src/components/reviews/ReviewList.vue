@@ -1,31 +1,36 @@
 <template>
-  <div v-if="reviewList">
-    <v-list>
-      <v-list-item>
-        {{ reviewCnt }}개의 리뷰가 있습니다.
-      </v-list-item>
-      <v-text-field
+  <div v-if="reviewList" class>
+    <v-list-item> {{ reviewCnt }}개의 리뷰가 있습니다. </v-list-item>
+    <v-text-field
       v-if="myReview.length == 0"
       v-model="reviewInput"
       @keyup.enter="setReview()"
-      ></v-text-field>
-      <review v-if="myReview.length != 0 && myReview[0].content != null"
+      :rules="reviewRule"
+    ></v-text-field>
+    <div>
+
+    <review
+    class="review-card mx-auto"
+      v-if="myReview.length != 0 && myReview[0].content != null"
       :review="myReview[0]"
-      @reload-review="sendParent">
-      </review>
-      <hr>
-      <review
+      @reload-review="sendParent"
+    >
+    </review>
+    <hr />
+    <review
+      class="review-card mx-auto"
       v-for="review in reviewList"
       :key="review.id"
       :review="review"
-      @reload-review="sendParent"></review>
-    </v-list>  
+      @reload-review="sendParent"
+    ></review>
+    </div>
   </div>
 </template>
 
 <script>
 import Review from "./Review.vue";
-import { mapActions } from 'vuex';
+import { mapActions } from "vuex";
 export default {
   name: "ReviewList",
   components: {
@@ -34,7 +39,12 @@ export default {
   data: function () {
     return {
       reviewInput: null,
-    }
+      reviewRule: [
+        (v) => !!v || " 리뷰를 입력해주세요.",
+        (v) =>
+          !(v && v.length > 200) || "리뷰는 200자 이상 입력할 수 없습니다.",
+      ],
+    };
   },
   props: {
     reviewCnt: Number,
@@ -43,28 +53,31 @@ export default {
     reviewList: Array,
   },
   methods: {
-    ...mapActions([
-      'createReview',
-    ]),
+    ...mapActions(["createReview"]),
     setReview: function () {
       const data = {
         movieId: this.movieId,
         params: {
           content: this.reviewInput,
-        }
-      }
-      this.createReview(data)
-      .then( res => {
-        console.log(res)
-        this.$emit('reload-review')
-      })
+        },
+      };
+      this.createReview(data).then((res) => {
+        console.log(res);
+        this.$emit("reload-review");
+      });
     },
     sendParent: function () {
-      this.$emit('reload-review')
-    }
-  }
-
+      this.$emit("reload-review");
+    },
+  },
 };
 </script>
 
-<style></style>
+<style>
+.review-card {
+  padding:15px;
+  border-radius: 25px;
+  background-color: white;
+  max-width: 85%
+}
+</style>

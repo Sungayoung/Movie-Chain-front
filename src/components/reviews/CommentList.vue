@@ -4,7 +4,9 @@
       class="p-3" 
       v-model="commentInput" 
       @keyup.enter="setComment"
+      :rules="commentRule"
     ></v-text-field>
+    <v-btn @click.stop="setComment">댓글작성</v-btn>
     <div v-if="commentList">
       <comment 
         v-for="comment in commentList" 
@@ -28,6 +30,11 @@ export default {
     return {
       commentList: null,
       commentInput: null,
+      commentRule: [
+          (v) => !!v || " 댓글을 입력해주세요.",
+          (v) =>
+            !(v && v.length > 200) || "댓글은 200자 이상 입력할 수 없습니다.",
+        ],
     }
   },
   props: {
