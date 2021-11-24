@@ -26,7 +26,6 @@
             name="input-7-4"
             label="쪽지내용"
             v-model="chattingInput"
-            @keyup.enter="sendChatting"
           ></v-textarea>
         </v-card-text>
         <v-divider></v-divider>
@@ -74,6 +73,7 @@ export default {
       })
       .then( res => {
         this.dialog = false
+        this.chattingInput = null
         console.log(res)
       })
       .catch( err => {

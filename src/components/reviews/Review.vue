@@ -15,8 +15,13 @@
             </v-text-field>
             <v-btn @click="editReview">수정</v-btn>
           </v-list-item-subtitle>
+          
           <v-list-item-subtitle v-else>
+            <div width="100%">
             {{ review.content }}
+
+            </div>
+
           </v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action>

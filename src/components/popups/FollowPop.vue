@@ -32,9 +32,11 @@ export default {
     goToProfile: function () {
       if (this.idx < 2) {
         this.$router.push({name: 'Profile', params: {'nickname' : this.person.nickname }})
+        this.$router.go()
       }
       else {
         this.$router.push({name: 'PeopleProfile', params: {'personId': this.person.id}})
+        this.$router.go()
       }
 
     },
