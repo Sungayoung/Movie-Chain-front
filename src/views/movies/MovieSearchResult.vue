@@ -1,22 +1,43 @@
 <template>
-  <div>
-    <h3>영화</h3>
-    <movie-card-list
-    v-if="movies"
-    :movies="movies">
-    </movie-card-list>
-    
-    <h3>배우</h3>
-    <people-card-list
-    v-if="actors"
-    :people="actors">
-    </people-card-list>
-
-    <h3>감독</h3>
-    <people-card-list
-    v-if="crews"
-    :people="crews">
-    </people-card-list>
+  <div v-if="query">
+    <v-sheet
+      rounded="xl"
+      color="#FFFFFFA3"
+      elevation="12"
+      class="mx-auto"
+      width="65%"
+      style="margin-top: 100px; z-index: ; position: relative">
+      <div class="py-3">
+        <div>
+          <h3 style="text-align: center"><strong>" {{query}} "</strong> 검색결과</h3>
+        </div>
+        <v-divider></v-divider>
+        <div v-if="movies.length + actors.length + crews.length">
+          <div v-if="movies.length" class="my-5">
+            <h4 style="text-align: center">영화</h4>
+            <movie-card-list
+            v-if="movies"
+            :movies="movies">
+            </movie-card-list>
+          </div>
+          <div v-if="actors.length" class="my-5">
+            <h4  style="text-align: center">배우</h4>
+            <people-card-list 
+            :people="actors">
+            </people-card-list>
+          </div>
+          <div v-if="crews.length" class="my-5">
+            <h4  style="text-align: center">감독</h4>
+            <people-card-list
+            :people="crews">
+            </people-card-list>
+          </div>
+        </div>
+        <div v-else style="height: 600px" class="d-flex justify-content-center align-items-center">
+          <h4> 검색 결과가 없습니다. </h4>
+        </div>
+      </div>
+    </v-sheet>
   </div>
 </template>
 
@@ -28,7 +49,7 @@ export default {
   name: "MovieSearchResult",
   components: {
     MovieCardList,
-    PeopleCardList,
+    PeopleCardList
   },
   props: {
     query: String,

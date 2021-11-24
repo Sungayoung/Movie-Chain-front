@@ -69,6 +69,7 @@ export default {
       };
       this.createComment(data).then((res) => {
         console.log(res);
+        this.commentInput = null;
         this.getCommentList();
       });
     },

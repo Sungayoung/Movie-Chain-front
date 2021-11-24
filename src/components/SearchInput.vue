@@ -39,6 +39,7 @@ export default {
           query: this.query,
         },
       });
+      this.$router.go()
     },
   },
 };

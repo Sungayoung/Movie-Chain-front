@@ -8,11 +8,12 @@
     <template v-slot:activator="{ on, attrs }">
       <v-btn
         width="100"
-        color="#89AFA5"
+        color="#999999"
         dark
         v-bind="attrs"
         v-on="on"
         class="m-2"
+        @click="getProfile"
       >
         개인정보 수정
       </v-btn>
@@ -113,13 +114,14 @@ export default {
     profile: Object
   },
   mounted: function () {
-    this.userProfile = this.profile
+    this.userProfile = {...this.profile}
     this.imgUrl = `${process.env.VUE_APP_MCS_URL}${this.profile.profile_img}?_=${new Date().getTime()}`
   },
   data: function () {
     return {
       userProfile: null,
       dialog: false,
+      introduce_content: null,
       profileImg: null,
       password: null,
       passwordConfirmation: null,
@@ -156,6 +158,9 @@ export default {
       'setProfileImg',
       'getProfile',
     ]),
+    getProfile: function () {
+      this.userProfile = { ...this.profile }
+    },
     sendProfile: function () {
       console.log('send')
       let data = new FormData()

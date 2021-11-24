@@ -23,7 +23,16 @@
         </div>
       </div>
     </transition>
-
+    <div v-if="nowLoading">
+      <v-overlay :value="overlay">
+        <v-progress-circular
+          :size="150"
+          :width="15"
+          color="white"
+          indeterminate
+        ></v-progress-circular>
+      </v-overlay>
+    </div>
     <!-- 메인화면(검색) -->
     <transition name="fade">
       <div v-if="isLogin" style="z-index: 50; margin-top: 72px">
@@ -58,13 +67,13 @@
           <div
             id="more-text"
             class="text-center"
-            style="height: 20vh; z-index: 50"
+            style="height: 20vh; z-index: 1"
           >
             <h3 class="more-text" style="z-index: 50">추천영화</h3>
             <v-icon class="more-text" size="48">mdi-chevron-double-down</v-icon>
           </div>
           <div style="background-color:rgba(0,0,0,0.5)">
-            <div class="d-flex justify-content-center align-items-center mt-5" >
+            <div class="d-flex justify-content-center align-items-center pt-5" >
 
               <h4 class="text-center my-5">추천 영화</h4>
               <v-btn icon dark @click="reloadRecommend"><v-icon>mdi-reload</v-icon></v-btn>

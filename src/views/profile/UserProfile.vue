@@ -2,15 +2,21 @@
   <div v-if="profile" class="d-flex">
     <v-sheet
       rounded="xl"
-       color="grey lighten-3"
+      color="#EEEEEEB0"
       elevation="12"
       width="50%"
-      class="mx-auto my-5"
+      class="mx-auto"
+      style="margin-top: 100px; z-index: 1;"
     >
-    <div style="background-color: #2E4D54; border-radius: 20px 20px 0px 0px" >
+    <v-sheet style="border-radius: 20px 20px 0px 0px" :style="{'background-color': profile.background_color}" :elevation="8">
       <v-row class="p-3" justify="space-between">
         <v-col>
           <!-- 팔로우 리스트 확인 버튼 -->
+          <color-picker-pop
+          v-if="isLoginUser"
+          :profile="profile">
+
+          </color-picker-pop>
           <follow-list-pop
             v-if="isLoginUser"
             :profile="profile">
@@ -46,7 +52,8 @@
             class="m-2"
             v-if="!isLoginUser"
             @click="followUser"
-            width="120px"
+            width="100px"
+            :color="profile.is_following ? 'error' : '#999999'"
             
           >{{ profile.is_following ? 'UNFOLLOW' : 'FOLLOW'}}</v-btn>
           </v-row>
@@ -71,7 +78,8 @@
           <div style="color: white; text-align: center" >{{ profile.introduce_content }}</div>
         </div>
       </v-row>
-    </div>
+      
+    </v-sheet>
 
     
     <div class="my-3">
@@ -101,12 +109,14 @@
 <script>
 import axios from 'axios'
 import { mapActions } from 'vuex'
+import ColorPickerPop from '@/components/popups/ColorPickerPop.vue'
 import FollowListPop from '@/components/popups/FollowListPop'
-import MovieCardList from '@/components/movies/MovieCardList'
+import MovieCardList from '@/components/movies/MovieCardList.vue'
 import ChatListPop from '@/components/popups/ChatListPop'
 import MovieCardListPersonal from '@/components/movies/MovieCardListPersonal'
 import UserUpdate from '@/components/accounts/UserUpdate.vue'
 import ChatInputPop from '../../components/popups/ChatInputPop.vue'
+
 export default {
   name: "UserProfile",
   components: {
@@ -115,7 +125,8 @@ export default {
     MovieCardListPersonal,
     UserUpdate,
     FollowListPop,
-    ChatInputPop
+    ChatInputPop,
+    ColorPickerPop
   },
   data: function () {
     return {

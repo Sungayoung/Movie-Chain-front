@@ -11,7 +11,7 @@
           <v-text-field
             maxlength="200"
             :rules="commentRule"
-            v-model="comment.content"
+            v-model="commentInput"
             @keyup.enter="editComment"
           >
           </v-text-field>
@@ -50,8 +50,12 @@ export default {
   props: {
     comment: Object,
   },
+  created: function () {
+    this.commentInput = this.comment.content
+  },
   data: function () {
     return {
+      commentInput: null,
       editMode: false,
       commentRule: [
         (v) => !!v || " 댓글을 입력해주세요.",
@@ -63,17 +67,23 @@ export default {
   methods: {
     ...mapActions(["updateComment", "deleteComment"]),
     modeChange: function () {
+      if (this.editMode) {
+        this.commentInput = this.comment.content
+      }
       this.editMode = !this.editMode;
     },
     editComment: function () {
       const data = {
         commentId: this.comment.id,
         params: {
-          content: this.comment.content,
+          content: this.commentInput,
         },
       };
+      // console.log(data)
       this.updateComment(data).then((res) => {
+        // console.log(res)
         this.comment.content = res.content;
+        this.commentInput = res.content;
         this.editMode = false;
       });
     },

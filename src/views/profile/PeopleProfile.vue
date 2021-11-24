@@ -1,20 +1,22 @@
 <template>
   <div v-if="person" class="d-flex">
     <v-sheet
-    rounded="xl"
-       color="grey lighten-3"
+      rounded="xl"
+      color="grey lighten-3"
       elevation="12"
       width="50%"
-      class="mx-auto my-5"
+      class="mx-auto"
+      style="margin-top: 100px; z-index: 1"
     >
       <div style="background-color: #EED360; border-radius: 20px 20px 0px 0px" >
         <v-row class="p-3" justify="end">
           <!-- 팔로우 버튼 -->
           <v-btn
             dark
+            class="m-2"
             @click="followPeople"
             width="120px"
-            
+            :color="person.is_following ? 'error' : '#999999'"
           >{{ person.is_following ? 'UNFOLLOW' : 'FOLLOW'}}</v-btn>
         </v-row>
         <v-row 
@@ -33,7 +35,7 @@
         </v-row>
       </div>
       
-      <div class="my-3">
+      <div class="my-5">
         <v-row>
           <h4 style="text-align: center"
             v-text="person.job ? '연출한 영화' : '출연한 영화'"></h4>

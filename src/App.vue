@@ -124,6 +124,7 @@ window.onscroll = function () {
   top: 0;
   width: 100%;
   object-fit: cover;
+  z-index: 0;
 }
 
 html {

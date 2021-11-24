@@ -14,7 +14,7 @@
             <v-text-field
               maxlength="200"
               :rules="reviewRule"
-              v-model="review.content"
+              v-model="reviewInput"
               @keyup.enter="editReview"
             >
             </v-text-field>
@@ -26,7 +26,6 @@
         </v-list-item-content>
         <v-btn v-if="editMode" @click="editReview">수정</v-btn>
         <v-list-item-action
-          v-if="!editMode"
           class="text-center justify-content-center"
         >
           <v-list-item-action-text
@@ -78,8 +77,8 @@ export default {
   },
   data: function () {
     return {
+      reviewInput: null,
       commentCnt: 0,
-      commentInput: null,
       isExpand: false,
       editMode: false,
       reviewRule: [
@@ -94,6 +93,7 @@ export default {
   },
   created: function () {
     this.commentCnt = this.review.commentCnt
+    this.reviewInput = this.review.content
   },
   methods: {
     ...mapActions(["deleteReview", "createComment", "updateReview"]),
@@ -112,16 +112,20 @@ export default {
       });
     },
     modeChange: function () {
+      if (this.editMode) {
+        this.reviewInput = this.review.content
+      }
       this.editMode = !this.editMode;
     },
     editReview: function () {
       const data = {
         reviewId: this.review.id,
         params: {
-          content: this.review.content,
+          content: this.reviewInput,
         },
       };
       this.updateReview(data).then((res) => {
+        this.reviewInput = res.content
         this.review.content = res.content;
         this.editMode = false;
       });
