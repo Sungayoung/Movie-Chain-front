@@ -8,7 +8,7 @@
         <v-list-item-title>{{ comment.user.nickname }}</v-list-item-title>
         <!-- 수정모드면 input, 아니면 text를 보여준다. -->
         <v-list-item-subtitle v-if="editMode">
-          <v-text-field v-model="comment.content" filled rounded @keyup.enter="editComment">
+          <v-text-field maxlength="200" :rules="commentRule" v-model="comment.content" filled rounded @keyup.enter="editComment">
           </v-text-field>
           <v-btn @click="editComment">수정</v-btn>
         </v-list-item-subtitle>
@@ -46,6 +46,11 @@ export default {
   data: function () {
     return {
       editMode: false,
+      commentRule: [
+          (v) => !!v || " 댓글을 입력해주세요.",
+          (v) =>
+            !(v && v.length > 200) || "댓글은 200자 이상 입력할 수 없습니다.",
+        ],
     }
   },
   methods: {

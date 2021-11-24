@@ -11,7 +11,7 @@
           
           <!-- 수정모드면 input, 아니면 text를 보여준다. -->
           <v-list-item-subtitle v-if="editMode">
-            <v-text-field v-model="review.content" filled rounded @keyup.enter="editReview">
+            <v-text-field  maxlength="200" :rules="reviewRule" v-model="review.content" filled rounded @keyup.enter="editReview">
             </v-text-field>
             <v-btn @click="editReview">수정</v-btn>
           </v-list-item-subtitle>
@@ -63,6 +63,12 @@ export default {
     return {
       commentInput: null,
       editMode: false,
+        reviewRule: [
+          (v) => !!v || " 리뷰를 입력해주세요.",
+          (v) =>
+            !(v && v.length > 200) || "리뷰는 200자 이상 입력할 수 없습니다.",
+        ],
+       
     }
   },
   props: {

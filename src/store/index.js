@@ -45,7 +45,6 @@ export default new Vuex.Store({
       state.SfilterBy = info.filterBy;
       state.SfilterId = info.filterId;
       state.SfilterIdList = info.filterIdList;
-      localStorage.removeItem("jwt");
     },
   },
   actions: {
