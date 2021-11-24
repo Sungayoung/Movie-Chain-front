@@ -1,5 +1,5 @@
 <template>
-  <div v-if="reviewList" class>
+  <div v-if="reviewList" >
     <v-list-item> {{ reviewCnt }}개의 리뷰가 있습니다. </v-list-item>
     <v-text-field
       v-if="myReview.length == 0"

@@ -44,7 +44,7 @@
       </v-toolbar>
       <v-tabs-items v-model="tab">
         <v-tab-item
-          v-for="(follow, idx) in followList"
+          v-for="(follow, key, idx) in followList"
           :key="idx"
         >
           <v-card flat style="overflow-y: scroll">

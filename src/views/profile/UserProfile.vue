@@ -1,7 +1,7 @@
 <template>
   <div v-if="profile" class="d-flex">
     <v-sheet
-    rounded="xl"
+      rounded="xl"
        color="grey lighten-3"
       elevation="12"
       width="50%"

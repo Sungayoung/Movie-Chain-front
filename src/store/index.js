@@ -31,7 +31,6 @@ export default new Vuex.Store({
     LOG_OUT: function (state) {
       state.isLogin = false;
       localStorage.removeItem("jwt");
-      localStorage.removeItem("userInfo");
     },
     SET_PROFILE: function (state, res) {
       state.profile_img = `${res.profile_img}?_=${new Date().getTime()}`;
