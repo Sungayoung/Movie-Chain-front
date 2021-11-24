@@ -7,7 +7,7 @@
       v-slot:activator="{ on, attrs }"
       >
       <v-btn
-        color="#89AFA5"
+        color="#999999"
         dark
         v-bind="attrs"
         v-on="on"
@@ -61,7 +61,7 @@ export default {
       const token = localStorage.getItem('jwt')
       console.log(this.toUser)
       const data = {
-        to_user: this.toUser.pk,
+        to_user: this.toUser.id,
         content: this.chattingInput,
       }
       console.log(data)

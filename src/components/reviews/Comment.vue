@@ -9,17 +9,13 @@
           <v-list-item-title>{{ comment.user.nickname }}</v-list-item-title>
           <!-- 수정모드면 input, 아니면 text를 보여준다. -->
           <v-list-item-subtitle v-if="editMode">
-            
-                <v-text-field
-                  maxlength="200"
-                  :rules="commentRule"
-                  v-model="comment.content"
-                  @keyup.enter="editComment"
-                >
-                </v-text-field>
-
-               
-            
+            <v-text-field
+              maxlength="200"
+              :rules="commentRule"
+              v-model="comment.content"
+              @keyup.enter="editComment"
+            >
+            </v-text-field>
           </v-list-item-subtitle>
           <v-list-item-subtitle v-else>
             {{ comment.content }}
@@ -30,9 +26,10 @@
             comment.updated_at | moment("YY-MM-DD HH:mm")
           }}</v-list-item-action-text>
           <v-list-item-icon v-if="editMode">
-           <button class="ms-3" @click.stop="editComment">
-                  <v-icon>mdi-arrow-left-bottom-bold</v-icon>
-                </button></v-list-item-icon>
+            <button class="ms-3" @click.stop="editComment">
+              <v-icon>mdi-arrow-left-bottom-bold</v-icon>
+            </button></v-list-item-icon
+          >
           <v-list-item-icon v-if="!editMode">
             <!-- 수정버튼 : editMode 값을 토글시킨다 -->
             <v-icon @click="modeChange" v-if="comment.isWriter"
@@ -59,8 +56,12 @@ export default {
   props: {
     comment: Object,
   },
+  created: function () {
+    this.commentInput = this.comment.content;
+  },
   data: function () {
     return {
+      commentInput: null,
       editMode: false,
       commentRule: [
         (v) => !!v || " 댓글을 입력해주세요.",
@@ -72,17 +73,23 @@ export default {
   methods: {
     ...mapActions(["updateComment", "deleteComment"]),
     modeChange: function () {
+      if (this.editMode) {
+        this.commentInput = this.comment.content;
+      }
       this.editMode = !this.editMode;
     },
     editComment: function () {
       const data = {
         commentId: this.comment.id,
         params: {
-          content: this.comment.content,
+          content: this.commentInput,
         },
       };
+      // console.log(data)
       this.updateComment(data).then((res) => {
+        // console.log(res)
         this.comment.content = res.content;
+        this.commentInput = res.content;
         this.editMode = false;
       });
     },
