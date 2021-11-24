@@ -1,7 +1,6 @@
 <template>
 <v-dialog
     scrollable
-    width="700px"
   >
     <template 
       v-slot:activator="{ on, attrs }"

@@ -1,12 +1,17 @@
 <template>
   <div class="p-3">
-    <v-text-field
-      class="p-3"
-      v-model="commentInput"
-      @keyup.enter="setComment"
-      :rules="commentRule"
-    ></v-text-field>
-    <v-btn @click.stop="setComment">댓글작성</v-btn>
+      <div class="d-flex container">
+        <v-text-field
+          maxlength="200"
+          v-model="commentInput"
+          @keyup.enter="setComment"
+          :rules="commentRule"
+        ></v-text-field>
+        <button class="ms-3" @click.stop="setComment">
+          <v-icon>mdi-arrow-left-bottom-bold</v-icon>
+        </button>
+      </div>
+
     <div v-if="commentList">
       <comment
         v-for="comment in commentList"
@@ -53,8 +58,8 @@ export default {
       this.getComment(this.reviewId)
         .then((res) => {
           this.commentList = res;
-          this.calComment()
-          console.log(res.length)
+          this.calComment();
+          console.log(res.length);
         })
         .catch((err) => {
           console.log(err);

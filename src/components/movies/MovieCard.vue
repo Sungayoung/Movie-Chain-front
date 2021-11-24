@@ -61,7 +61,7 @@
               dark
               right
                size="40"
-              @click="likeMovie"
+              @click="saveMovie"
               v-text="
                 movie.isSaved ? 'mdi-bookmark-check' : 'mdi-bookmark-outline'
               "

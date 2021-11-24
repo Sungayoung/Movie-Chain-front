@@ -1,5 +1,5 @@
 <template>
-  <v-app style="background: rgba(0, 0, 0, 0.9); color: white">
+  <v-app style="background: rgba(0, 0, 0, 0.5 ); color: black">
     <!-- 체인 -->
 
     <div class="d-flex align-items-center">
@@ -9,7 +9,8 @@
     </div>
     <v-main>
       <!-- 네비바 -->
-      <div id="navbar">
+      <transition name="fade">
+      <div id="navbar" v-if="isLogin">
         <div class="d-flex justify-content-between">
           <div class="d-flex align-center">
             <router-link class="my-link mx-2" :to="{ name: 'MainPage' }">
@@ -52,6 +53,7 @@
           </div>
         </div>
       </div>
+      </transition>
 
       <img id="bg-img" class="bg-img" />
       
@@ -118,12 +120,28 @@ window.onscroll = function () {
 </script>
 
 <style>
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 1s;
+}
+.fade-enter-active {
+  transition-delay: 1.5s;
+}
+.fade-enter{
+  opacity: 1;
+
+}
+.fade-leave-to {
+  opacity: 0;
+}
+
 .bg-img {
   transition-duration: 1s;
   position: fixed;
   top: 0;
   width: 100%;
   object-fit: cover;
+  z-index: 0;
 }
 
 html {
@@ -131,7 +149,7 @@ html {
   background-color: rgba(0, 0, 0, 0.3) !important;
 }
 .bg {
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0,0.3);
 }
 .my-link {
   text-decoration: none;
@@ -158,8 +176,8 @@ html::-webkit-scrollbar {
   width: 6px;
 }
 * ::-webkit-scrollbar-thumb {
-  height: 5%;
-  background-color: rgba(255, 255, 255, 0.5);
+  height: 17%;
+  background-color: rgba(255, 255, 255)!important;
   border-radius: 25px;
 }
 * ::-webkit-scrollbar-track {
