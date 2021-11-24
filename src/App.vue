@@ -1,5 +1,11 @@
 <template>
   <v-app style="background: rgba(0, 0, 0, 0.9); color: white">
+    <div class="d-flex align-items-center">
+
+      <div class="d-flex chain"  style="top:100px; left:30px"></div>
+      <div class="d-flex chain"  style="top:100px; left:130px"></div>
+      <div class="d-flex chain2" style="top:115px; left:80px" ></div>
+    </div>
     <v-main>
       <div
         class="my-navbar sticky-top"
@@ -139,5 +145,24 @@ html::-webkit-scrollbar {
   position: absolute;
   left: 0;
   background-color: rgba(0, 0, 0, 0);
+}
+.chain {
+  border: 5px white solid;
+  border-radius: 30px;
+  height: 50px;
+  width: 80px;
+  position: absolute
+
+  
+}
+.chain2 {
+  border: 5px black solid;
+  background: white;
+  border-radius: 30px;
+  height: 15px;
+  width: 80px;
+  position: absolute
+
+  
 }
 </style>

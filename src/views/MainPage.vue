@@ -67,6 +67,11 @@
         </div>
       </div>
     </transition>
+    <div>
+      <a class="to-top-button" href="#" title="맨 위로" :class="{'display-button': !isTop}">
+        <v-icon color="white" size="64">mdi-arrow-up</v-icon>
+      </a>
+    </div>
   </div>
 </template>
 
@@ -163,7 +168,6 @@ export default {
   computed: {
     ...mapState(["isLogin", "hoveringPosterURL"]),
     hoveringPosterURL: function () {
-      console.log(1111);
       return localStorage.getItem("hoveringPosterURL");
     },
   },
@@ -171,6 +175,21 @@ export default {
 </script>
 
 <style scoped>
+.to-top-button {
+  display: scroll;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 100;
+  color: rgba(104, 240, 217, 0.473);
+  transition-duration : 1s;
+  transform: translateY(100px);
+}
+.display-button {
+  transition-duration : 1s;
+  transform: none;
+
+}
 .fade-enter-active,
 .fade-leave-active {
   transition-duration: 1s;

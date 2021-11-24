@@ -390,7 +390,7 @@ export default {
 
       // 회원가입 절차 페이지네이션
       length: 4,
-      onboarding: 2,
+      onboarding: 0,
 
       // 회원가입에 필요한 정보들
       credentials: {

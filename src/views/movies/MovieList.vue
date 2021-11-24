@@ -1,73 +1,98 @@
 <template>
   <div>
+    <v-navigation-drawer
+      absolute
+      temporary
+      color="rgba(255,255,255,0.2)"
+      v-model="openBar"
+    >
+      <v-spacer style="height: 10vh"></v-spacer>
+      <div>
+        <!-- N개씩 보기 버튼 -->
+        <div class="d-flex">
+          <v-select
+            v-model="movieCnt"
+            :items="movieCntItems"
+            background-color="white"
+            @change="getMovie"
+            width="10"
+            solo
+            hide-details
+          ></v-select>
+        </div>
+        <div class="d-flex">
+          <v-select
+            v-model="orderBy"
+            :items="orderItems"
+            background-color="white"
+            @change="getMovie"
+            width="10"
+            solo
+            hide-details
+          ></v-select>
+        </div>
+        <!-- 필터지정 -->
+        <div style="width: 15vw">
+          <v-select
+            class="d-flex"
+            solo
+            width="10"
+            :items="filterItems"
+            v-model="filterBy"
+            @change="getList(filterBy), (filterIdList = [])"
+          ></v-select>
+        </div>
+        <!-- 필터에서 내용선택 -->
+        <v-autocomplete
+          :disabled="filterBy === 'all'"
+          @change="getMovieMovie"
+          chips
+          deletable-chips
+          multiple
+          :items="filterIdItems"
+          item-text="name"
+          item-value="id"
+          v-model="filterIdList"
+        ></v-autocomplete>
+      </div>
+    </v-navigation-drawer>
+
     <!-- 화면에 고정되야 할 것들 -->
     <!-- 좌우버튼 -->
-    <button @click="prev" id="left-btn" class="left-btn-bg">
+    
+    <button @click="prev" class="left-btn-bg left-btn">
       <v-icon size="64" color="white"> mdi-chevron-left </v-icon>
     </button>
-    <button @click="next" id="right-btn" class="right-btn-bg">
+    <button @click="next" class="right-btn-bg right-btn">
       <v-icon :disabled="page === 1000" size="64" color="white" depressed>
         mdi-chevron-right
       </v-icon>
     </button>
+    <div
+      style="height: 1px; width: 100%; position: fixed; bottom: 100px; z-index: 50"
+      class="d-flex justify-content-center text-center"
+    >
+      <div class="page-slot justify-content-evenly d-flex">
+        <span v-for="n in 5" :key="`btn-${n}`" class="d-flex">
+          <v-icon v-if="pageIdx === n" color="white">mdi-record</v-icon>
+          <v-icon v-else color="grey darken-2">mdi-record</v-icon>
+        </span>
+      </div>
+    </div>
 
     <div>
       <div class="my-5 container">
+       
         <div class="justify-content-around row" mandatory>
           <!-- 사이드바 -->
-          <div class="my-sidebar col-2">
-            <v-btn>
-              <v-icon size="200"> mdi-filter-menu-outline </v-icon>
-            </v-btn>
-            <!-- N개씩 보기 버튼 -->
-            <div class="d-flex">
-              <v-select
-                v-model="movieCnt"
-                :items="movieCntItems"
-                background-color="white"
-                @change="getMovie"
-                width="10"
-                solo
-                hide-details
-              ></v-select>
-            </div>
-            <div class="d-flex">
-              <v-select
-                v-model="orderBy"
-                :items="orderItems"
-                background-color="white"
-                @change="getMovie"
-                width="10"
-                solo
-                hide-details
-              ></v-select>
-            </div>
-            <!-- 필터지정 -->
-            <div style="width: 15vw">
-              <v-select
-                class="d-flex"
-                solo
-                width="10"
-                :items="filterItems"
-                v-model="filterBy"
-                @change="getList(filterBy), (filterIdList = [])"
-              ></v-select>
-            </div>
-            <!-- 필터에서 내용선택 -->
-            <v-autocomplete
-              :disabled="filterBy === 'all'"
-              @change="getMovieMovie"
-              chips
-              deletable-chips
-              multiple
-              :items="filterIdItems"
-              item-text="name"
-              item-value="id"
-              v-model="filterIdList"
-            ></v-autocomplete>
+
+          <div class="col-2">
+            
           </div>
         </div>
-
+ <button @click="openBar = !openBar" class="filter-button">
+      <v-icon size="64" color="white"> mdi-filter-menu-outline </v-icon>
+    </button>
         <div class="content-area offset-1 col-9">
           <!-- 사이드바 배경부분 -->
           <div class=""></div>
@@ -75,23 +100,6 @@
           <div class="container">
             <!-- 페이지네이션 버튼 -->
 
-            <div
-              style="
-                height: 1px;
-                width: 100%;
-                position: fixed;
-                top: 300px;
-                z-index: 50;
-              "
-              class="d-flex justify-content-center text-center"
-            >
-              <div class="page-slot justify-content-evenly d-flex">
-                <span v-for="n in 5" :key="`btn-${n}`" class="d-flex">
-                  <v-icon v-if="pageIdx === n" color="white">mdi-record</v-icon>
-                  <v-icon v-else color="grey darken-2">mdi-record</v-icon>
-                </span>
-              </div>
-            </div>
             <div class="d-flex">
               <MovieCardMatrix :movieList="movies" />
             </div>
@@ -116,6 +124,7 @@ export default {
   },
   data: function () {
     return {
+      openBar: false,
       page: 1,
       pageIdx: 1,
       movieCnt: 18,
@@ -167,8 +176,6 @@ export default {
       filterIdList: this.filterIdList,
     };
     this.updateInfo(info);
-    document.querySelector("#left-btn").classList.add("left-btn");
-    document.querySelector("#right-btn").classList.add("right-btn");
   },
   created: function () {
     this.page = this.Spage;
@@ -308,11 +315,9 @@ export default {
 }
 
 .left-btn {
-  transform: translateX(18vw);
   left: 0;
 }
 .right-btn {
-  transform: translateX(-3vw);
   right: 0;
 }
 .left-btn-bg,
@@ -324,16 +329,6 @@ export default {
   transition-property: background-color;
   transition-duration: 500ms;
   background-color: rgb(163, 200, 202);
-}
-
-.my-sidebar {
-  position: fixed;
-  background-color: red;
-  height: 100vh;
-  width: 20vw;
-  top: 72px;
-  left: 0px;
-  transition-duration: 1s;
 }
 .page-slot {
   width: 300px;
