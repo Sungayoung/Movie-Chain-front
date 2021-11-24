@@ -105,6 +105,9 @@
             v-text="movie.isLiked ? 'mdi-heart' : 'mdi-heart-outline'"
           ></v-icon>
         </v-btn>
+        <user-list-pop 
+          :movieId="movie.id">
+        </user-list-pop>
       </div>
       <hr />
       <h3>감독</h3>
@@ -141,6 +144,7 @@
 
 <script>
 import axios from "axios";
+import UserListPop from '@/components/popups/UserListPop.vue';
 import ReviewList from "@/components/reviews/ReviewList.vue";
 import PeopleCardList from "../../components/people/PeopleCardList.vue";
 import { mapActions } from "vuex";
@@ -158,6 +162,7 @@ export default {
     };
   },
   components: {
+    UserListPop,
     ReviewList,
     PeopleCardList,
   },

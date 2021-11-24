@@ -36,7 +36,9 @@
                 
               </v-item>
               <v-row justify="center">
-                <v-btn class="mx-auto" width="80px" rounded>추천</v-btn>
+                <user-list-pop 
+                  :movieId="movie.id">
+                </user-list-pop>
               </v-row>
             </v-col>
             <v-col v-if="movieList.length < 3" cols="4" md="4">
@@ -125,7 +127,9 @@
             ></v-img>
           </v-card>
           <v-row justify="center">
-            <v-btn class="mx-auto" width="80px" rounded>추천</v-btn>
+            <user-list-pop 
+              :movieId="movie.id">
+            </user-list-pop>
           </v-row>
         </v-col>
       </v-row>
@@ -135,6 +139,7 @@
 
 <script>
 import axios from "axios";
+import UserListPop from '../popups/UserListPop.vue'
 import { mapActions } from "vuex";
 
 export default {
@@ -143,7 +148,9 @@ export default {
     movieList: Array,
     isLoginUser: Boolean
   },
-
+  components: {
+    UserListPop
+  },
   data: function () {
     return {
       query: null,
@@ -178,9 +185,9 @@ export default {
       if (this.cur_idx < this.movieList.length) {
         const data = {
           movieId: movie.id,
-          originId: this.movieList[this.cur_idx].pk
+          originId: this.movieList[this.cur_idx].id
         }
-        console.log(this.movieList[this.cur_idx].pk)
+        console.log(this.movieList[this.cur_idx].id)
         axios({
           method: "put",
           url: `${process.env.VUE_APP_MCS_URL}/accounts/personal-movie/`,

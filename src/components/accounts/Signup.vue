@@ -401,6 +401,7 @@ export default {
         passwordConfirmation: null,
         like_genres: [],
         personal_movies: [],
+        birth: null,
         valid_check: true,
       },
 
@@ -489,6 +490,7 @@ export default {
           this.credentials.personal_movies.push(mov.id)
         );
       }
+      console.log(this.credentials)
       axios({
         method: "POST",
         url: "http://127.0.0.1:8000/accounts/signup/",
