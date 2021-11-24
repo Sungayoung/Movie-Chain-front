@@ -69,7 +69,7 @@
     </transition>
     <div>
       <a class="to-top-button" href="#" title="맨 위로" :class="{'display-button': !isTop}">
-        <v-icon color="white" size="64">mdi-arrow-up</v-icon>
+        <v-icon color="white" size="36">mdi-arrow-up</v-icon>
       </a>
     </div>
   </div>

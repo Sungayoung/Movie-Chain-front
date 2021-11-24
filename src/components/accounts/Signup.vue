@@ -43,6 +43,7 @@
               <!-- 아이디 -->
               <div>
                 <v-text-field
+                  maxlength="20"
                   :rules="rules.usernameRule"
                   label="ID"
                   type="text"
@@ -71,6 +72,7 @@
               <!-- 닉네임 -->
               <div>
                 <v-text-field
+                maxlength="20"
                   :rules="rules.nicknameRule"
                   label="Nickname"
                   type="text"
@@ -360,12 +362,12 @@ export default {
           (v) =>
             /^[a-zA-Z0-9]*$/.test(v) || "아이디는 영문+숫자만 입력 가능합니다.",
           (v) =>
-            !(v && v.length >= 15) || "아이디는 15자 이상 입력할 수 없습니다.",
+            !(v && v.length > 20) || "아이디는 20자 이상 입력할 수 없습니다.",
         ],
         nicknameRule: [
           (v) => !!v || " 닉네임을 입력해주세요.",
           (v) =>
-            !(v && v.length >= 30) || "닉네임은 30자 이상 입력할 수 없습니다.",
+            !(v && v.length > 20) || "닉네임은 20자 이상 입력할 수 없습니다.",
           (v) =>
             !/[~!@#$%^&*()_+|<>?:{}]/.test(v) ||
             "닉네임에는 특수문자를 사용할 수 없습니다.",
@@ -397,6 +399,7 @@ export default {
         username: null,
         nickname: null,
         email: null,
+        birth: null,
         password: null,
         passwordConfirmation: null,
         like_genres: [],

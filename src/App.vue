@@ -1,7 +1,8 @@
 <template>
   <v-app style="background: rgba(0, 0, 0, 0.9); color: white">
+    <!-- 체인 -->
     <div class="d-flex align-items-center">
-
+      
       <div class="d-flex chain"  style="top:100px; left:30px"></div>
       <div class="d-flex chain"  style="top:100px; left:130px"></div>
       <div class="d-flex chain2" style="top:115px; left:80px" ></div>
@@ -136,12 +137,12 @@ html {
 html::-webkit-scrollbar {
   width: 6px;
 }
-::-webkit-scrollbar-thumb {
+* ::-webkit-scrollbar-thumb {
   height:5%;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 25px;
 }
-::-webkit-scrollbar-track {
+* ::-webkit-scrollbar-track {
   position: absolute;
   left: 0;
   background-color: rgba(0, 0, 0, 0);
