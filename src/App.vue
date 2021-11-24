@@ -54,6 +54,7 @@
           </div>
         </div>
       </div>
+      
       <img id="bg-img" class="bg-img" />
       <router-view></router-view>
     </v-main>
@@ -111,12 +112,10 @@ export default {
   transition-duration: 1s;
   position: fixed;
   top: 0;
-  width: 100vw;
-  height: 100vh;
+  height: 100%;
+   object-fit: cover
 }
-element.style {
-  background-color: rgba(0, 0, 0, 0.3) !important;
-}
+
 html {
   transition-duration: 1s;
   background-color: rgba(0, 0, 0, 0.3) !important;
@@ -129,7 +128,7 @@ html {
   color: white !important;
 }
 .my-navbar {
-  background-color: rgb(30, 104, 114);
+  background-color: rgba(30, 104, 114, 0.5);
   position: fixed;
 }
 /* 트랜지션 용 스타일 */

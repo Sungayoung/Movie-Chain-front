@@ -9,11 +9,13 @@
         v-if="!isLogin"
         id="login-page"
         class="d-flex justify-content-center login-page"
+        style="z-index: 100"
       >
-        <div class="my-auto">
+        <div class="my-auto" style="z-index: 50">
           <img
+            style="z-index: 100"
             alt="MovieChain Logo"
-            class="d-flex justif mx-auto"
+            class="d-flex mx-auto"
             src="@/assets/movie_chain.png"
             width="200"
           />
@@ -24,23 +26,28 @@
 
     <!-- 메인화면(검색) -->
     <transition name="fade">
-      <div v-if="isLogin">
-        <div style="height: 80vh; z-index: 2" id="search-page">
+      <div v-if="isLogin"  style="z-index: 50">
+        <div style="height: 80vh; z-index: 50" id="search-page">
           <v-col
             class="d-flex align-center justify-center"
-            style="height: 80vh"
+            style="height: 80vh; z-index: 50"
           >
-            <div>
-              <div v-if="isLogin" class="justify-content-center d-flex">
-                <div>
+            <div  style="z-index: 50">
+              <div
+                v-if="isLogin"
+                class="justify-content-center d-flex"
+                style="z-index: 50"
+              >
+                <div  style="z-index: 50">
                   <img
+                    style="z-index: 50"
                     alt="MovieChain Logo"
                     class="d-flex justif mx-auto"
                     src="@/assets/movie_chain.png"
                     width="200"
                   />
 
-                  <div>
+                  <div  style="z-index: 50">
                     <SearchInput />
                   </div>
                 </div>
@@ -51,9 +58,9 @@
           <div
             id="more-text"
             class="text-center"
-            style="height: 20vh; z-index: 0"
+            style="height: 20vh; z-index: 50"
           >
-            <h3 class="more-text">추천영화</h3>
+            <h3 class="more-text"  style="z-index: 50">추천영화</h3>
             <v-icon class="more-text" size="48">mdi-chevron-double-down</v-icon>
           </div>
           
@@ -285,7 +292,7 @@ export default {
 .curtain-right {
   position: fixed;
   top: 0;
-  background: rgba(151, 24, 24, 0.15);
+  background: rgb(87, 21, 21);
   width: 50%;
   height: 200vh;
   transition-delay: 1s;

@@ -62,7 +62,7 @@
     </v-list-item>
     
     <div class="px-3">
-      <comment-list v-if="review" :reviewId="review.id" :class="{'hide-comment':!isExpand}"></comment-list>
+      <comment-list @calCommentCnt="calCommentCnt" v-if="review" :reviewId="review.id" :class="{'hide-comment':!isExpand}"></comment-list>
     </div>
   </div>
 </template>
@@ -97,6 +97,9 @@ export default {
   },
   methods: {
     ...mapActions(["deleteReview", "createComment", "updateReview"]),
+    calCommentCnt(val) {
+      this.commentCnt = val
+    },
     goToProfile: function () {
       this.$router.push({
         name: "Profile",

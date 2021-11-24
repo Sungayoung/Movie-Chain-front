@@ -34,21 +34,27 @@
     <div
       :id="'my-content-' + movie.id"
       class="my-content d-flex align-items-center justify-content-center"
-      @click="moveDetail"
     >
-      <div class="container ">
+      <div class="container">
         <div>
-
-        <p>{{ movie.title }}</p>
-        <p>{{ movie.release_date }}</p>
+          <p>{{ movie.title }}</p>
+          <p>{{ movie.release_date }}</p>
         </div>
         <hr />
         <div>
-
-        <div class="my-5 py-5"></div>
+          <div class="my-5 py-5"></div>
         </div>
         <hr />
         <div>
+          <button>
+            <v-icon
+              @click="moveDetail"
+              dark
+              right
+            >
+            mdi-arrow-right-bold-outline
+            </v-icon>
+          </button>
           <button>
             <v-icon
               @click="likeMovie"
@@ -114,10 +120,7 @@ export default {
       });
     },
     posterRotate: function () {
-
-      document
-        .querySelector('#bg-img')
-        .setAttribute('src',this.backdropURL);
+      document.querySelector("#bg-img").setAttribute("src", this.backdropURL);
 
       document
         .querySelector(`#my-img-${this.movie.id}`)
@@ -133,9 +136,9 @@ export default {
         .classList.add("curtain-on-mouse");
     },
     posterRerotate: function () {
-      document
-        .querySelector('#bg-img')
-        .setAttribute('src','#');
+      // document
+      //   .querySelector('#bg-img')
+      //   .setAttribute('src','#');
       document
         .querySelector(`#my-img-${this.movie.id}`)
         .classList.remove("poster-on-mouse");
