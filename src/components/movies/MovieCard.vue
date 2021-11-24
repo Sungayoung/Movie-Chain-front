@@ -46,20 +46,13 @@
         </div>
         <hr />
         <div>
-          <button>
-            <v-icon
-              @click="moveDetail"
-              dark
-              right
-            >
-            mdi-arrow-right-bold-outline
-            </v-icon>
-          </button>
+          
           <button>
             <v-icon
               @click="likeMovie"
               dark
               right
+               size="40"
               v-text="movie.isLiked ? 'mdi-heart' : 'mdi-heart-outline'"
             ></v-icon>
           </button>
@@ -67,10 +60,22 @@
             <v-icon
               dark
               right
+               size="40"
+              @click="likeMovie"
               v-text="
                 movie.isSaved ? 'mdi-bookmark-check' : 'mdi-bookmark-outline'
               "
             ></v-icon>
+          </button>
+          <button>
+            <v-icon
+              @click="moveDetail"
+              dark
+              right
+              size="40"
+            >
+            mdi-open-in-new
+            </v-icon>
           </button>
         </div>
       </div>
