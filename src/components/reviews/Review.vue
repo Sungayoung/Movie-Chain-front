@@ -1,6 +1,6 @@
 <template>
   <div v-if="review" >
-    <v-list-item  @click="isExpand=!isExpand">
+    <v-list-item  >
       <!-- 리뷰와 댓글 리스트를 보여준다 -->
       <template >
         <v-list-item-avatar @click="goToProfile">
@@ -57,12 +57,12 @@
             >
           </v-list-item-icon>
         </v-list-item-action>
-        <v-btn>댓글 {{ commentCnt }}</v-btn>
+        <v-btn @click="isExpand=!isExpand">댓글 {{ commentCnt }}</v-btn>
       </template>
     </v-list-item>
     
     <div class="px-3">
-      <comment-list @getCommentCnt="getCommentCnt()" v-if="review" :reviewId="review.id" :class="{'hide-comment':!isExpand}"></comment-list>
+      <comment-list v-if="review" :reviewId="review.id" :class="{'hide-comment':!isExpand}"></comment-list>
     </div>
   </div>
 </template>
@@ -91,6 +91,9 @@ export default {
   },
   props: {
     review: Object,
+  },
+  created: function () {
+    this.commentCnt = this.review.commentCnt
   },
   methods: {
     ...mapActions(["deleteReview", "createComment", "updateReview"]),

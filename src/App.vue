@@ -1,11 +1,11 @@
 <template>
   <v-app style="background: rgba(0, 0, 0, 0.9); color: white">
     <!-- 체인 -->
+
     <div class="d-flex align-items-center">
-      
-      <div class="d-flex chain"  style="top:100px; left:30px"></div>
-      <div class="d-flex chain"  style="top:100px; left:130px"></div>
-      <div class="d-flex chain2" style="top:115px; left:80px" ></div>
+      <div class="d-flex chain" style="top: 100px; left: 30px"></div>
+      <div class="d-flex chain" style="top: 100px; left: 130px"></div>
+      <div class="d-flex chain2" style="top: 115px; left: 80px"></div>
     </div>
     <v-main>
       <div
@@ -54,6 +54,7 @@
           </div>
         </div>
       </div>
+      <img id="bg-img" class="bg-img" />
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -85,14 +86,17 @@ export default {
       this.logOut();
     },
     goToProfile: function () {
-      this.$router.push({ name: 'Profile' , params: {'nickname': this.nickname}})
-      this.$router.go()
+      this.$router.push({
+        name: "Profile",
+        params: { nickname: this.nickname },
+      });
+      this.$router.go();
     },
   },
   computed: {
-    ...mapState(["isLogin", 'profile_img', 'nickname']),
+    ...mapState(["isLogin", "profile_img", "nickname"]),
     imgUrl: function () {
-      if(this.profile_img) {
+      if (this.profile_img) {
         return `${process.env.VUE_APP_MCS_URL}${this.profile_img}`;
       } else {
         return null;
@@ -103,12 +107,22 @@ export default {
 </script>
 
 <style>
+.bg-img {
+  transition-duration: 1s;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+}
+element.style {
+  background-color: rgba(0, 0, 0, 0.3) !important;
+}
 html {
   transition-duration: 1s;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.3) !important;
 }
 .bg {
-  background-color: rgba(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.3);
 }
 .my-link {
   text-decoration: none;
@@ -138,7 +152,7 @@ html::-webkit-scrollbar {
   width: 6px;
 }
 * ::-webkit-scrollbar-thumb {
-  height:5%;
+  height: 5%;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 25px;
 }
@@ -152,9 +166,7 @@ html::-webkit-scrollbar {
   border-radius: 30px;
   height: 50px;
   width: 80px;
-  position: absolute
-
-  
+  position: absolute;
 }
 .chain2 {
   border: 5px black solid;
@@ -162,8 +174,6 @@ html::-webkit-scrollbar {
   border-radius: 30px;
   height: 15px;
   width: 80px;
-  position: absolute
-
-  
+  position: absolute;
 }
 </style>

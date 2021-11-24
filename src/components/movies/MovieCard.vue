@@ -114,7 +114,11 @@ export default {
       });
     },
     posterRotate: function () {
-      localStorage.setItem("hoveringPosterURL", this.movie.poster_path);
+
+      document
+        .querySelector('#bg-img')
+        .setAttribute('src',this.backdropURL);
+
       document
         .querySelector(`#my-img-${this.movie.id}`)
         .classList.add("poster-on-mouse");
@@ -129,7 +133,9 @@ export default {
         .classList.add("curtain-on-mouse");
     },
     posterRerotate: function () {
-      localStorage.removeItem("hoveringPosterURL");
+      document
+        .querySelector('#bg-img')
+        .setAttribute('src','#');
       document
         .querySelector(`#my-img-${this.movie.id}`)
         .classList.remove("poster-on-mouse");
@@ -148,6 +154,13 @@ export default {
     imgURL: function () {
       if (this.movie) {
         return `https://image.tmdb.org/t/p/w500${this.movie.poster_path}`;
+      } else {
+        return "@/assets/no_image.png";
+      }
+    },
+    backdropURL: function () {
+      if (this.movie) {
+        return `https://image.tmdb.org/t/p/original${this.movie.backdrop_path}`;
       } else {
         return "@/assets/no_image.png";
       }

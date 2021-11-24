@@ -314,10 +314,10 @@ export default {
 }
 
 .left-btn {
-  left: 0;
+  left: 20vw;
 }
 .right-btn {
-  right: 0;
+  right: 20vw;
 }
 .left-btn-bg,
 .right-btn-bg {
