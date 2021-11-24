@@ -8,10 +8,8 @@
       <div class="d-flex chain2" style="top: 115px; left: 80px"></div>
     </div>
     <v-main>
-      <div
-        class="my-navbar sticky-top"
-        :class="{ 'not-login': !isLogin, login: isLogin }"
-      >
+      <!-- 네비바 -->
+      <div id="navbar">
         <div class="d-flex justify-content-between">
           <div class="d-flex align-center">
             <router-link class="my-link mx-2" :to="{ name: 'MainPage' }">
@@ -54,8 +52,9 @@
           </div>
         </div>
       </div>
-      
+
       <img id="bg-img" class="bg-img" />
+      
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -105,6 +104,17 @@ export default {
     },
   },
 };
+
+var prevScrollpos = window.pageYOffset;
+window.onscroll = function () {
+  var currentScrollPos = window.pageYOffset;
+  if (prevScrollpos > currentScrollPos) {
+    document.getElementById("navbar").style.top = "0px";
+  } else {
+    document.getElementById("navbar").style.top = "-100px";
+  }
+  prevScrollpos = currentScrollPos;
+};
 </script>
 
 <style>
@@ -112,8 +122,8 @@ export default {
   transition-duration: 1s;
   position: fixed;
   top: 0;
-  height: 100%;
-   object-fit: cover
+  width: 100%;
+  object-fit: cover;
 }
 
 html {
@@ -127,12 +137,9 @@ html {
   text-decoration: none;
   color: white !important;
 }
-.my-navbar {
-  background-color: rgba(30, 104, 114, 0.5);
-  position: fixed;
-}
+
 /* 트랜지션 용 스타일 */
-.login {
+/* .login {
   transform: none;
   transition-property: all;
   transition-delay: 1s;
@@ -141,7 +148,7 @@ html {
 .not-login {
   transform: translateY(-100px);
   transition-duration: 1s;
-}
+} */
 
 /* 스크롤 바 설정 */
 html {
@@ -175,4 +182,14 @@ html::-webkit-scrollbar {
   width: 80px;
   position: absolute;
 }
+#navbar {
+  background-color: rgba(30, 104, 114, 0.5);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  transition: top 0.3s;
+  z-index: 100;
+}
+
+/* Style the navbar links */
 </style>
