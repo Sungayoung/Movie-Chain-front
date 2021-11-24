@@ -143,21 +143,24 @@
                   <v-chip
                     @click="addOrDelGenre(genre.id)"
                     v-if="credentials.like_genres.includes(genre.id)"
-                    color="teal darken-2 "
-                    text-color="white"
+            color="grey darken-3"
+            text-color="white"
                     :pill="true"
                     :ripple="{ class: 'red--text' }"
-                    >{{ genre.name }}</v-chip
+                    >
+              <v-icon left> mdi-movie-open-outline </v-icon>
+                    
+                    {{ genre.name }}</v-chip
                   >
 
                   <v-chip v-else @click="addOrDelGenre(genre.id)">
+              <v-icon left> mdi-movie-open-outline </v-icon>
                     {{ genre.name }}</v-chip
                   >
                 </div>
               </div>
               <hr />
               <div>
-                {{ credentials.like_genres }}
               </div>
             </v-card-text>
           </v-window-item>
@@ -169,7 +172,7 @@
               <div
                 class="d-flex col-3 justify-content-center align-items-center"
               >
-                <h3 class="d-flex">{{ credentials.nickname }}강동옥 님</h3>
+                <h3 class="d-flex">{{ credentials.nickname }} 님</h3>
               </div>
               <div class="col-9 d-flex">
                 <div

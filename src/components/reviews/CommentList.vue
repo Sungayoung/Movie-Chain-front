@@ -1,26 +1,27 @@
 <template>
   <div class="p-3">
-    <v-text-field 
-      class="p-3" 
-      v-model="commentInput" 
+    <v-text-field
+      class="p-3"
+      v-model="commentInput"
       @keyup.enter="setComment"
       :rules="commentRule"
     ></v-text-field>
     <v-btn @click.stop="setComment">댓글작성</v-btn>
     <div v-if="commentList">
-      <comment 
-        v-for="comment in commentList" 
+      <comment
+        v-for="comment in commentList"
         :key="comment.id"
         :comment="comment"
-        @reload-comment="getCommentList">
+        @reload-comment="getCommentList"
+      >
       </comment>
-    </div> 
+    </div>
   </div>
 </template>
 
 <script>
 import Comment from "./Comment.vue";
-import { mapActions } from 'vuex'
+import { mapActions } from "vuex";
 export default {
   name: "CommentList",
   components: {
@@ -31,45 +32,46 @@ export default {
       commentList: null,
       commentInput: null,
       commentRule: [
-          (v) => !!v || " 댓글을 입력해주세요.",
-          (v) =>
-            !(v && v.length > 200) || "댓글은 200자 이상 입력할 수 없습니다.",
-        ],
-    }
+        (v) => !!v || " 댓글을 입력해주세요.",
+        (v) =>
+          !(v && v.length > 200) || "댓글은 200자 이상 입력할 수 없습니다.",
+      ],
+    };
   },
   props: {
     reviewId: Number,
   },
   created: function () {
-    this.getCommentList()
+    this.getCommentList();
   },
   methods: {
-    ...mapActions([
-      'getComment',
-      'createComment',
-    ]),
+    ...mapActions(["getComment", "createComment"]),
+    calComment() {
+      this.$emit("calCommentCnt", this.commentList.length);
+    },
     getCommentList: function () {
       this.getComment(this.reviewId)
-      .then( res => {
-        this.commentList = res
-      })
-      .catch( err => {
-        console.log(err)
-      })
+        .then((res) => {
+          this.commentList = res;
+          this.calComment()
+          console.log(res.length)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     setComment: function () {
       const data = {
         reviewId: this.reviewId,
         params: {
-          content: this.commentInput
-        }
-      }
-      this.createComment(data)
-      .then( res => {
-        console.log(res)
-        this.getCommentList()
-      })
-    }
+          content: this.commentInput,
+        },
+      };
+      this.createComment(data).then((res) => {
+        console.log(res);
+        this.getCommentList();
+      });
+    },
   },
 };
 </script>

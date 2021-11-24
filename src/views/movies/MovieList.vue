@@ -1,9 +1,10 @@
 <template>
   <div>
+    <!-- 사이드바 -->
     <v-navigation-drawer
       absolute
       temporary
-      color="rgba(255,255,255,0.2)"
+      color="rgba(255,255,255,0.4)"
       v-model="openBar"
     >
       <v-spacer style="height: 10vh"></v-spacer>
@@ -59,7 +60,7 @@
 
     <!-- 화면에 고정되야 할 것들 -->
     <!-- 좌우버튼 -->
-    
+
     <button @click="prev" class="left-btn-bg left-btn">
       <v-icon size="64" color="white"> mdi-chevron-left </v-icon>
     </button>
@@ -69,7 +70,13 @@
       </v-icon>
     </button>
     <div
-      style="height: 1px; width: 100%; position: fixed; bottom: 100px; z-index: 50"
+      style="
+        height: 1px;
+        width: 100%;
+        position: fixed;
+        bottom: 100px;
+        z-index: 50;
+      "
       class="d-flex justify-content-center text-center"
     >
       <div class="page-slot justify-content-evenly d-flex">
@@ -82,17 +89,14 @@
 
     <div>
       <div class="my-5 container">
-       
         <div class="justify-content-around row" mandatory>
           <!-- 사이드바 -->
 
-          <div class="col-2">
-            
-          </div>
+          <div class="col-2"></div>
         </div>
- <button @click="openBar = !openBar" class="filter-button">
-      <v-icon size="64" color="white"> mdi-filter-menu-outline </v-icon>
-    </button>
+        <button @click="openBar = !openBar" class="filter-button">
+          <v-icon size="64" color="white"> mdi-filter-menu-outline </v-icon>
+        </button>
         <div class="content-area offset-1 col-9">
           <!-- 사이드바 배경부분 -->
           <div class=""></div>
