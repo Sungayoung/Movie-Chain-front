@@ -8,22 +8,23 @@
       :rules="reviewRule"
     ></v-text-field>
     <div>
-
+      <v-sheet rounded="xl" elevation="8" color="grey lighten-2" class="mt-5">
     <review
     class="review-card mx-auto"
       v-if="myReview.length != 0 && myReview[0].content != null"
       :review="myReview[0]"
       @reload-review="sendParent"
     >
-    </review>
+    </review>      </v-sheet>
     <hr />
+          <v-sheet rounded="xl" elevation="8" color="grey lighten-2" class="mt-5">
     <review
       class="review-card mx-auto"
       v-for="review in reviewList"
       :key="review.id"
       :review="review"
       @reload-review="sendParent"
-    ></review>
+    ></review>      </v-sheet>
     </div>
   </div>
 </template>
@@ -77,7 +78,5 @@ export default {
 .review-card {
   padding:15px;
   border-radius: 25px;
-  background-color: white;
-  max-width: 85%
 }
 </style>

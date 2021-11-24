@@ -1,161 +1,260 @@
 <template>
-  <div class="container d-flex">
-    <div style="width: 900px" class="mx-auto">
-      <div>
+  <div class="container d-flex" style="margin-top: 100px">
+    <v-sheet
+      style="z-index: 1"
+      rounded="xl"
+      color="rgba(255,255,255,0.6)"
+      width="50%"
+      class="mx-auto my-5 p-3"
+    >
+      <v-sheet
+        rounded="xl"
+        color="#85c085"
+        elevation="8"
+        class="justify-content-center align-items-center"
+      >
         <!-- 제목 -->
-        <div>
-          <h3 class="d-inline-flex">{{ movie.title }}</h3>
-
-          <!-- 별 평점 -->
-          <div>
-            <v-icon size="50" color="warning">mdi-star</v-icon>
-            <span>
-              {{ voteAverage }}
-            </span>
-          </div>
-        </div>
-
-        <hr />
-        <!-- 개봉일 -->
-        <div>
-
-        <v-chip small light color="grey darken-3" text-color="white" class="mx-2 my-1">
-          <button>
-          <v-icon left> mdi-calendar-month-outline </v-icon>
-          {{ releaseDate }}
-          </button>
-        </v-chip>
-        </div>
-        
-        <!-- 태그들(장르, 키워드) -->
-        <div>
-          <div>
-
-          <v-chip
-            small light
-            color="grey darken-3"
-            text-color="white"
-            v-for="(gnr, idx) in movie.genre"
-            :key="idx"
-            class="mx-2 my-1"
-          >
-            <button @click.stop="moveGenreList(gnr.id)">
-              <v-icon left> mdi-movie-open-outline </v-icon>
-              {{ gnr.name }}
-            </button>
-          </v-chip>
-          </div>
-          <div>
-
-          <v-chip
-            small light
-            color="grey darken-3"
-            text-color="white"
-            v-for="(kwd, idx) in movie.keyword"
-            :key="idx"
-            class="mx-2 my-1"
-          >
-            <button @click.stop="moveKeywordList(kwd.id)">
-              <v-icon left> mdi-pound </v-icon>
-              {{ kwd.name }}
-            </button>
-          </v-chip>
-          </div>
-        </div>
-      </div>
-      <hr />
-      <!-- 본문 -->
-      <div class="d-flex row">
-        <!-- 포스터 -->
-        <div class="col-3" @click.stop="dialog = true">
-          <div class="poster-box" @mouseover="magnify">
-            <!-- 포스터 확대 기능 -->
-            <div class="hover-magnifier justify-content-center">
-              <v-icon> magnify-plus-outline </v-icon>
-            </div>
-            <v-img :src="imgURL"></v-img>
-          </div>
-        </div>
-        <!-- 줄거리 -->
-        <div class="col-9">{{ movie.overview }}</div>
-
-        <!-- 별점주기 -->
         <div class="text-center">
-          <p>평가하기</p>
-          <v-rating
-            color="warning"
-            background-color="warning lighten-1"
-            empty-icon="mdi-star-outline"
-            full-icon="mdi-star"
-            half-icon="mdi-star-half-full"
-            hover
-            half-increments
-            length="5"
-            large
-            v-model="rank"
-            @input="setRank"
-          ></v-rating>
-        </div>
-        <!-- 북마크 -->
-        <v-btn color="primary" dark @click="saveMovie">
-          {{ movie.saveCnt }}
-          <v-icon
-            dark
-            right
-            v-text="
-              movie.isSaved ? 'mdi-bookmark-check' : 'mdi-bookmark-outline'
-            "
-          ></v-icon>
-        </v-btn>
-        <!-- 좋아요 -->
-        <v-btn color="red" dark @click="likeMovie">
-          {{ movie.likeCnt }}
-          <v-icon
-            dark
-            right
-            v-text="movie.isLiked ? 'mdi-heart' : 'mdi-heart-outline'"
-          ></v-icon>
-        </v-btn>
-        <user-list-pop 
-          :movieId="movie.id">
-        </user-list-pop>
-      </div>
-      <hr />
-      <h3>감독</h3>
-      <hr />
-      <div>
-        <PeopleCardList :people="movie.crews" />
-      </div>
+          <span class="fs-3 fw-bold my-auto">{{ movie.title }}</span>
+          <v-sheet
+            rounded="xl"
+            color="grey lighten-2"
+            class="mt-3 d-flex"
+            style="min-height: 340px"
+          >
+            <div class="col-3">
+              <!-- 포스터 -->
+              <button
+                @click.stop="dialog = true"
+                style="position: relative"
+                class="d-flex"
+              >
+                <div class="d-flex justify-content-center" style="width: 200px">
+                  <div style="position: absolute; z-index: 30; top: 273px">
+                    <user-list-pop :movieId="movie.id"> </user-list-pop>
+                  </div>
+                </div>
+                <div
+                  class="poster-box"
+                  @mouseover="isHover = true"
+                  @mouseleave="isHover = false"
+                  style="
+                    border: 2px solid white;
+                    position: absolute;
+                    border-radius: 25px;
+                  "
+                >
+                  <!-- 포스터 확대 기능 -->
+                  <transition name="my-movie-card">
+                    <div
+                      v-if="isHover"
+                      class="hover-magnifying justify-content-center d-flex"
+                      style="border-radius: 25px"
+                    >
+                      <v-icon
+                        color="white"
+                        style="z-index: 20  border-radius:25px"
+                        size="64"
+                      >
+                        mdi-magnify-plus-outline
+                      </v-icon>
+                    </div>
+                  </transition>
 
-      <h3>배우</h3>
-      <hr />
-      <div>
-        <PeopleCardList :people="movie.actors" />
-      </div>
+                  <v-img :src="imgURL" style="border-radius: 25px"></v-img>
+                </div>
+              </button>
+            </div>
+
+            <!-- 본문 -->
+            <div class="col-9">
+              <v-sheet
+                rounded="xl"
+                elevation="8"
+                color="grey lighten-2"
+                class="mt-3"
+              >
+                <!-- 줄거리 -->
+                <div class="p-3">{{ movie.overview }}</div>
+              </v-sheet>
+
+              <v-sheet
+                rounded="xl"
+                elevation="8"
+                color="grey lighten-2"
+                class="justify-content-center d-flex mt-3"
+                width="auto"
+              >
+                <!-- 좋아요 -->
+                <button @click="likeMovie">
+                  <v-icon
+                    color="red"
+                    size="40"
+                    v-text="movie.isLiked ? 'mdi-heart' : 'mdi-heart-outline'"
+                  ></v-icon>
+                  {{ movie.likeCnt }}
+                </button>
+                <!-- 북마크 -->
+
+                <button dark @click="saveMovie">
+                  <v-icon
+                    color="blue"
+                    size="40"
+                    v-text="
+                      movie.isSaved ? 'mdi-bookmark' : 'mdi-bookmark-outline'
+                    "
+                  ></v-icon>
+                  {{ movie.saveCnt }}
+                </button>
+
+                <!-- 별점주기 -->
+                <div class="text-center">
+                  <v-rating
+                    color="warning"
+                    background-color="warning lighten-1"
+                    empty-icon="mdi-star-outline"
+                    full-icon="mdi-star"
+                    half-icon="mdi-star-half-full"
+                    hover
+                    half-increments
+                    length="5"
+                    large
+                    v-model="rank"
+                    @input="setRank"
+                  ></v-rating>
+                </div>
+                <button>
+                  {{ rank }}
+                </button>
+              </v-sheet>
+            </div>
+          </v-sheet>
+        </div>
+      </v-sheet>
+
+      <v-sheet
+        rounded="xl"
+        elevation="8"
+        class="mt-5 justify-content-center align-items-center"
+        ><div class="d-flex justify-content-center container">
+          <h3 class="fw-bold m-0">감독</h3>
+        </div>
+        <div>
+          <PeopleCardList :people="movie.crews" />
+        </div>
+      </v-sheet>
+
+      <v-sheet
+        rounded="xl"
+        color="grey lighten-2"
+        elevation="8"
+        class="mt-5 justify-content-center align-items-center"
+        ><div class="d-flex justify-content-center container">
+          <h3 class="fw-bold m-0">배우</h3>
+        </div>
+        <div>
+          <PeopleCardList :people="movie.actors" />
+        </div>
+      </v-sheet>
       <!-- 확대했을 때 dialog -->
+
       <v-dialog v-model="dialog" max-width="500">
-        <v-img :src="imgURL"></v-img>
+        <div style="border: 2px solid white">
+          <v-img :src="imgURL"></v-img>
+        </div>
       </v-dialog>
 
       <!-- 리뷰 -->
+        <div>
+          <v-icon large color="red lighten-2"> </v-icon>
+          <review-list
+            :reviewList="reviewList"
+            :myReview="myReview"
+            :reviewCnt="reviewCnt"
+            :movieId="movieId"
+            @reload-review="getReviewList"
+          >
+          </review-list>
+        </div>
+    </v-sheet>
+
+    <v-sheet
+      style="position: absolute; right: 1430px; top: 132px; width: auto"
+      rounded="xl"
+      elevation="8"
+      color="rgba(255,255,255,0.6)"
+      class="p-2 col d-flex"
+    >
       <div>
-        <v-icon large color="red lighten-2"> </v-icon>
-        <review-list
-          :reviewList="reviewList"
-          :myReview="myReview"
-          :reviewCnt="reviewCnt"
-          :movieId="movieId"
-          @reload-review="getReviewList"
-        >
-        </review-list>
+        <!-- 별 평점 -->
+        <div>
+          <v-chip
+            light
+            color="grey darken-3"
+            text-color="white"
+            class="mx-2 my-1"
+          >
+            <button>
+              <v-icon left color="warning">mdi-star</v-icon>
+              {{ voteAverage }}
+            </button>
+          </v-chip>
+        </div>
+
+        <!-- 개봉일 -->
+        <div>
+          <v-chip
+            light
+            color="grey darken-3"
+            text-color="white"
+            class="mx-2 my-1"
+          >
+            <button>
+              <v-icon left> mdi-calendar-month-outline </v-icon>
+              {{ releaseDate }}
+            </button>
+          </v-chip>
+        </div>
+
+        <!-- 태그들(장르, 키워드) -->
+        <div>
+          <div v-for="(gnr, idx) in movie.genre" :key="idx">
+            <v-chip
+              small
+              light
+              color="grey darken-3"
+              text-color="white"
+              class="mx-2 my-1"
+            >
+              <button @click.stop="moveGenreList(gnr.id)">
+                <v-icon left> mdi-movie-open-outline </v-icon>
+                {{ gnr.name }}
+              </button>
+            </v-chip>
+          </div>
+          <div v-for="(kwd, idx) in movie.keyword" :key="idx">
+            <v-chip
+              small
+              light
+              color="grey darken-3"
+              text-color="white"
+              class="mx-2 my-1"
+            >
+              <button @click.stop="moveKeywordList(kwd.id)">
+                <v-icon left> mdi-pound </v-icon>
+                {{ kwd.name }}
+              </button>
+            </v-chip>
+          </div>
+        </div>
       </div>
-    </div>
+    </v-sheet>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import UserListPop from '@/components/popups/UserListPop.vue';
+import UserListPop from "@/components/popups/UserListPop.vue";
 import ReviewList from "@/components/reviews/ReviewList.vue";
 import PeopleCardList from "../../components/people/PeopleCardList.vue";
 import { mapActions } from "vuex";
@@ -164,6 +263,7 @@ export default {
   name: "MovieDetail",
   data: function () {
     return {
+      isHover: false,
       dialog: false,
       movie: null,
       rank: null,
@@ -208,7 +308,7 @@ export default {
         params: { propFilterBy: "keyword", propFilterId: kwdId },
       });
     },
-    magnify: function () {},
+
     getReviewList: function () {
       this.getReview(this.movieId).then((res) => {
         this.myReview = res.myReview;
@@ -309,18 +409,15 @@ export default {
 </script>
 
 <style>
-.hover-magnifier {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  z-index: 100;
+.movie-detail-header {
+  height: 300px;
 }
 .hover-magnifying {
-  background-color: rgba(92, 78, 78, 0.2);
+  background-color: rgba(65, 65, 65, 0.705);
   position: absolute;
   height: 100%;
   width: 100%;
-  z-index: 100;
+  z-index: 20;
 }
 .poster-box {
   position: relative;
@@ -328,5 +425,13 @@ export default {
   width: 200px;
   height: 300px;
   object-fit: fill;
+}
+.my-movie-card-enter-active,
+.my-movie-card-leave-active {
+  transition-duration: 500ms;
+}
+.my-movie-card-enter,
+.my-movie-card-leave-to {
+  opacity: 0;
 }
 </style>

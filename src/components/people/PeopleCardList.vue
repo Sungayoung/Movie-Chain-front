@@ -1,21 +1,17 @@
 <template>
   <div>
-    <v-sheet
-      class="mx-auto"
-      elevation="8"
-      max-width="85%"
-      style="background: gray; border-radius:25px"
-    >
+    <v-sheet class="mx-auto" elevation="8" rounded="xl" color="grey darken-2">
       <v-slide-group
         show-arrows
         next-icon="mdi-chevron-right"
         prev-icon="mdi-chevron-left"
       >
         <people-card
-        v-for="idx in people.length"
-        :key="people[idx-1].id"
-        :person="people[idx-1]"
-        class="ma-4">
+          v-for="idx in people.length"
+          :key="people[idx - 1].id"
+          :person="people[idx - 1]"
+          class="ma-4"
+        >
         </people-card>
       </v-slide-group>
     </v-sheet>
@@ -35,6 +31,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>
