@@ -12,11 +12,7 @@
             rounded="xl"
             color="grey lighten-5"
           >
-            <v-img
-              class="my-profile"
-              :src="imgURL"
-              alt=""
-            ></v-img>
+            <v-img class="my-profile" :src="imgURL" alt=""></v-img>
             <transition name="my-movie-card">
               <div
                 v-if="nowPersonId === person.id"
@@ -27,11 +23,18 @@
                   justify-content-center
                 "
               >
-                <button class="d-flex">
-                  <v-icon @click="moveDetail" dark right size="40">
-                    mdi-open-in-new
-                  </v-icon>
-                </button>
+                <div class="container p-3 d- justify-content-center">
+                  <div style="flex-wrap: wrap; position:relative">
+                    <p v-if="person.job">{{ person.job}}</p>
+                    <p v-if="person.character" class="text-wrap">{{ person.character }} 역</p>
+                  </div>
+                  <hr />
+                  <button class="text-center">
+                    <v-icon @click="moveDetail" dark right size="40">
+                      mdi-open-in-new
+                    </v-icon>
+                  </button>
+                </div>
               </div>
             </transition>
             <div stlye="position:absolute; bottom:0;">
@@ -96,11 +99,11 @@ export default {
 }
 .my-content {
   color: whitesmoke;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.8);
   position: absolute;
-  top:0;
+  top: 0;
   width: 146px;
-  height:225px;
+  height: 225px;
   z-index: 6;
   transition-duration: 200ms;
   border-radius: 25px;
@@ -116,5 +119,6 @@ export default {
 .my-movie-card-enter,
 .my-movie-card-leave-to {
   opacity: 0;
+  
 }
 </style>

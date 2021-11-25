@@ -24,7 +24,7 @@
                   @click="getIdx(idx)"
                   @mouseover="
                     (nowHoverMovieId = movie.id),
-                      setMBDURL({ url: backdropURL, id: movie.id })
+                      setMBDURL({ url: backdropURL(movie.backdrop_path), id: movie.id })
                   "
                   @mouseleave="nowHoverMovieId = null"
                 >
@@ -171,7 +171,7 @@
           <v-card
             @mouseover="
               (nowHoverMovieId = movie.id),
-                setMBDURL({ url: backdropURL, id: movie.id })
+                setMBDURL({ url: backdropURL(movie.backdrop_path), id: movie.id })
             "
             @mouseleave="nowHoverMovieId = null"
             class="d-flex align-center mx-auto"
@@ -254,7 +254,7 @@ export default {
       });
   },
   methods: {
-    ...mapActions(["getMovieList", "search"]),
+    ...mapActions(["getMovieList", "search", "setMBDURL"]),
     moveDetail: function (movieId) {
       this.$router.push({
         name: "MovieDetail",
@@ -313,6 +313,13 @@ export default {
         }
       } else {
         return null;
+      }
+    },
+     backdropURL: function (backdrop_path) {
+      if (backdrop_path) {
+        return `https://image.tmdb.org/t/p/original${backdrop_path}`;
+      } else {
+        return "#";
       }
     },
     calBgColor: function () {},
