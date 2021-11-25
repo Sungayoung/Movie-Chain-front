@@ -89,7 +89,7 @@ export default {
     login: function () {
       axios({
         method: "POST",
-        url: "http://127.0.0.1:8000/accounts/api-token-auth/",
+        url: `${process.env.VUE_APP_MCS_URL}/accounts/api-token-auth/`,
         data: this.credentials,
       })
         .then((res) => {
