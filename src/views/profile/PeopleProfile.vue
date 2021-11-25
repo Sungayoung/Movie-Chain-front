@@ -34,6 +34,7 @@
         
         <v-row justify="center">
           <h3 style="color: white; text-align: center" >{{ person.name }} 님</h3>
+        <h5 style="color: white; text-align: center" >{{ person.birthday }} ~ {{ person.deathday }}</h5>
         </v-row>
       </div>
       
