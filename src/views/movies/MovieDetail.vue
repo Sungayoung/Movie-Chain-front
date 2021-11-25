@@ -204,7 +204,7 @@
     </v-sheet>
     
     <div class='d-flex flex-column'
-    style="position: absolute; right: 1430px; top: 132px; width: auto">
+    style="position: absolute; right: 1430px; top: 132px; width: auto; z-index:3">
 
     <v-sheet
       rounded="xl"

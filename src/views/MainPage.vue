@@ -22,6 +22,13 @@
           />
           <Login />
         </div>
+
+
+        <div class="fs-5 d-flex more-text" style="position:fixed; bottom:100px;  z-index:3; color:#76b1a6">
+           Final PJT. by 동옥, 아영
+        </div>
+
+
       </div>
     </transition>
     <div v-if="nowLoading">
