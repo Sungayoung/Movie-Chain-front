@@ -78,16 +78,12 @@ export default {
   created: function () {
     this.search(this.query)
       .then((res) => {
-        console.log(res);
         this.actors = res.actors;
         this.crews = res.crews;
         this.movies = res.movies;
         this.genres = res.genres;
         this.keywords = res.keywords;
       })
-      .catch((err) => {
-        console.log(err);
-      });
   },
   methods: {
     ...mapActions(["search"]),

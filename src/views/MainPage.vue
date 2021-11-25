@@ -173,11 +173,8 @@ export default {
               this.movies.push(mov);
             });
             this.nowPage++;
-            console.log(this.movies);
           })
-          .catch((err) => {
-            console.log(err);
-          });
+
       }
     }
   },
@@ -257,11 +254,9 @@ export default {
               });
               this.nowPage++;
               this.nowLoading = false;
-              console.log(this.movies);
             })
             .catch((err) => {
               this.nowLoading = false;
-              console.log(err);
             });
         }
       }
@@ -287,17 +282,14 @@ export default {
               this.movies.push(mov);
             });
             this.nowPage++;
-            console.log(this.movies);
             this.nowLoading = false;
           })
           .catch((err) => {
-            console.log(err);
             this.nowLoading = false;
           });
         this.nowLoading = true;
 
         this.getRecommendMovie().then((res) => {
-          console.log(res);
           this.recommendMovies = res;
         });
         this.nowLoading = false;

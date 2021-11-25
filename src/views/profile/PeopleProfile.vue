@@ -79,7 +79,6 @@ export default {
         headers: {Authorization: `JWT ${token}`}
       })
       .then( res => {
-        console.log(res.data)
         this.person = res.data
       })
     },
@@ -94,10 +93,6 @@ export default {
       })
       .then( res => {
         this.person.is_following = !this.person.is_following
-        console.log(res.data)
-      })
-      .catch( err => {
-        console.log(err)
       })
     }
   },

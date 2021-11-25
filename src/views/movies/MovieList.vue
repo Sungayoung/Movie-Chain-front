@@ -219,9 +219,6 @@ export default {
             .then((res) => {
               this.filterIdItems = res.data;
             })
-            .catch((err) => {
-              console.log(err);
-            });
         }
       }
     },
@@ -236,14 +233,9 @@ export default {
       this.movies = [];
       this.getMovieListPage(params)
         .then((res) => {
-          // console.log(res);
           this.movies = res.serialized_data;
-          console.log(res.serialized_data);
           this.totalPages = res.total_page_cnt;
         })
-        .catch((err) => {
-          console.log(err);
-        });
     },
     getMovie: function () {
       const params = {
@@ -258,13 +250,9 @@ export default {
       }
       this.getMovieListPage(params)
         .then((res) => {
-          // console.log(res);
           this.movies = res.serialized_data;
           this.totalPages = res.total_page_cnt;
         })
-        .catch((err) => {
-          console.log(err);
-        });
     },
 
     getSearch: function () {
@@ -272,9 +260,6 @@ export default {
         .then((res) => {
           this.results = res;
         })
-        .catch((err) => {
-          console.log(err);
-        });
     },
     next: function () {
       this.page =

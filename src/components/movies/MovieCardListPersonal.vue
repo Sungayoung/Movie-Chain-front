@@ -249,9 +249,7 @@ export default {
         this.movies = res;
         this.filteredMovies = this.movies;
       })
-      .catch((err) => {
-        console.log(err);
-      });
+
   },
   methods: {
     ...mapActions(["getMovieList", "search", "setMBDURL"]),
@@ -267,15 +265,12 @@ export default {
       this.cur_idx = idx;
     },
     setPersonalMovie: function (movie) {
-      console.log(this.cur_idx);
-      console.log(this.movieList[this.cur_idx]);
       const token = localStorage.getItem("jwt");
       if (this.cur_idx < this.movieList.length) {
         const data = {
           movieId: movie.id,
           originId: this.movieList[this.cur_idx].id,
         };
-        console.log(this.movieList[this.cur_idx].id);
         axios({
           method: "put",
           url: `${process.env.VUE_APP_MCS_URL}/accounts/personal-movie/`,
@@ -290,7 +285,6 @@ export default {
         const data = {
           movieId: movie.id,
         };
-        console.log(movie);
         axios({
           method: "post",
           url: `${process.env.VUE_APP_MCS_URL}/accounts/personal-movie/`,

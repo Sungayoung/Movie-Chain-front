@@ -93,10 +93,6 @@ export default {
       })
       .then( res => {
         this.followList = res.data
-        console.log(res.data)
-      })
-      .catch( err => {
-        console.log(err)
       })
     }
   }

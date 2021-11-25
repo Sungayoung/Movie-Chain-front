@@ -88,9 +88,7 @@ export default {
           content: this.commentInput,
         },
       };
-      // console.log(data)
       this.updateComment(data).then((res) => {
-        // console.log(res)
         this.comment.content = res.content;
         this.commentInput = res.content;
         this.editMode = false;

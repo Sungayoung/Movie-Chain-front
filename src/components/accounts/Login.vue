@@ -93,14 +93,12 @@ export default {
         data: this.credentials,
       })
         .then((res) => {
-          console.log(res);
           localStorage.setItem("jwt", res.data.token);
           this.logIn();
         })
-        .catch((err) => {
+        .catch(() => {
            this.validAlert = true;
           setTimeout(() => (this.validAlert = false), 2000);
-          console.log(err);
         });
     },
   },

@@ -59,11 +59,7 @@ export default {
         .then((res) => {
           this.commentList = res;
           this.calComment();
-          console.log(res.length);
         })
-        .catch((err) => {
-          console.log(err);
-        });
     },
     setComment: function () {
       const data = {
@@ -73,7 +69,6 @@ export default {
         },
       };
       this.createComment(data).then((res) => {
-        console.log(res);
         this.commentInput = null;
         this.getCommentList();
       });

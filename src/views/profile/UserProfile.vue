@@ -148,9 +148,6 @@ export default {
   mounted: function () {
     if(this.nickname){
       this.getProfileInfo(this.nickname)
-      
-      console.log(this.nickname)
-      console.log(this.$store.state.nickname)
     }
   },
   props: {
@@ -164,7 +161,6 @@ export default {
       inputData
       this.getProfile(this.nickname)
       .then(res=> {
-        console.log(res)
         this.profile = res
         this.imgUrl = `${process.env.VUE_APP_MCS_URL}${res.profile_img}?_=${new Date().getTime()}`
         this.isLoginUser = this.nickname == this.$store.state.nickname
@@ -193,10 +189,6 @@ export default {
       })
       .then( res => {
         this.profile.is_following = !this.profile.is_following
-        console.log(res.data)
-      })
-      .catch( err => {
-        console.log(err)
       })
     }
   },
@@ -207,7 +199,6 @@ export default {
         let r= parseInt(result[1], 16);
         let g= parseInt(result[2], 16);
         let b= parseInt(result[3], 16);
-        console.log(r, g, b)
         if (r >= 190 && g >= 190 && b >= 190) {
           return 'black'
         }

@@ -119,6 +119,7 @@ export default {
   },
   data: function () {
     return {
+      validAlert = false,
       userProfile: null,
       dialog: false,
       introduce_content: null,
@@ -162,15 +163,19 @@ export default {
       this.userProfile = { ...this.profile }
     },
     sendProfile: function () {
-      console.log('send')
-      let data = new FormData()
-      data.append('files', this.profileImg)
-      console.log(data)
-      this.setProfileImg(data)
-      .then( () => {
-        this.$emit('reload-profile', 'profile_img')
-        this.imgUrl = `${process.env.VUE_APP_MCS_URL}${this.profile.profile_img}?_=${new Date().getTime()}`
-      })
+      if(this.profileImg.size >= 1000000) {
+          this.validAlert = true
+         setTimeout(() => (this.validAlert = false), 2000);
+      }
+      else {
+        let data = new FormData()
+        data.append('files', this.profileImg)
+        this.setProfileImg(data)
+        .then( (res) => {
+          this.$emit('reload-profile', 'profile_img')
+          this.imgUrl = `${process.env.VUE_APP_MCS_URL}${res.profile_img}?_=${new Date().getTime()}`
+        })
+      }
     },
     updateUser: function () {
       const token = localStorage.getItem('jwt')
@@ -182,7 +187,7 @@ export default {
       }
       axios({
         method: "put",
-        url: "http://127.0.0.1:8000/accounts/update-user/",
+        url: `${process.env.VUE_APP_MCS_URL}/accounts/update-user/`,
         headers: { Authorization: `JWT ${token}`},
         data: data
       })
@@ -191,11 +196,10 @@ export default {
         this.getProfile(res.data.nickname)
         this.$emit('reload-profile', res.data.nickname)
       })
-      .catch((err) => {
+      .catch(() => {
         this.validAlert = true;
         setTimeout(() => (this.validAlert = false), 2000);
 
-        console.log(err.response);
       });
     },
   },
@@ -216,5 +220,15 @@ export default {
   position: scroll;
   left: 0;
   background-color: rgba(0, 0, 0, 0);
+}
+.alert-box {
+  position: fixed;
+  top: 0;
+  width: 45%;
+  z-index: 10;
+}
+.alert {
+  position: absolute;
+  top: 0;
 }
 </style>

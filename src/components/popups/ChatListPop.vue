@@ -100,9 +100,7 @@ export default {
       .then(res => {
         this.chatList = res.data
       })
-      .catch( err => {
-        console.log(err)
-      })
+
     },
   }
 };

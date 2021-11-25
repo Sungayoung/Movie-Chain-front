@@ -52,12 +52,8 @@ export default {
           headers: { Authorization: `JWT ${token}` },
           data: {follow: follow, follow_id: this.person.id,}
         })
-        .then( res => {
+        .then( () => {
           this.person.is_following = !this.person.is_following
-          console.log(res.data)
-        })
-        .catch( err => {
-          console.log(err)
         })
       }
   },

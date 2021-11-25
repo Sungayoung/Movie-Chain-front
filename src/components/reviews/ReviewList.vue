@@ -73,7 +73,6 @@ export default {
         },
       };
       this.createReview(data).then((res) => {
-        console.log(res);
         this.$emit("reload-review");
       });
     },

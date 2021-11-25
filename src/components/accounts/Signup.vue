@@ -514,13 +514,10 @@ export default {
       };
       this.getMovieList(params)
         .then((res) => {
-          // console.log(res);
           this.movies = res;
           this.filteredMovies = this.movies.slice(0, 100);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+
     }
   },
   methods: {
@@ -582,7 +579,6 @@ export default {
           this.credentials.personal_movies.push(mov.id)
         );
       }
-      console.log(this.credentials);
       axios({
         method: "POST",
         url: `${process.env.VUE_APP_MCS_URL}/accounts/signup/`,
@@ -592,7 +588,6 @@ export default {
           this.onboarding++;
         })
         .catch((err) => {
-          console.log(err.response.data);
           if (err.response.data.error) {
             this.movieAlertText = err.response.data.error;
           } else if (err.response.data.username &&

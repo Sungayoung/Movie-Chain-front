@@ -356,24 +356,17 @@ export default {
       this.getReview(this.movieId).then((res) => {
         this.myReview = res.myReview;
         if (res.myRank.length != 0) {
-          console.log(res.myRank);
           this.rank = res.myRank[0].rank / 2;
         }
         this.reviewList = res.reviews;
         this.reviewCnt = res.reviewCnt;
-        console.log(res);
       });
     },
     getMovie: function () {
-      console.log(this.movieId);
       this.getMovieDetail(this.movieId)
         .then((res) => {
           this.movie = res;
-          console.log(res);
         })
-        .catch((err) => {
-          console.log(err);
-        });
     },
     likeMovie: function () {
       const token = localStorage.getItem("jwt");
@@ -400,7 +393,6 @@ export default {
       });
     },
     setRank: function () {
-      console.log("hello");
       if (this.myReview.length == 0) {
         let data = {
           movieId: this.movieId,
@@ -430,7 +422,6 @@ export default {
   computed: {
     videoURL: function () {
       if(this.movie.video_id) {
-        console.log(`https://www.youtube.com/embed/xDmRI9y0LEs${this.movie.video_id}`)
         return `https://www.youtube.com/embed/${this.movie.video_id}`
       }
       else {
@@ -462,7 +453,6 @@ export default {
           let r= parseInt(result[1], 16);
           let g= parseInt(result[2], 16);
           let b= parseInt(result[3], 16);
-          console.log(r, g, b)
           if (r >= 190 && g >= 190 && b >= 190) {
             return 'black'
           }

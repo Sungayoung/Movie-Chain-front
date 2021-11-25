@@ -63,7 +63,6 @@ export default {
   methods: {
     updateColor: function () {
       const token = localStorage.getItem('jwt')
-      console.log(this.color.hex)
       axios({
         method: 'put',
         url: `${process.env.VUE_APP_MCS_URL}/accounts/update-user/`,

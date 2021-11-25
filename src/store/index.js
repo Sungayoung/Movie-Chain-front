@@ -49,7 +49,6 @@ export default new Vuex.Store({
     SET_PROFILE: function (state, res) {
       state.profile_img = `${res.profile_img}?_=${new Date().getTime()}`;
       state.nickname = res.nickname;
-      console.log(state.nickname);
     },
     UPDATE_INFO: function (state, info) {
       state.Spage = info.page;
@@ -104,11 +103,9 @@ export default new Vuex.Store({
           params,
         })
           .then((res) => {
-            // console.log(res.data)
             resolve(res.data);
           })
           .catch((err) => {
-            // console.log(err.data)
             reject(err.data);
           });
       });
@@ -131,11 +128,9 @@ export default new Vuex.Store({
           params,
         })
           .then((res) => {
-            // console.log(res.data)
             resolve(res.data);
           })
           .catch((err) => {
-            // console.log(err.data)
             reject(err.data);
           });
       });
@@ -153,7 +148,6 @@ export default new Vuex.Store({
           },
         })
           .then((res) => {
-            // console.log(res.data);
             resolve(res.data);
           })
           .catch((err) => {
@@ -231,7 +225,6 @@ export default new Vuex.Store({
     },
     createReview: function ({ commit }, data) {
       commit;
-      console.log(data);
       const token = localStorage.getItem("jwt");
       return new Promise((resolve, reject) => {
         axios({

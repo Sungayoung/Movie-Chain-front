@@ -59,12 +59,10 @@ export default {
   methods: {
     sendChatting: function () {
       const token = localStorage.getItem('jwt')
-      console.log(this.toUser)
       const data = {
         to_user: this.toUser.id,
         content: this.chattingInput,
       }
-      console.log(data)
       axios({
         method: 'post',
         url: `${process.env.VUE_APP_MCS_URL}/accounts/chatting/`,
@@ -74,11 +72,8 @@ export default {
       .then( res => {
         this.dialog = false
         this.chattingInput = null
-        console.log(res)
       })
-      .catch( err => {
-        console.log(err)
-      })
+
     }
   }
 };

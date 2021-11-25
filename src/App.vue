@@ -21,15 +21,15 @@
                 Main</router-link
               >
 
+
+              <router-link class="my-link mx-2" :to="{ name: 'MovieList' }"
+                >MovieList</router-link
+              >
               <router-link
                 class="my-link mx-2"
                 @click.native="logout()"
                 :to="{ name: 'MainPage' }"
                 >Logout</router-link
-              >
-
-              <router-link class="my-link mx-2" :to="{ name: 'MovieList' }"
-                >MovieList</router-link
               >
             </div>
 
