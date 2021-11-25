@@ -7,16 +7,24 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     isLogin: localStorage.getItem("jwt") ? true : false,
+    profile_img: null,
+    nickname: null,
+    lastHoverMBDURL:null,
+    lastHoverMovieId:null,
+
+    // 뒤로가기시 필터가 빠지지 않게 만드는 변수
     Spage: 1,
     SmovieCnt: 18,
     SorderBy: null,
     SfilterBy: "all",
     SfilterId: null,
     SfilterIdList: [],
-    profile_img: null,
-    nickname: null,
   },
   mutations: {
+    SET_MBDURL: function (state, movie) {
+      state.lastHoverMBDURL = movie.url;
+      state.lastHoverMovieId = movie.id;
+    },
     LOG_IN: function (state) {
       state.isLogin = true;
       const token = localStorage.getItem("jwt");
@@ -47,6 +55,9 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    getMBDURL: function ({commit}, url) {
+      commit("SET_MBDURL",url)
+    },
     logIn: function ({ commit }) {
       commit("LOG_IN");
     },

@@ -14,14 +14,17 @@
               <v-item v-slot="{ active }">
                 <v-card
                   :color="active ? 'primary' : 'grey'"
-                  class="d-flex align-center mx-auto"
+                  class="d-flex align-center mx-auto movie-img"
                   width="200"
                   height="300"
                   v-bind="attrs"
+                  rounded="xl"
                   v-on="on"
                   @click="getIdx(idx)"
                 >
                   <v-img
+                  rounded="xl"
+                  class="movie-img"
                   width="200"
                   height="300"
                   :src="imgURL(movie)"
@@ -50,9 +53,9 @@
                   height="300"
                   v-bind="attrs"
                   v-on="on"
+                  rounded="xl"
                   @click="getIdx(idx)"
                 >
-                  <v-img></v-img>
                   <v-scroll-y-transition>
                     <div
                       v-if="active"
@@ -106,25 +109,29 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="primary" text @click="dialog = false">
+              <v-btn color="white" text @click="dialog = false">
                 CLOSE
               </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-row>
+
+      
       <v-row v-else>
         <v-col v-for="(movie, idx) in movieList" :key="idx" cols="4" md="4">
           <v-card
-            class="d-flex align-center mx-auto"
+            class="d-flex align-center mx-auto movie-img"
             width="200"
             height="300"
           >
-            <v-img
+            <img
+            class="movie-img"
+            rounded="xl"
             width="200"
             height="300"
             :src="imgURL(movie)"
-            ></v-img>
+            />
           </v-card>
           <v-row justify="center">
             <user-list-pop 
@@ -146,7 +153,8 @@ export default {
   name: "MovieCardListPersonal",
   props: {
     movieList: Array,
-    isLoginUser: Boolean
+    isLoginUser: Boolean,
+    background_color:String
   },
   components: {
     UserListPop
@@ -222,12 +230,13 @@ export default {
         if (movie.poster_path != null) {
           return `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
         } else {
-          return "@/assets/no_image.png";
+          return `${process.env.VUE_APP_MCS_URL}/media/images/profile/movie_chain_poster.png`;
         }
       } else {
         return null;
       }
     },
+    calBgColor: function(){}
   },
   watch: {
     query(val) {
@@ -249,6 +258,8 @@ export default {
   width: 160px;
   height: 240px;
   object-fit: fill;
+  border-radius: 25px ;
+  border: 2px solid #ffffff96
 }
 * ::-webkit-scrollbar {
   display: none;
