@@ -3,6 +3,7 @@
     <!-- 커텐 -->
     <div class="curtain-left" :class="{ 'curtain-open': isLogin }"></div>
     <div class="curtain-right" :class="{ 'curtain-open': isLogin }"></div>
+    
     <!-- 메인화면(로그인) -->
     <transition name="fade">
       <div
@@ -71,7 +72,7 @@
           >
             <v-icon class="more-text" size="48">mdi-chevron-double-down</v-icon>
           </div>
-          <div style="background-color: rgba(0, 0, 0, 0.5)">
+          <div style="background-color: rgba(0, 0, 0, 0.7)">
             <div class="d-flex p-5 justify-content-center align-items-center">
               <div
                 class="pt-5 pb-2 d-flex"
@@ -94,7 +95,7 @@
             />
             <MovieCardMatrix :movieList="recommendMovies" />
           </div>
-          <div style="background-color: rgba(0, 0, 0, 0.5)">
+          <div style="background-color: rgba(0, 0, 0, 0.7)">
             <div class="d-flex p-5 justify-content-center align-items-center">
               <div
                 class="pt-5 pb-2 d-flex"
@@ -339,7 +340,7 @@ export default {
 .curtain-right {
   position: fixed;
   top: 0;
-  background: rgb(87, 21, 21);
+  background: rgb(78, 19, 19);
   width: 50%;
   height: 200vh;
   transition-delay: 1s;
@@ -361,7 +362,7 @@ export default {
 .not-top {
   transition-duration: 1s;
   transform: translateY(-90vh);
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.7);
 }
 .is-top {
   transition-duration: 1s;
@@ -369,7 +370,7 @@ export default {
 }
 .color-change {
   transition-duration: 1s;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.7);
 }
 .color-change-return {
   transition-duration: 1s;

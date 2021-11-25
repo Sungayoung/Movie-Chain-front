@@ -1,5 +1,16 @@
 <template>
   <div class="container d-flex" style="margin-top: 100px">
+    <div>
+      <a
+        class="to-top-button"
+        href="#"
+        title="맨 위로"
+      >
+        <v-icon color="white" size="36">mdi-arrow-up</v-icon>
+      </a>
+    </div>
+    <div class="black-curtain"></div>
+
     <v-sheet
       style="z-index: 1"
       rounded="xl"
@@ -168,17 +179,28 @@
       </v-dialog>
 
       <!-- 리뷰 -->
-        <div>
-          <v-icon large color="red lighten-2"> </v-icon>
+
+      <v-sheet
+        rounded="xl"
+        :color="movie.background_color"
+        elevation="8"
+        class="mt-5 justify-content-center align-items-center"
+        >
+        <div class="d-flex justify-content-center container m-0">
+          <h3 class="fw-bold m-0" :style="{'color': fontColor}">리뷰</h3>
+        </div>
+        <div :style="{'color': fontColor}" class="d-flex justify-content-center container m-0"> <h5>
+          {{ reviewCnt }}개의 리뷰가 있습니다.
+          </h5>
+          </div>
           <review-list
             :reviewList="reviewList"
             :myReview="myReview"
-            :reviewCnt="reviewCnt"
             :movieId="movieId"
             @reload-review="getReviewList"
           >
           </review-list>
-        </div>
+      </v-sheet>
     </v-sheet>
     
     <div class='d-flex flex-column'
@@ -416,10 +438,10 @@ export default {
       }
     },
     imgURL: function () {
-      if (this.movie) {
+      if (this.movie.poster_path) {
         return `https://image.tmdb.org/t/p/w500${this.movie.poster_path}`;
       } else {
-        return "@/assets/no_image.png";
+        return `${process.env.VUE_APP_MCS_URL}/media/images/profile/movie_chain_poster.png`;
       }
     },
     releaseDate: function () {
@@ -481,5 +503,25 @@ export default {
 .my-movie-card-enter,
 .my-movie-card-leave-to {
   opacity: 0;
+}
+.black-curtain {
+  position: fixed;
+  top: 0;
+  left:0;
+  background: rgb(0, 0, 0, 0.5);
+  width: 100%;
+  height: 200vh;
+  transition-delay: 1s;
+  transition-duration: 1.1s;
+  z-index: 1;
+}
+.to-top-button {
+  display: scroll;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 100;
+  color: rgba(104, 240, 217, 0.473);
+  transition-duration: 1s;
 }
 </style>

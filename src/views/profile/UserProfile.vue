@@ -1,5 +1,7 @@
 <template>
   <div v-if="profile" class="d-flex">
+      <div class='black-curtain'></div>
+
     <v-sheet
       rounded="xl"
       color="#EEEEEEB0"
@@ -224,5 +226,15 @@ export default {
 <style scoped>
 * ::-webkit-scrollbar {
   display: none;
+}
+.black-curtain {
+  position: fixed;
+  top: 0;
+  background: rgb(0,0,0,0.5);
+  width: 100%;
+  height: 200vh;
+  transition-delay: 1s;
+  transition-duration: 1.1s;
+  z-index: 1;
 }
 </style>

@@ -1,5 +1,21 @@
 <template>
   <div class="d-flex justify-center">
+    <div class="alert-box">
+        <div class="d-flex justify-content-center">
+          <transition
+            name="custom-classes-transition"
+            enter-active-class="animated animate__fadeInDown"
+            leave-active-class="animated animate__fadeOutUp"
+          >
+            <v-alert v-if="validAlert" type="error" class="alert d-flex">
+              아이디와 비밀번호를 다시 확인해주세요.
+            </v-alert>
+            <v-alert v-if="movieAlert" type="error" class="alert d-flex">
+              {{ movieAlertText }}
+            </v-alert>
+          </transition>
+        </div>
+      </div>
     <div>
       <div class="login-box rounded-lg p-3">
         <div class="px-5 my-2">
@@ -25,25 +41,32 @@
             @keyup.enter="login"
           ></v-text-field>
         </div>
-        <div class="d-flex justify-end mx-3">
-          <v-btn text class="mx-2" @click="moveSignup" dense
-            >Signup</v-btn
-          >
-          <v-icon @click.stop="login">mdi-chevron-right</v-icon>
+        <div class="d-flex justify-content-between mx-3">
+          <v-btn text class="mx-2" @click.stop="isSignup=true" dense
+            >Signup</v-btn>
+          <v-btn text class="mx-2" @click.stop="login">
+          <v-icon readonly>mdi-chevron-right</v-icon>
+          </v-btn>
         </div>
       </div>
     </div>
+    <v-dialog v-model="isSignup" width="45%">
+      <Signup/>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import { mapActions } from "vuex";
+import Signup from './Signup.vue';
 
 export default {
   name: "Login",
   data: function () {
     return {
+      validAlert: false,
+      isSignup:false,
       credentials: {
         username: null,
         password: null,
@@ -55,6 +78,9 @@ export default {
       },
     };
   },
+  components: {
+    Signup
+  },
   methods: {
     ...mapActions(["logIn"]),
     moveSignup: function () {
@@ -63,7 +89,7 @@ export default {
     login: function () {
       axios({
         method: "POST",
-        url: "http://127.0.0.1:8000/accounts/api-token-auth/",
+        url: `${process.env.VUE_APP_MCS_URL}/accounts/api-token-auth/`,
         data: this.credentials,
       })
         .then((res) => {
@@ -72,6 +98,8 @@ export default {
           this.logIn();
         })
         .catch((err) => {
+           this.validAlert = true;
+          setTimeout(() => (this.validAlert = false), 2000);
           console.log(err);
         });
     },
@@ -79,9 +107,37 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .login-box {
   width: 300px;
   background: rgba(245, 245, 245, 0.8);
 }
+
+html::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  height: 12%;
+  background-color: rgba(255, 255, 255,0.5) !important;
+  border-radius: 25px;
+}
+::-webkit-scrollbar-track {
+  position: scroll;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+
+
+.alert-box {
+  position: fixed;
+  top: 0;
+  width: 45%;
+  z-index: 10;
+}
+.alert {
+  position: absolute;
+  top: 0;
+}
+
 </style>
