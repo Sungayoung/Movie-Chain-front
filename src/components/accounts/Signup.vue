@@ -257,7 +257,7 @@
                 <v-card-text style="overflow-y: scroll">
                   <div
                     class="row row-cols-5 g-3 m-0 mx-auto"
-                    style="height: 500px; background=grey"
+                    style="max-height: 500px; background-color:grey"
                   >
                     <button
                       :id="'my-img-' + movie.id"
@@ -585,7 +585,7 @@ export default {
       console.log(this.credentials);
       axios({
         method: "POST",
-        url: "http://127.0.0.1:8000/accounts/signup/",
+        url: `${process.env.VUE_APP_MCS_URL}/accounts/signup/`,
         data: this.credentials,
       })
         .then(() => {
