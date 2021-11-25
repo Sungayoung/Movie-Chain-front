@@ -72,7 +72,7 @@ export default {
           content: this.reviewInput,
         },
       };
-      this.createReview(data).then((res) => {
+      this.createReview(data).then(() => {
         this.$emit("reload-review");
       });
     },

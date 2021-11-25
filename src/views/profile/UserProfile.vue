@@ -187,7 +187,7 @@ export default {
         headers: { Authorization: `JWT ${token}` },
         data: {follow: 'user', follow_id: this.profile.id,}
       })
-      .then( res => {
+      .then( () => {
         this.profile.is_following = !this.profile.is_following
       })
     }

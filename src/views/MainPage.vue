@@ -262,7 +262,7 @@ export default {
               this.nowPage++;
               this.nowLoading = false;
             })
-            .catch((err) => {
+            .catch(() => {
               this.nowLoading = false;
             });
         }
@@ -291,7 +291,7 @@ export default {
             this.nowPage++;
             this.nowLoading = false;
           })
-          .catch((err) => {
+          .catch(() => {
             this.nowLoading = false;
           });
         this.nowLoading = true;

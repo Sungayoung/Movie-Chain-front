@@ -68,7 +68,7 @@ export default {
           content: this.commentInput,
         },
       };
-      this.createComment(data).then((res) => {
+      this.createComment(data).then(() => {
         this.commentInput = null;
         this.getCommentList();
       });

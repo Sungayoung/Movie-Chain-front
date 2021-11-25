@@ -69,7 +69,7 @@ export default {
         headers: { Authorization: `JWT ${token}` },
         data: data,
       })
-      .then( res => {
+      .then( () => {
         this.dialog = false
         this.chattingInput = null
       })
