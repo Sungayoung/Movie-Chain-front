@@ -180,9 +180,11 @@
           </review-list>
         </div>
     </v-sheet>
+    
+    <div class='d-flex flex-column'
+    style="position: absolute; right: 1430px; top: 132px; width: auto">
 
     <v-sheet
-      style="position: absolute; right: 1430px; top: 132px; width: auto"
       rounded="xl"
       elevation="8"
       color="rgba(255,255,255,0.6)"
@@ -252,6 +254,22 @@
         </div>
       </div>
     </v-sheet>
+    <v-sheet
+      v-if="movie.video_id"
+      rounded="xl"
+      elevation="8"
+      color="rgba(255,255,255,0.6)"
+      class="p-2 col my-5">
+      <div style="border-radius: 25px; overflow: hidden">
+        <b-embed
+          type="iframe"
+          :src="videoURL"
+          allowfullscreen
+          width="250"
+        ></b-embed>
+      </div>
+    </v-sheet>
+    </div>
   </div>
 </template>
 
@@ -388,6 +406,15 @@ export default {
     },
   },
   computed: {
+    videoURL: function () {
+      if(this.movie.video_id) {
+        console.log(`https://www.youtube.com/embed/xDmRI9y0LEs${this.movie.video_id}`)
+        return `https://www.youtube.com/embed/${this.movie.video_id}`
+      }
+      else {
+        return null
+      }
+    },
     imgURL: function () {
       if (this.movie) {
         return `https://image.tmdb.org/t/p/w500${this.movie.poster_path}`;

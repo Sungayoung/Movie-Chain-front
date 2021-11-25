@@ -42,7 +42,10 @@ export default {
     },
     followPeople: function () {
         const token = localStorage.getItem('jwt')
-        const follow = this.person.job ? 'crew' : 'actor'
+        let follow = this.person.job ? 'crew' : 'actor'
+        if(this.idx < 2){
+          follow = 'user'
+        }
         axios({
           method: 'post',
           url: `${process.env.VUE_APP_MCS_URL}/accounts/follow/`,

@@ -12,6 +12,7 @@
         <v-btn
             dark
             width="120px"
+            :color="user.is_following ? 'error' : '#999999'"
           >{{ user.is_following ? 'UNFOLLOW' : 'FOLLOW'}}</v-btn>
       </v-list-item-icon>
     </v-list-item>
@@ -32,21 +33,21 @@ export default {
       this.$router.go()
     },
     followUser: function () {
-      /* eslint-disable */
-        const token = localStorage.getItem('jwt')
-        axios({
-          method: 'post',
-          url: `${process.env.VUE_APP_MCS_URL}/accounts/follow/`,
-          headers: { Authorization: `JWT ${token}` },
-          data: {follow: 'user', follow_id: this.user.id,}
-        })
-        .then( res => {
-          console.log(res.data)
-          this.user.is_following = !this.user.is_following
-        })
-        .catch( err => {
-          console.log(err)
-        })
+      const token = localStorage.getItem('jwt')
+      console.log({follow: 'user', follow_id: this.user.id,})
+      axios({
+        method: 'post',
+        url: `${process.env.VUE_APP_MCS_URL}/accounts/follow/`,
+        headers: { Authorization: `JWT ${token}` },
+        data: {follow: 'user', follow_id: this.user.id,}
+      })
+      .then( res => {
+        console.log(res.data)
+        this.user.is_following = !this.user.is_following
+      })
+      .catch( err => {
+        console.log(err)
+      })
       }
   },
   computed: {
