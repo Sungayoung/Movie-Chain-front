@@ -1,6 +1,6 @@
 <template>
   <button
-    @mouseover="nowHoverMovieId = movie.id, getMBDURL({url:backdropURL,id:movie.id})"
+    @mouseover="nowHoverMovieId = movie.id, setMBDURL({url:backdropURL,id:movie.id})"
     @mouseleave="nowHoverMovieId = null"
     class="poster-box mx-1 justify-content-center"
     :class="{
@@ -83,7 +83,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['getMBDURL']),
+    ...mapActions(['setMBDURL']),
     saveMovie: function () {
       const token = localStorage.getItem("jwt");
       axios({

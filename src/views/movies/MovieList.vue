@@ -13,14 +13,14 @@
       temporary
       color="rgba(0,0,0,0.8)"
       v-model="openBar"
-      width=300
+      width=270
     >
       <v-spacer style="height: 10vh"></v-spacer>
       <div>
         <!-- N개씩 보기 버튼 -->
         <div class="d-flex">
           <v-select
-          prefix="_______________"
+          prefix="______________"
           dark
             v-model="movieCnt"
             :items="movieCntItems"
@@ -30,7 +30,7 @@
         </div>
         <div class="d-flex">
           <v-select
-          prefix="_______________"
+          prefix="______________"
           dark
             v-model="orderBy"
             :items="orderItems"
@@ -41,7 +41,7 @@
         <!-- 필터지정 -->
         <div class="d-flex">
           <v-select
-          prefix="_______________"
+          prefix="______________"
           dark
             
             width="10"
@@ -111,7 +111,7 @@
               color='rgb(163, 200, 202)'
               style="height:100"
                 v-model="page"
-                :length="totalPages"
+                :length="totalPages-1"
                 :total-visible="7"
               ></v-pagination>
             </div>

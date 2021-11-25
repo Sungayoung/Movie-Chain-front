@@ -1,7 +1,5 @@
 <template>
   <v-app style="background: rgba(0, 0, 0.8); color: black">
-    
-
     <v-main>
       <!-- 네비바 -->
       <transition name="fade">
@@ -17,7 +15,7 @@
                   src="@/assets/movie_chain_no_text.png"
                   width="80"
                   height="50"
-              />
+                />
               </router-link>
               <router-link class="my-link mx-2" :to="{ name: 'MainPage' }">
                 Main</router-link
@@ -41,13 +39,11 @@
               </div>
               <div class="d-flex">
                 <div class="container">
-              <button>
-
-
-                  <v-avatar @click="goToProfile">
-                    <img :src="imgUrl" alt="" />
-                  </v-avatar>
-              </button>
+                  <button>
+                    <v-avatar @click="goToProfile">
+                      <img :src="imgUrl" alt="" />
+                    </v-avatar>
+                  </button>
                 </div>
               </div>
             </div>
@@ -80,9 +76,10 @@ export default {
     if (this.isLogin) {
       this.logIn();
     }
+    this.setMBDURL({url:localStorage.getItem('lastHoverMBDURL'),id:localStorage.getItem('lastHoverMovieId')})
   },
   methods: {
-    ...mapActions(["logOut", "logIn"]),
+    ...mapActions(["logOut", "logIn", "setMBDURL"]),
     logout: function () {
       this.logOut();
     },
@@ -186,7 +183,6 @@ html {
   transition: top 0.3s;
   z-index: 100;
 }
-
 
 /* Style the navbar links */
 </style>

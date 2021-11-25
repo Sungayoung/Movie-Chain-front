@@ -24,6 +24,8 @@ export default new Vuex.Store({
     SET_MBDURL: function (state, movie) {
       state.lastHoverMBDURL = movie.url;
       state.lastHoverMovieId = movie.id;
+      localStorage.setItem('lastHoverMBDURL',movie.url)
+      localStorage.setItem('lastHoverMovieId',movie.id)
     },
     LOG_IN: function (state) {
       state.isLogin = true;
@@ -37,6 +39,8 @@ export default new Vuex.Store({
       });
     },
     LOG_OUT: function (state) {
+      state.profile_img = null
+      state.nickname = null
       state.isLogin = false;
       localStorage.removeItem("jwt");
     },
@@ -55,7 +59,7 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    getMBDURL: function ({commit}, url) {
+    setMBDURL: function ({commit}, url) {
       commit("SET_MBDURL",url)
     },
     logIn: function ({ commit }) {
