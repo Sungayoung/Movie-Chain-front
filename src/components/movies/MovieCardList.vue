@@ -4,7 +4,8 @@
       class="mx-auto py-5"
       elevation="8"
       max-width="90%"
-      style="background: grey lighten-2; border-radius:25px"
+      style="border-radius:25px"
+      color='grey lighten-2'
     >
     <movie-list-detail-pop
       :movies="movies">

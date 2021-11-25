@@ -8,14 +8,13 @@
         v-on="on"
         style="width: 100px"
         @click="getUserList"
-        class="m-2" 
         data-toggle="tooltip" 
         data-placement="bottom" 
         title="이 영화와 연결된 사람입니다."
         >연결
       </v-btn>
     </template>
-    <v-card>
+    <v-card  rounded="xl">
       <v-tabs
         v-model="tab"
         background-color="deep-purple accent-4"

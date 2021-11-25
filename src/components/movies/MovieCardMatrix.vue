@@ -1,8 +1,8 @@
 <template>
-  <div class="container">
-    <div >
-      <div class="row row-cols-6 g-3 m-0 mx-auto" style="width:70vw">
-        <div v-for="(movie, idx) in movieList" :key="idx" class="p-0">
+  <div >
+    <div class="container" >
+      <div class="row row-cols-6 g-3 mt-5 mx-auto container" style="width:73vw">
+        <div v-for="(movie, idx) in movieList" :key="idx" class="p-auto my-2">
           <MovieCard :movie="movie" />
         </div>
       </div>

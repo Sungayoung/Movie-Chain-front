@@ -203,5 +203,18 @@ export default {
 </script>
 
 <style>
-
+*::-webkit-scrollbar {
+  width: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  height: 12%;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  border-radius: 25px;
+}
+*::-webkit-scrollbar-track {
+  height: 80%;
+  position: scroll;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0);
+}
 </style>
