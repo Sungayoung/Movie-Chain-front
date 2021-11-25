@@ -80,6 +80,7 @@ export default {
         params: { movieId: this.movieId },
       }).then((res) => {
         this.userList = res.data;
+        console.log(this.userList)
       });
     },
   },

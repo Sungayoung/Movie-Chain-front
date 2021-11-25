@@ -37,7 +37,7 @@
     <!-- 메인화면(검색) -->
     <transition name="fade">
       <div v-if="isLogin" style="z-index: 50; margin-top: 72px">
-        <div style="height: 80vh; z-index: 50" id="search-page">
+        <div style="height: 80vh; z-index: 50;" id="search-page">
           <v-col
             class="d-flex align-center justify-center"
             style="height: 80vh; z-index: 50"
