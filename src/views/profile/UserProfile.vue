@@ -4,7 +4,7 @@
       rounded="xl"
       color="#EEEEEEB0"
       elevation="12"
-      width="50%"
+      width="55%"
       class="mx-auto"
       style="margin-top: 100px; z-index: 1;"
     >
@@ -71,11 +71,11 @@
       </v-row>
       
       <v-row justify="center">
-        <h3 style="color: white; text-align: center" >{{ profile.nickname }} 님</h3>
+        <h3 style="color: white; text-align: center" :style="{'color': fontColor}">{{ profile.nickname }} 님</h3>
       </v-row>
       <v-row justify="center">
         <div class="py-3">
-          <div style="color: white; text-align: center" >{{ profile.introduce_content }}</div>
+          <div style="color: white; text-align: center" :style="{'color': fontColor}">{{ profile.introduce_content }}</div>
         </div>
       </v-row>
       
@@ -88,18 +88,23 @@
      :movieList="profile.personal_movies"
      :isLoginUser="isLoginUser"
      @reload-profile="reloadProfile"></movie-card-list-personal>
-     <v-divider></v-divider>
+     <v-divider class="mx-5"></v-divider>
     </v-row>
     <v-row>
-    <h4 style="text-align: center">좋아하는 영화</h4>
-    <movie-card-list
-    :movies="profile.favorite_movies"
-    class="my-3"></movie-card-list>
-    <v-divider></v-divider>
-    <h4 style="text-align: center">저장한 영화</h4>
-    <movie-card-list
-    :movies="profile.bookmark_movies"
-    class="my-3"></movie-card-list>
+    <div v-if="profile.favorite_movies.length">
+      <h4 style="text-align: center">좋아하는 영화</h4>
+      <movie-card-list
+      :movies="profile.favorite_movies"
+      class="my-3"></movie-card-list>
+    </div>
+    
+    <div v-if="profile.bookmark_movies.length">
+      <v-divider class='mx-5'></v-divider>
+      <h4 style="text-align: center">저장한 영화</h4>
+      <movie-card-list
+      :movies="profile.bookmark_movies"
+      class="my-3"></movie-card-list>
+    </div>
     </v-row>
     </div>
     </v-sheet>
@@ -192,6 +197,26 @@ export default {
       })
     }
   },
+  computed: {
+    fontColor: function () {
+      if (this.profile) {
+        let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(this.profile.background_color);
+        let r= parseInt(result[1], 16);
+        let g= parseInt(result[2], 16);
+        let b= parseInt(result[3], 16);
+        console.log(r, g, b)
+        if (r >= 190 && g >= 190 && b >= 190) {
+          return 'black'
+        }
+        else {
+          return 'white'
+        }
+      }
+      else {
+        return null
+      }
+    }
+  }
 }
 </script>
 

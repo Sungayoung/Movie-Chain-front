@@ -22,13 +22,17 @@
           </div>
           <div v-if="actors.length" class="my-5">
             <h4  style="text-align: center">배우</h4>
-            <people-card-list 
+            <people-card-list
+            style="width: 90%"
+            class="mx-auto"
             :people="actors">
             </people-card-list>
           </div>
           <div v-if="crews.length" class="my-5">
             <h4  style="text-align: center">감독</h4>
             <people-card-list
+            style="width: 90%"
+            class="mx-auto"
             :people="crews">
             </people-card-list>
           </div>

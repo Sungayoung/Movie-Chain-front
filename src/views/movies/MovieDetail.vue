@@ -9,17 +9,19 @@
     >
       <v-sheet
         rounded="xl"
-        color="#85c085"
+        :color="movie.background_color"
         elevation="8"
         class="justify-content-center align-items-center"
       >
         <!-- 제목 -->
         <div class="text-center">
-          <span class="fs-3 fw-bold my-auto">{{ movie.title }}</span>
+          <div class="d-flex justify-content-center container">
+            <h3 class="fw-bold m-0" :style="{'color': fontColor }">{{ movie.title }}</h3>
+          </div>
           <v-sheet
             rounded="xl"
             color="grey lighten-2"
-            class="mt-3 d-flex"
+            class="d-flex"
             style="min-height: 340px"
           >
             <div class="col-3">
@@ -86,20 +88,20 @@
                 width="auto"
               >
                 <!-- 좋아요 -->
-                <button @click="likeMovie">
+                <button @click="likeMovie" class="mx-1">
                   <v-icon
                     color="red"
-                    size="40"
+                    size="28"
                     v-text="movie.isLiked ? 'mdi-heart' : 'mdi-heart-outline'"
                   ></v-icon>
                   {{ movie.likeCnt }}
                 </button>
                 <!-- 북마크 -->
 
-                <button dark @click="saveMovie">
+                <button dark @click="saveMovie" class="mx-1">
                   <v-icon
                     color="blue"
-                    size="40"
+                    size="28"
                     v-text="
                       movie.isSaved ? 'mdi-bookmark' : 'mdi-bookmark-outline'
                     "
@@ -118,7 +120,7 @@
                     hover
                     half-increments
                     length="5"
-                    large
+                    size="30"
                     v-model="rank"
                     @input="setRank"
                   ></v-rating>
@@ -135,9 +137,10 @@
       <v-sheet
         rounded="xl"
         elevation="8"
+        :color="movie.background_color"
         class="mt-5 justify-content-center align-items-center"
         ><div class="d-flex justify-content-center container">
-          <h3 class="fw-bold m-0">감독</h3>
+          <h3 class="fw-bold m-0" :style="{'color': fontColor}">감독</h3>
         </div>
         <div>
           <PeopleCardList :people="movie.crews" />
@@ -146,11 +149,11 @@
 
       <v-sheet
         rounded="xl"
-        color="grey lighten-2"
+        :color="movie.background_color"
         elevation="8"
         class="mt-5 justify-content-center align-items-center"
         ><div class="d-flex justify-content-center container">
-          <h3 class="fw-bold m-0">배우</h3>
+          <h3 class="fw-bold m-0" :style="{'color': fontColor}">배우</h3>
         </div>
         <div>
           <PeopleCardList :people="movie.actors" />
@@ -404,6 +407,24 @@ export default {
       }
       return this.movie.vote_average;
     },
+    fontColor: function () {
+      if (this.movie) {
+          let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(this.movie.background_color);
+          let r= parseInt(result[1], 16);
+          let g= parseInt(result[2], 16);
+          let b= parseInt(result[3], 16);
+          console.log(r, g, b)
+          if (r >= 190 && g >= 190 && b >= 190) {
+            return 'black'
+          }
+          else {
+            return 'white'
+          }
+      }
+      else {
+        return null
+      }
+    }
   },
 };
 </script>

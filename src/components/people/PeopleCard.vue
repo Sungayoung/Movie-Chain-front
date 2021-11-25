@@ -5,7 +5,7 @@
         <v-img style="border-radius:25px" :src="imgURL" alt="" class="movie-img"></v-img>
         <div stlye="position:absolute; bottom:0;" >
 
-      <v-sheet  class="text-center fw-bold" elevation="4" rounded="xl" color="grey lighten-2">
+      <v-sheet  class="text-center fw-bold" elevation="4" rounded="xl" color="grey lighten-5">
       {{ person.name }} 
       </v-sheet>
         </div>
