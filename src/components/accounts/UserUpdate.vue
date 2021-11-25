@@ -119,7 +119,7 @@ export default {
   },
   data: function () {
     return {
-      validAlert = false,
+      validAlert: false,
       userProfile: null,
       dialog: false,
       introduce_content: null,
