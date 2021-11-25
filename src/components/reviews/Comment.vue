@@ -2,7 +2,7 @@
   <div v-if="comment">
     <v-sheet rounded="xl" elevation="8" color="grey lighten-2" class="mt-5">
       <v-list-item>
-        <v-list-item-avatar>
+        <v-list-item-avatar @click="goToProfile">
           <v-img :src="imgUrl"></v-img>
         </v-list-item-avatar>
         <v-list-item-content>
@@ -75,6 +75,12 @@ export default {
   },
   methods: {
     ...mapActions(["updateComment", "deleteComment"]),
+    goToProfile: function () {
+      this.$router.push({
+        name: "Profile",
+        params: { nickname: this.comment.user.nickname },
+      });
+    },
     modeChange: function () {
       if (this.editMode) {
         this.commentInput = this.comment.content;
