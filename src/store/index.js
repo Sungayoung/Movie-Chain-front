@@ -9,8 +9,8 @@ export default new Vuex.Store({
     isLogin: localStorage.getItem("jwt") ? true : false,
     profile_img: null,
     nickname: null,
-    lastHoverMBDURL:null,
-    lastHoverMovieId:null,
+    lastHoverMBDURL: null,
+    lastHoverMovieId: null,
 
     // 뒤로가기시 필터가 빠지지 않게 만드는 변수
     Spage: 1,
@@ -24,8 +24,12 @@ export default new Vuex.Store({
     SET_MBDURL: function (state, movie) {
       state.lastHoverMBDURL = movie.url;
       state.lastHoverMovieId = movie.id;
+      localStorage.setItem("lastHoverMBDURL", movie.url);
+      localStorage.setItem("lastHoverMovieId", movie.id);
     },
     LOG_IN: function (state) {
+      state.lastHoverMBDURL = null;
+      state.lastHoverMovieId = null;
       state.isLogin = true;
       const token = localStorage.getItem("jwt");
       axios({
@@ -37,6 +41,8 @@ export default new Vuex.Store({
       });
     },
     LOG_OUT: function (state) {
+      state.profile_img = null;
+      state.nickname = null;
       state.isLogin = false;
       localStorage.removeItem("jwt");
     },
@@ -55,8 +61,8 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    getMBDURL: function ({commit}, url) {
-      commit("SET_MBDURL",url)
+    setMBDURL: function ({ commit }, url) {
+      commit("SET_MBDURL", url);
     },
     logIn: function ({ commit }) {
       commit("LOG_IN");
@@ -66,21 +72,21 @@ export default new Vuex.Store({
     },
     getRecommendMovie: function ({ commit }) {
       commit;
-      const token = localStorage.getItem('jwt')
+      const token = localStorage.getItem("jwt");
 
       return new Promise((resolve, reject) => {
         axios({
-          method: 'get',
+          method: "get",
           url: `${process.env.VUE_APP_MCS_URL}/movies/recommend/`,
-          headers: {Authorization : `JWT ${token}`}
+          headers: { Authorization: `JWT ${token}` },
         })
-        .then((res) => {
-          resolve(res.data)
-        })
-        .catch((err) => {
-          reject(err)
-        })
-      })
+          .then((res) => {
+            resolve(res.data);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
     },
     getMovieList: function ({ commit }, params) {
       /**

@@ -13,6 +13,7 @@
           v-on="on"
           plain
           width="100px"
+          class="fs-4"
         >
           MORE
         </v-btn>

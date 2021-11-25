@@ -13,12 +13,13 @@
           v-on="on"
           plain
           width="100px"
+          class="fs-4"
         >
           MORE
         </v-btn>
       </template>
-      <v-card>
-        <v-card-title class="d-flex justify-content-center">영화 리스트</v-card-title>
+      <v-card rounded="xl">
+        <v-card-title class="d-flex justify-content-center fs-3">영화 리스트</v-card-title>
         <v-divider></v-divider>
         <v-card-text style="height: 700px;">
           <div class="container">

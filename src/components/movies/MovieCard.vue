@@ -1,6 +1,6 @@
 <template>
   <button
-    @mouseover="nowHoverMovieId = movie.id, getMBDURL({url:backdropURL,id:movie.id})"
+    @mouseover="nowHoverMovieId = movie.id, setMBDURL({url:backdropURL,id:movie.id})"
     @mouseleave="nowHoverMovieId = null"
     class="poster-box mx-1 justify-content-center"
     :class="{
@@ -9,22 +9,16 @@
     }"
   >
     <!-- 영화 이미지 -->
-    <span style="position: absolute; z-index: 10; left: 10px">
-      <v-icon v-if="movie.isLiked" large color="red" style="z-index: 10">
+    <span style="position: absolute; z-index: 6; left: 10px">
+      <v-icon v-if="movie.isLiked" large color="red" style="z-index: 4">
         mdi-heart</v-icon
       >
-      <v-icon v-if="movie.isSaved" large color="blue" style="z-index: 10"
+      <v-icon v-if="movie.isSaved" large color="blue" style="z-index: 4"
         >mdi-bookmark</v-icon
       >
     </span>
+    
     <v-img
-      v-if="noImage"
-      src="@/assets/no_image.png"
-      alt="포스터가 없는 영화"
-      class="my-poster"
-    ></v-img>
-    <v-img
-      v-else
       :src="imgURL"
       :alt="movie.poster_path"
       class="my-poster"
@@ -89,7 +83,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['getMBDURL']),
+    ...mapActions(['setMBDURL']),
     saveMovie: function () {
       const token = localStorage.getItem("jwt");
       axios({
@@ -125,24 +119,17 @@ export default {
   },
   computed: {
     imgURL: function () {
-      if (this.movie) {
+      if (this.movie.poster_path) {
         return `https://image.tmdb.org/t/p/w500${this.movie.poster_path}`;
       } else {
         return `${process.env.VUE_APP_MCS_URL}/media/images/profile/movie_chain_poster.png`;
       }
     },
     backdropURL: function () {
-      if (this.movie) {
+      if (this.movie.backdrop_path) {
         return `https://image.tmdb.org/t/p/original${this.movie.backdrop_path}`;
       } else {
         return "#";
-      }
-    },
-    noImage: function () {
-      if (this.movie.poster_path) {
-        return false;
-      } else {
-        return true;
       }
     },
   },
