@@ -1,6 +1,12 @@
 <template>
   <div>
-    <v-sheet class="mx-auto" elevation="8" rounded="xl" color="grey darken-2">
+    <v-sheet 
+      class="mx-auto py-5" 
+      elevation="8" 
+      style="background: grey lighten-2; border-radius:25px">
+      <people-list-detail-pop
+       :people="people">
+      </people-list-detail-pop>
       <v-slide-group
         show-arrows
         next-icon="mdi-chevron-right"
@@ -20,6 +26,7 @@
 
 <script>
 import PeopleCard from "./PeopleCard.vue";
+import PeopleListDetailPop from '@/components/popups/PeopleListDetailPop.vue'
 export default {
   name: "PeopleCardList",
   props: {
@@ -27,6 +34,7 @@ export default {
   },
   components: {
     PeopleCard,
+    PeopleListDetailPop,
   },
 };
 </script>

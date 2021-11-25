@@ -84,12 +84,6 @@
       "
       class="d-flex justify-content-center text-center"
     >
-      <div class="page-slot justify-content-evenly d-flex">
-        <span v-for="n in 5" :key="`btn-${n}`" class="d-flex">
-          <v-icon v-if="pageIdx === n" color="white">mdi-record</v-icon>
-          <v-icon v-else color="grey darken-2">mdi-record</v-icon>
-        </span>
-      </div>
     </div>
 
     <div>
@@ -108,12 +102,20 @@
           <div class=""></div>
           <!-- 영화 보여주는 곳 -->
           <div class="container">
-          
 
             <div class="d-flex">
               <MovieCardMatrix :movieList="movies" />
             </div>
           </div>
+          <template style="z-index: 2; position: relative;">
+            <div class="text-center" style="z-index: 2; position: relative;">
+              <v-pagination
+                v-model="page"
+                :length="totalPages"
+                :total-visible="7"
+              ></v-pagination>
+            </div>
+          </template>
         </div>
       </div>
     </div>
@@ -239,7 +241,7 @@ export default {
         .then((res) => {
           // console.log(res);
           this.movies = res.serialized_data;
-          console.log(res);
+          console.log(res.serialized_data);
           this.totalPages = res.total_page_cnt;
         })
         .catch((err) => {

@@ -32,6 +32,7 @@ export default {
       this.$router.go()
     },
     followUser: function () {
+      /* eslint-disable */
         const token = localStorage.getItem('jwt')
         axios({
           method: 'post',
@@ -40,8 +41,8 @@ export default {
           data: {follow: 'user', follow_id: this.user.id,}
         })
         .then( res => {
-          this.user.is_following = !this.user.is_following
           console.log(res.data)
+          this.user.is_following = !this.user.is_following
         })
         .catch( err => {
           console.log(err)

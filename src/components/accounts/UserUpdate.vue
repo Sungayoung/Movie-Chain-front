@@ -165,6 +165,7 @@ export default {
       console.log('send')
       let data = new FormData()
       data.append('files', this.profileImg)
+      console.log(data)
       this.setProfileImg(data)
       .then( () => {
         this.$emit('reload-profile', 'profile_img')

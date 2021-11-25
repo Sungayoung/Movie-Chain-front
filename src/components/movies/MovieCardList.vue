@@ -1,11 +1,14 @@
 <template>
   <div>
     <v-sheet
-      class="mx-auto"
+      class="mx-auto py-5"
       elevation="8"
-      max-width="85%"
-      style="background: gray; border-radius:25px"
+      max-width="90%"
+      style="background: grey lighten-2; border-radius:25px"
     >
+    <movie-list-detail-pop
+      :movies="movies">
+    </movie-list-detail-pop>
       <v-slide-group
         show-arrows
         next-icon="mdi-chevron-right"
@@ -24,6 +27,7 @@
 
 <script>
 import MovieCard from "./MovieCard.vue";
+import MovieListDetailPop from '@/components/popups/MovieListDetailPop.vue'
 export default {
   name: "MovieCardList",
   props: {
@@ -31,6 +35,7 @@ export default {
   },
   components: {
     MovieCard,
+    MovieListDetailPop,
   },
 };
 </script>
