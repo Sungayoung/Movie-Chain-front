@@ -257,7 +257,7 @@
                 <v-card-text style="overflow-y: scroll">
                   <div
                     class="row row-cols-5 g-3 m-0 mx-auto"
-                    style="max-height: 500px; background-color:grey"
+                    style="max-height: 500px;"
                   >
                     <button
                       :id="'my-img-' + movie.id"
