@@ -45,14 +45,12 @@
                         justify-content-center
                       "
                     >
-                     
-                          <button>
-                            <v-icon  dark right size="64">
-                             mdi-pencil-box-outline
-                            </v-icon>
-                          </button>
-                        </div>
-                    
+                      <button class="d-flex">
+                        <v-icon dark right size="64">
+                        mdi-pencil-box-outline
+                        </v-icon>
+                      </button>
+                    </div>
                   </transition>
                   <v-scroll-y-transition>
                     <div
@@ -78,8 +76,10 @@
                   v-on="on"
                   rounded="xl"
                   @click="getIdx(idx)"
+                  @mouseover="onBoard = true"
+                  @mouseleave="onBoard = false"
                 >
-                <v-img
+                  <v-img
                     rounded="xl"
                     class="movie-img"
                     width="200"
@@ -88,7 +88,7 @@
                   ></v-img>
                   <transition name="my-movie-card">
                     <div
-                      v-if="nowHoverMovieId === movie.id"
+                      v-if="onBoard"
                       class="
                         my-content
                         d-flex
@@ -96,13 +96,12 @@
                         justify-content-center
                       "
                     >
-                          <button>
-                            <v-icon  dark right size="64">
-                            mdi-plus-circle-outline
-                            </v-icon>
-                          </button>
-                        </div>
-                    
+                      <button>
+                        <v-icon dark right size="64">
+                          mdi-plus-circle-outline
+                        </v-icon>
+                      </button>
+                    </div>
                   </transition>
                   <v-scroll-y-transition>
                     <div
@@ -198,13 +197,12 @@
                   justify-content-center
                 "
               >
-                
-                    <button>
-                      <v-icon @click="moveDetail(movie.id)" dark right size="40">
-                        mdi-open-in-new
-                      </v-icon>
-                    </button>
-                  </div>
+                <button>
+                  <v-icon @click="moveDetail(movie.id)" dark right size="40">
+                    mdi-open-in-new
+                  </v-icon>
+                </button>
+              </div>
             </transition>
           </v-card>
           <v-row justify="center">
@@ -233,6 +231,7 @@ export default {
   },
   data: function () {
     return {
+      onBoard:false,
       nowHoverMovieId: null,
       query: null,
       dialog: false,
