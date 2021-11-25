@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 100vh">
     <!-- 커텐 -->
     <div class="curtain-left" :class="{ 'curtain-open': isLogin }"></div>
     <div class="curtain-right" :class="{ 'curtain-open': isLogin }"></div>
@@ -13,7 +13,7 @@
       >
         <div class="my-auto" style="z-index: 50">
           <img
-            style="z-index: 100; "
+            style="z-index: 100"
             alt="MovieChain Logo"
             class="d-flex mx-auto"
             src="@/assets/movie_chain.png"
@@ -24,7 +24,7 @@
       </div>
     </transition>
     <div v-if="nowLoading">
-      <v-overlay :value="overlay">
+      <v-overlay :value="nowLoading">
         <v-progress-circular
           :size="150"
           :width="15"
@@ -69,14 +69,23 @@
             class="text-center"
             style="height: 20vh; z-index: 1"
           >
-            <h3 class="more-text" style="z-index: 50">추천영화</h3>
             <v-icon class="more-text" size="48">mdi-chevron-double-down</v-icon>
           </div>
-          <div style="background-color:rgba(0,0,0,0.5)">
-            <div class="d-flex justify-content-center align-items-center" >
-
-              <h4 class="text-center my-5">추천 영화</h4>
-              <v-btn icon dark @click="reloadRecommend"><v-icon>mdi-reload</v-icon></v-btn>
+          <div style="background-color: rgba(0, 0, 0, 0.5)">
+            <div class="d-flex p-5 justify-content-center align-items-center">
+              <div
+                class="pt-5 pb-2 d-flex"
+                style="border-bottom: solid 1px white"
+              >
+                <span class="text-center px-3 fs-3" style="color: white"
+                  >추천 영화</span
+                >
+                <button>
+                  <v-icon class="reload-icon" dark @click="reloadRecommend"
+                    >mdi-reload</v-icon
+                  >
+                </button>
+              </div>
             </div>
             <img
               v-if="!(hoveringPosterURL === null)"
@@ -85,9 +94,17 @@
             />
             <MovieCardMatrix :movieList="recommendMovies" />
           </div>
-          <v-divider></v-divider>
-          <div style="background-color:rgba(0,0,0,0.5)">
-            <h4 class="text-center mt-5">더 많은 영화</h4>
+          <div style="background-color: rgba(0, 0, 0, 0.5)">
+            <div class="d-flex p-5 justify-content-center align-items-center">
+              <div
+                class="pt-5 pb-2 d-flex"
+                style="border-bottom: solid 1px white"
+              >
+                <span class="text-center pt-5 px-3 fs-3" style="color: white"
+                  >더 많은 영화</span
+                >
+              </div>
+            </div>
             <img
               v-if="!(hoveringPosterURL === null)"
               :src="hoveringPosterURL"
@@ -139,18 +156,15 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
 
     if (this.isLogin) {
-
       if (this.nowpage == 1) {
-        this.getRecommendMovie()
-        .then((res) => {
-          this.recommendMovies = res
-          this.nowPage ++
-        })
-      }
-      else {
+        this.getRecommendMovie().then((res) => {
+          this.recommendMovies = res;
+          this.nowPage++;
+        });
+      } else {
         const params = {
           filter_by: "all",
-          page: this.nowPage-1,
+          page: this.nowPage - 1,
         };
         this.getMovieListPage(params)
           .then((res) => {
@@ -170,7 +184,7 @@ export default {
     window.removeEventListener("scroll", this.handleScroll);
   },
   methods: {
-    ...mapActions(["getMovieListPage", "search", 'getRecommendMovie']),
+    ...mapActions(["getMovieListPage", "search", "getRecommendMovie"]),
     hoverMovieCard: function () {
       document
         .querySelector(`#my-img-${this.movie.id}`)
@@ -182,54 +196,55 @@ export default {
         .classList.remove("card-on-mouse");
     },
     reloadRecommend: function () {
-      this.nowLoading = !this.nowLoading
+      this.nowLoading = true;
       this.getRecommendMovie()
         .then((res) => {
-          this.recommendMovies = res
-          this.nowLoading = !this.nowLoading
+          this.recommendMovies = res;
+          this.nowLoading = false;
         })
-        .catch( () => {
-          this.nowLoading = !this.nowLoading
-        })
+        .catch(() => {
+          this.nowLoading = false;
+        });
     },
     handleScroll() {
       const { clientHeight, scrollHeight, scrollTop } =
         document.documentElement;
-      // 페이지 전환용
-      if (scrollTop > 50 && this.isTop) {
-        document.querySelector("#search-page").classList.add("not-top");
-        document.querySelector("#search-page").classList.remove("is-top");
-        document.querySelector("#more-text").classList.add("color-change");
-        document
-          .querySelector("#more-text")
-          .classList.remove("color-change-return");
-        this.isTop = !this.isTop;
-      }
-      if (scrollTop < 50 && !this.isTop) {
-        document.querySelector("#search-page").classList.add("is-top");
-        document.querySelector("#search-page").classList.remove("not-top");
-        document
-          .querySelector("#more-text")
-          .classList.add("color-change-return");
-        document.querySelector("#more-text").classList.remove("color-change");
-        this.isTop = !this.isTop;
+      if (!this.nowLoading) {
+        // 페이지 전환용
+        if (scrollTop > 50 && this.isTop) {
+          document.querySelector("#search-page").classList.add("not-top");
+          document.querySelector("#search-page").classList.remove("is-top");
+          document.querySelector("#more-text").classList.add("color-change");
+          document
+            .querySelector("#more-text")
+            .classList.remove("color-change-return");
+          this.isTop = !this.isTop;
+        }
+        if (scrollTop < 50 && !this.isTop) {
+          document.querySelector("#search-page").classList.add("is-top");
+          document.querySelector("#search-page").classList.remove("not-top");
+          document
+            .querySelector("#more-text")
+            .classList.add("color-change-return");
+          document.querySelector("#more-text").classList.remove("color-change");
+          this.isTop = !this.isTop;
+        }
       }
 
       // 인피니티 스크롤용
       if (scrollHeight - scrollTop === clientHeight && !this.nowLoading) {
-        this.nowLoading = !this.nowLoading;
+        this.nowLoading = true;
         if (this.nowPage == 1) {
           this.getRecommendMovie()
-          .then((res) => {
-            this.recommendMovies = res
-            this.nowLoading = !this.nowLoading
-            this.nowPage ++
-          })
-          .catch(() => {
-            this.nowLoading = !this.nowLoading
-          })
-        }
-        else {
+            .then((res) => {
+              this.recommendMovies = res;
+              this.nowLoading = false;
+              this.nowPage++;
+            })
+            .catch(() => {
+              this.nowLoading = false;
+            });
+        } else {
           const params = {
             filter_by: "all",
             page: this.nowPage - 1,
@@ -240,11 +255,11 @@ export default {
                 this.movies.push(mov);
               });
               this.nowPage++;
-              this.nowLoading = !this.nowLoading;
+              this.nowLoading = false;
               console.log(this.movies);
             })
             .catch((err) => {
-              this.nowLoading = !this.nowLoading
+              this.nowLoading = false;
               console.log(err);
             });
         }
@@ -259,6 +274,7 @@ export default {
   },
   watch: {
     isLogin: function () {
+      this.nowLoading = true;
       if (this.isLogin) {
         const params = {
           filter_by: "all",
@@ -271,16 +287,19 @@ export default {
             });
             this.nowPage++;
             console.log(this.movies);
+            this.nowLoading = false;
           })
           .catch((err) => {
             console.log(err);
-            this.nowLoading = !this.nowLoading
+            this.nowLoading = false;
           });
-        this.getRecommendMovie()
-        .then((res) => {
-          console.log(res)
-          this.recommendMovies = res
-        })
+        this.nowLoading = true;
+
+        this.getRecommendMovie().then((res) => {
+          console.log(res);
+          this.recommendMovies = res;
+        });
+        this.nowLoading = false;
       }
     },
   },
@@ -361,6 +380,14 @@ export default {
   animation-duration: 1.5s;
   animation-direction: alternate;
   animation-iteration-count: infinite;
+}
+.reload-icon {
+  transform: rotateZ(0);
+  transition-duration: 1s;
+}
+.reload-icon:hover {
+  transform: rotateZ(360deg);
+  transition-duration: 1s;
 }
 
 @keyframes sparkle {

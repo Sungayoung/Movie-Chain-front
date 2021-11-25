@@ -2,11 +2,12 @@
   <v-app style="background: rgba(0, 0, 0, 0.5 ); color: black">
     <!-- 체인 -->
 
-    <div class="d-flex align-items-center">
+    <!-- <div class="d-flex align-items-center">
       <div class="d-flex chain" style="top: 100px; left: 30px"></div>
       <div class="d-flex chain" style="top: 100px; left: 130px"></div>
       <div class="d-flex chain2" style="top: 115px; left: 80px"></div>
-    </div>
+    </div> -->
+
     <v-main>
       <!-- 네비바 -->
       <transition name="fade">
@@ -55,7 +56,7 @@
       </div>
       </transition>
 
-      <img id="bg-img" class="bg-img" />
+      <img class="bg-img" :src='lastHoverMBDURL' />
       
       <router-view></router-view>
     </v-main>
@@ -96,7 +97,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["isLogin", "profile_img", "nickname"]),
+    ...mapState(["isLogin", "profile_img", "nickname",'lastHoverMBDURL']),
     imgUrl: function () {
       if (this.profile_img) {
         return `${process.env.VUE_APP_MCS_URL}${this.profile_img}`;
@@ -155,18 +156,6 @@ html {
   text-decoration: none;
   color: white !important;
 }
-
-/* 트랜지션 용 스타일 */
-/* .login {
-  transform: none;
-  transition-property: all;
-  transition-delay: 1s;
-  transition-duration: 1s;
-}
-.not-login {
-  transform: translateY(-100px);
-  transition-duration: 1s;
-} */
 
 /* 스크롤 바 설정 */
 html {

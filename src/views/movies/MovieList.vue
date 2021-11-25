@@ -1,10 +1,15 @@
 <template>
   <div>
+    <div style="z-index: 100">
+      <a class="to-top-button" href="#" title="맨 위로">
+        <v-icon color="white" size="36">mdi-arrow-up</v-icon>
+      </a>
+    </div>
     <!-- 사이드바 -->
     <v-navigation-drawer
       absolute
       temporary
-      color="rgba(255,255,255,0.4)"
+      color="rgba(0,0,0,0.8)"
       v-model="openBar"
     >
       <v-spacer style="height: 10vh"></v-spacer>
@@ -12,31 +17,29 @@
         <!-- N개씩 보기 버튼 -->
         <div class="d-flex">
           <v-select
+          dark
             v-model="movieCnt"
             :items="movieCntItems"
-            background-color="white"
             @change="getMovie"
             width="10"
-            solo
             hide-details
           ></v-select>
         </div>
         <div class="d-flex">
           <v-select
+          dark
             v-model="orderBy"
             :items="orderItems"
-            background-color="white"
             @change="getMovie"
             width="10"
-            solo
             hide-details
           ></v-select>
         </div>
         <!-- 필터지정 -->
         <div style="width: 15vw">
           <v-select
+          dark
             class="d-flex"
-            solo
             width="10"
             :items="filterItems"
             v-model="filterBy"
@@ -45,6 +48,7 @@
         </div>
         <!-- 필터에서 내용선택 -->
         <v-autocomplete
+        dark
           :disabled="filterBy === 'all'"
           @change="getMovieMovie"
           chips
@@ -69,6 +73,7 @@
         mdi-chevron-right
       </v-icon>
     </button>
+      <!-- 페이지네이션 버튼 -->
     <div
       style="
         height: 1px;
@@ -94,6 +99,7 @@
 
           <div class="col-2"></div>
         </div>
+
         <button @click="openBar = !openBar" class="filter-button">
           <v-icon size="64" color="white"> mdi-filter-menu-outline </v-icon>
         </button>
@@ -102,7 +108,7 @@
           <div class=""></div>
           <!-- 영화 보여주는 곳 -->
           <div class="container">
-            <!-- 페이지네이션 버튼 -->
+          
 
             <div class="d-flex">
               <MovieCardMatrix :movieList="movies" />
@@ -308,28 +314,44 @@ export default {
 </script>
 
 <style>
+.to-top-button {
+  display: scroll;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 100;
+  color: rgba(104, 240, 217, 0.473);
+  transition-duration: 1s;
+}
+.filter-button {
+  position: fixed;
+  left: 150px;
+  top: 100px;
+  padding: 10px;
+
+  border-radius: 25px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
 .left-btn,
 .right-btn {
   position: fixed;
-  transition-duration: 500ms;
-  transition-property: position;
+  padding: 10px;
   top: 50vh;
   z-index: 100;
+  border-radius: 25px;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .left-btn {
-  left: 20vw;
+  left: 150px;
 }
 .right-btn {
-  right: 20vw;
+  right: 150px;
 }
-.left-btn-bg,
-.right-btn-bg {
-  background-color: rgb(87, 94, 94);
-}
+.filter-button:hover,
+.to-top-button:hover,
 .left-btn-bg:hover,
 .right-btn-bg:hover {
-  transition-property: background-color;
   transition-duration: 500ms;
   background-color: rgb(163, 200, 202);
 }
