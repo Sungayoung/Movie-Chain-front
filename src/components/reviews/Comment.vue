@@ -26,9 +26,12 @@
             comment.updated_at | moment("YY-MM-DD HH:mm")
           }}</v-list-item-action-text>
           <v-list-item-icon v-if="editMode">
-            <button class="ms-3" @click.stop="editComment">
-              <v-icon>mdi-arrow-left-bottom-bold</v-icon>
-            </button></v-list-item-icon
+              <v-icon @click.stop="editComment" >mdi-arrow-left-bottom-bold</v-icon>
+           <v-icon @click="modeChange" v-if="comment.isWriter"
+              >close-thick</v-icon
+            >
+            
+            </v-list-item-icon
           >
           <v-list-item-icon v-if="!editMode">
             <!-- 수정버튼 : editMode 값을 토글시킨다 -->

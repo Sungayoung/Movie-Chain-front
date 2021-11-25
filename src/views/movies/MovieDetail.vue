@@ -434,7 +434,7 @@ export default {
   height: 300px;
 }
 .hover-magnifying {
-  background-color: rgba(65, 65, 65, 0.705);
+  background-color: rgba(65, 65, 65, 0.7);
   position: absolute;
   height: 100%;
   width: 100%;

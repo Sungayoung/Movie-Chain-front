@@ -1,6 +1,5 @@
 <template>
-  <transition
-  >
+  <transition>
     <div class="text-center">
       <div class="alert-box">
         <div class="d-flex justify-content-center">
@@ -18,18 +17,34 @@
           </transition>
         </div>
       </div>
-      <!-- 점 페이지네이션 -->
-      <v-item-group v-model="onboarding" class="text-center" mandatory>
-        <v-item v-for="n in length" :key="`btn-${n}`">
-          <v-icon v-if="onboarding === n - 1" color="teal darken-2"
-            >mdi-record</v-icon
-          >
-          <v-icon v-else color="white">mdi-record</v-icon>
-        </v-item>
-      </v-item-group>
+      <!-- 페이지네이션 버튼 -->
+      <div
+        style="
+          height: 1px;
+          width: 100%;
+          position: fixed;
+          bottom: 100px;
+          z-index: 50;
+        "
+        class="d-flex justify-content-center text-center"
+      >
+        <div class="page-slot justify-content-evenly d-flex">
+          <span v-for="n in 4" :key="`btn-${n}`" class="d-flex">
+            <v-icon v-if="onboarding === n - 1" color="white"
+              >mdi-record</v-icon
+            >
+            <v-icon v-else color="grey darken-2">mdi-record</v-icon>
+          </span>
+        </div>
+      </div>
 
       <!-- 회원가입 폼 -->
-      <v-card class="mx-auto" max-width="800">
+      <v-card
+        class="mx-auto"
+        style="margin-top: 100px"
+        max-width="55%"
+        rounded="xl"
+      >
         <v-card-title
           class="text-h6 d-flex justify-content-center font-weight-regular"
         >
@@ -72,7 +87,7 @@
               <!-- 닉네임 -->
               <div>
                 <v-text-field
-                maxlength="20"
+                  maxlength="20"
                   :rules="rules.nicknameRule"
                   label="Nickname"
                   type="text"
@@ -143,25 +158,24 @@
                   <v-chip
                     @click="addOrDelGenre(genre.id)"
                     v-if="credentials.like_genres.includes(genre.id)"
-            color="grey darken-3"
-            text-color="white"
+                    color="grey darken-3"
+                    text-color="white"
                     :pill="true"
                     :ripple="{ class: 'red--text' }"
-                    >
-              <v-icon left> mdi-movie-open-outline </v-icon>
-                    
+                  >
+                    <v-icon left> mdi-movie-open-outline </v-icon>
+
                     {{ genre.name }}</v-chip
                   >
 
                   <v-chip v-else @click="addOrDelGenre(genre.id)">
-              <v-icon left> mdi-movie-open-outline </v-icon>
+                    <v-icon left> mdi-movie-open-outline </v-icon>
                     {{ genre.name }}</v-chip
                   >
                 </div>
               </div>
               <hr />
-              <div>
-              </div>
+              <div></div>
             </v-card-text>
           </v-window-item>
 
@@ -184,24 +198,41 @@
                     :key="n"
                     class="d-flex col-3"
                     @click.stop="delMovie(n)"
-                     @mouseover="nowHoverMyMovieNum = n - 1"
-                        @mouseleave="nowHoverMyMovieNum = null"
-                  ><button>
+                    @mouseover="nowHoverMyMovieNum = n - 1"
+                    @mouseleave="nowHoverMyMovieNum = null"
+                  >
+                    <button>
+                      <div class="movie-img d-flex">
+                        <transition name="my-movie-card">
+                          <div
+                            v-if="
+                              nowHoverMyMovieNum === n - 1 &&
+                              tempPersonalMovies[n - 1]
+                            "
+                            class="
+                              del-movie-curtain
+                              d-flex
+                              justify-content-center
+                              align-items-center
+                            "
+                          >
+                            <v-icon color="white" size="64" class="my-auto"
+                              >mdi-minus-circle-outline</v-icon
+                            >
+                          </div>
+                        </transition>
 
-                    <div class="movie-img d-flex">
-                      <transition name="my-movie-card">
                         <div
-                          v-if="nowHoverMyMovieNum === n - 1 && tempPersonalMovies[n - 1]"
-                          class="del-movie-curtain d-flex justify-content-center align-items-center"
-                        ><v-icon color="white" size="64" class="my-auto">mdi-minus-circle-outline</v-icon></div>
-                      </transition>
-
-                      <v-img
-                       
-                        :src="imgURL(tempPersonalMovies[n - 1])"
-                      ></v-img>
-                    </div>
-                  </button>
+                          class="movie-img"
+                          style="background-color: rgb(214, 226, 223)"
+                        >
+                          <v-img
+                            class="movie-img"
+                            :src="imgURL(tempPersonalMovies[n - 1])"
+                          ></v-img>
+                        </div>
+                      </div>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -245,9 +276,19 @@
                       <transition name="movie-card-transition">
                         <div
                           v-if="nowHoverMovieId === movie.id"
-                          class="add-movie-curtain d-flex justify-content-center align-items-center"
-                        ><v-icon color="white" size="64" class="my-auto">mdi-plus-circle-outline</v-icon></div>
+                          class="
+                            add-movie-curtain
+                            d-flex
+                            justify-content-center
+                            align-items-center
+                          "
+                        >
+                          <v-icon color="white" size="64" class="my-auto"
+                            >mdi-plus-circle-outline</v-icon
+                          >
+                        </div>
                       </transition>
+
                       <v-img class="movie-img" :src="imgURL(movie)" />
                     </button>
                   </div>
@@ -267,6 +308,34 @@
               >
                 {{ credentials.nickname }}
               </div>
+
+              <!-- 체인 -->
+              <div stlye="position:relative">
+                <div class="d-flex align-items-center">
+                  <transition name="chain-fade">
+                    <div
+                      v-if="onboarding === 3"
+                      class="d-flex chain"
+                      style="top: 100px; left: 200px"
+                    ></div>
+                  </transition>
+                  <transition name="chain-fade">
+                    <div
+                      v-if="onboarding === 3"
+                      class="d-flex chain"
+                      style="top: 100px; left: 260px"
+                    ></div>
+                  </transition>
+                  <transition name="chain-fade-two">
+                    <div
+                      v-if="onboarding === 3"
+                      class="d-flex chain2"
+                      style="top: 108x; left: 230px"
+                    ></div>
+                  </transition>
+                </div>
+              </div>
+
               <img
                 style="width: 150px"
                 src="@/assets/movie_chain_no_text.png"
@@ -304,6 +373,14 @@
           </v-icon>
           <v-icon
             v-if="onboarding === 2"
+            color="primary"
+            depressed
+            @click="next"
+          >
+            mdi-chevron-right
+          </v-icon>
+          <v-icon
+            v-if="onboarding === 3"
             :disabled="onboarding === length"
             color="primary"
             depressed
@@ -452,7 +529,7 @@ export default {
       if (movie && movie.poster_path != null) {
         return `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
       } else {
-        return `${process.env.VUE_APP_MCS_URL}/media/images/profile/person_default.jpg`;
+        return `${process.env.VUE_APP_MCS_URL}/media/images/profile/movie_chain_poster.png`;
       }
     },
     addMovie: function (mov) {
@@ -494,7 +571,7 @@ export default {
           this.credentials.personal_movies.push(mov.id)
         );
       }
-      console.log(this.credentials)
+      console.log(this.credentials);
       axios({
         method: "POST",
         url: "http://127.0.0.1:8000/accounts/signup/",
@@ -551,11 +628,14 @@ export default {
   width: 150px;
   height: 225px;
   object-fit: fill;
+  border-radius: 25px;
+  border: 2px solid #ffffff96;
 }
 .img-box {
   width: 100%;
   height: 300px;
   object-fit: fill;
+  border-radius: 25px;
 }
 * ::-webkit-scrollbar {
   display: none;
@@ -580,6 +660,43 @@ export default {
   opacity: 0;
 }
 
+.chain-fade-enter-active,
+.chain-fade-leave-active {
+  transition-duration: 1s;
+}
+.chain-fade-enter-active {
+  transition-delay: 0.5s;
+}
+.chain-fade-enter,
+.chain-fade-leave-to {
+  opacity: 0;
+}
+.chain-fade-two-enter-active,
+.chain-fade-two-leave-active {
+  transition-duration: 1s;
+}
+.chain-fade-two-enter-active {
+  transition-delay: 1s;
+}
+.chain-fade-two-enter,
+.chain-fade-two-leave-to {
+  opacity: 0;
+}
+.chain {
+  border: 5px red solid;
+  border-radius: 30px;
+  height: 30px;
+  width: 50px;
+  position: absolute;
+}
+.chain2 {
+  border: 5px white solid;
+  background: red;
+  border-radius: 30px;
+  height: 15px;
+  width: 50px;
+  position: absolute;
+}
 .alert-box {
   position: fixed;
   top: 0;

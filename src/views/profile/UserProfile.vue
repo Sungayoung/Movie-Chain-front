@@ -85,6 +85,7 @@
     <div class="my-3">
     <v-row>
     <movie-card-list-personal
+     :background_color="profile.background_color"
      :movieList="profile.personal_movies"
      :isLoginUser="isLoginUser"
      @reload-profile="reloadProfile"></movie-card-list-personal>
@@ -221,5 +222,7 @@ export default {
 </script>
 
 <style scoped>
-
+* ::-webkit-scrollbar {
+  display: none;
+}
 </style>
