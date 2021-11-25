@@ -574,7 +574,7 @@ export default {
       console.log(this.credentials);
       axios({
         method: "POST",
-        url: "http://127.0.0.1:8000/accounts/signup/",
+        url: `${process.env.VUE_APP_MCS_URL}/accounts/signup/`,
         data: this.credentials,
       })
         .then(() => {
