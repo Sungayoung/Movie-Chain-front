@@ -54,9 +54,6 @@
       <img class="bg-img" :src="lastHoverMBDURL" />
       <transition name="fast-fade"> <router-view></router-view> </transition>
     </v-main>
-   
-
-     
   </v-app>
 </template>
 
