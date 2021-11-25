@@ -1,5 +1,7 @@
 <template>
   <div v-if="person" class="d-flex">
+      <div class='black-curtain'></div>
+
     <v-sheet
       rounded="xl"
       color="grey lighten-3"
@@ -115,4 +117,14 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.black-curtain {
+  position: fixed;
+  top: 0;
+  background: rgb(0,0,0,0.5);
+  width: 100%;
+  height: 200vh;
+  transition-delay: 1s;
+  transition-duration: 1.1s;
+  z-index: 1;
+}</style>

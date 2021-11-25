@@ -1,6 +1,6 @@
 <template>
-  <transition>
-    <div class="text-center">
+  <div>
+    <div class="justify-content-center">
       <div class="alert-box">
         <div class="d-flex justify-content-center">
           <transition
@@ -8,9 +8,6 @@
             enter-active-class="animated animate__fadeInDown"
             leave-active-class="animated animate__fadeOutUp"
           >
-            <v-alert v-if="validAlert" type="error" class="alert d-flex">
-              형식이 맞지않습니다.
-            </v-alert>
             <v-alert v-if="movieAlert" type="error" class="alert d-flex">
               {{ movieAlertText }}
             </v-alert>
@@ -18,37 +15,37 @@
         </div>
       </div>
       <!-- 페이지네이션 버튼 -->
-      <div
-        style="
-          height: 1px;
-          width: 100%;
-          position: fixed;
-          bottom: 100px;
-          z-index: 50;
-        "
-        class="d-flex justify-content-center text-center"
-      >
-        <div class="page-slot justify-content-evenly d-flex">
-          <span v-for="n in 4" :key="`btn-${n}`" class="d-flex">
-            <v-icon v-if="onboarding === n - 1" color="white"
-              >mdi-record</v-icon
-            >
-            <v-icon v-else color="grey darken-2">mdi-record</v-icon>
-          </span>
-        </div>
-      </div>
 
       <!-- 회원가입 폼 -->
-      <v-card
-        class="mx-auto"
-        style="margin-top: 100px"
-        max-width="55%"
-        rounded="xl"
-      >
+      <v-card class="mx-auto" style="margin-top: px" rounded="xl">
         <v-card-title
+          style="background-color: grey"
           class="text-h6 d-flex justify-content-center font-weight-regular"
         >
-          <span class="text-center">Movie Chain과 연결하기</span>
+          <span
+            v-if="onboarding === 0"
+            class="fs-3 text-center"
+            style="color: white"
+            >Movie Chain과 연결하기</span
+          >
+          <span
+            v-if="onboarding === 1"
+            class="fs-3 text-center"
+            style="color: white"
+            >좋아하는 장르를 선택해주세요</span
+          >
+          <span
+            v-if="onboarding === 2"
+            class="fs-3 text-center"
+            style="color: white"
+            >나를 상징하는 영화를 선택해주세요</span
+          >
+          <span
+            v-if="onboarding === 3"
+            class="fs-3 text-center"
+            style="color: white"
+            >Movie Chain과 연결 성공!</span
+          >
         </v-card-title>
 
         <v-window v-model="onboarding">
@@ -149,7 +146,7 @@
           <!-- 2 페이지: 선호장르 -->
           <v-window-item :onboarding="2">
             <v-card-text>
-              <div class="d-flex row">
+              <div class="d-flex row p-5">
                 <div
                   class="col-3 text-center p-1"
                   v-for="(genre, idx) in genreList"
@@ -174,7 +171,6 @@
                   >
                 </div>
               </div>
-              <hr />
               <div></div>
             </v-card-text>
           </v-window-item>
@@ -238,10 +234,10 @@
               </div>
             </div>
             <!-- 영화등록하는 부분 -->
-            <v-card class="grey m-3">
+            <v-card class="grey m-3" rounded="xl">
               <div class="mx-auto p-3">
                 <v-autocomplete
-                  class="d-inline-flex ms-5 mt-5"
+                  class="d-flex mx-auto mt-5"
                   hide-details
                   rounded
                   filled
@@ -300,37 +296,33 @@
 
           <!-- 4 페이지: 회원가입 완료 -->
           <v-window-item :onboarding="4">
-            <div class="text-center">MovieChain과 연결되었습니다.</div>
             <div class="pa-4 d-flex justify-content-around">
               <div
-                class="text-h6 font-weight-light mb-2 align-self-center"
+                class="fs-3 fw-bold m-5 align-self-center"
                 style="width: 150px"
               >
                 {{ credentials.nickname }}
               </div>
 
               <!-- 체인 -->
-              <div stlye="position:relative">
-                <div class="d-flex align-items-center">
+              <div class="d-flex align-items-center">
+                <div stlye="position:relative">
                   <transition name="chain-fade">
-                    <div
-                      v-if="onboarding === 3"
-                      class="d-flex chain"
-                      style="top: 100px; left: 200px"
-                    ></div>
+                    v-if="onboarding === 3"
+                    <div class="d-flex chain" style="top: 40%; left: 40%"></div>
                   </transition>
                   <transition name="chain-fade">
                     <div
                       v-if="onboarding === 3"
                       class="d-flex chain"
-                      style="top: 100px; left: 260px"
+                      style="top: 40%; left: 50%"
                     ></div>
                   </transition>
                   <transition name="chain-fade-two">
                     <div
                       v-if="onboarding === 3"
                       class="d-flex chain2"
-                      style="top: 108x; left: 230px"
+                      style="top: 45%; left: 45%"
                     ></div>
                   </transition>
                 </div>
@@ -341,6 +333,7 @@
                 src="@/assets/movie_chain_no_text.png"
               />
             </div>
+            <div class="text-center">MovieChain과 연결되었습니다.</div>
           </v-window-item>
         </v-window>
 
@@ -348,10 +341,31 @@
 
         <v-card-actions>
           <!-- 페이지별 이전버튼 구성 -->
-          <v-icon v-if="0 < onboarding && onboarding < 3" @click="prev">
+          <v-icon v-if="onboarding === 0" color="white" depressed size="50">
+            mdi-chevron-left
+          </v-icon>
+          <v-icon
+            v-if="0 < onboarding && onboarding < 3"
+            @click="prev"
+            size="50"
+          >
+            mdi-chevron-left
+          </v-icon>
+          <v-icon v-if="onboarding === 3" color="white" depressed size="50">
             mdi-chevron-left
           </v-icon>
 
+          <v-spacer></v-spacer>
+          <div class="d-flex justify-content-center text-center">
+            <div class="justify-content-evenly d-flex" style="width: auto">
+              <span v-for="n in 4" :key="`btn-${n}`" class="d-flex m-2">
+                <v-icon v-if="onboarding === n - 1" color="primary"
+                  >mdi-record</v-icon
+                >
+                <v-icon v-else color="grey">mdi-record</v-icon>
+              </span>
+            </div>
+          </div>
           <v-spacer></v-spacer>
           <!-- 페이지별 다음버튼 구성 -->
           <v-icon
@@ -359,6 +373,7 @@
             :disabled="onboarding === length"
             color="primary"
             depressed
+            size="50"
             @click="signup(false)"
           >
             mdi-chevron-right
@@ -367,6 +382,7 @@
             v-if="onboarding === 1"
             color="primary"
             depressed
+            size="50"
             @click="next"
           >
             mdi-chevron-right
@@ -375,23 +391,18 @@
             v-if="onboarding === 2"
             color="primary"
             depressed
-            @click="next"
-          >
-            mdi-chevron-right
-          </v-icon>
-          <v-icon
-            v-if="onboarding === 3"
-            :disabled="onboarding === length"
-            color="primary"
-            depressed
+            size="50"
             @click="signup(true)"
           >
             mdi-check
           </v-icon>
+          <v-icon v-if="onboarding === 3" color="white" depressed size="50">
+            mdi-close
+          </v-icon>
         </v-card-actions>
       </v-card>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script>
@@ -487,8 +498,8 @@ export default {
       },
 
       //  에러표시 위한 변수
-      validAlert: false,
       movieAlert: false,
+      movieAlertText: null,
 
       // 생일 메뉴창을 위한 변수
       menu: false,
@@ -579,14 +590,31 @@ export default {
       })
         .then(() => {
           this.onboarding++;
-          if (validCheck) {
-            this.$router.push({ name: "MainPage" });
-          }
         })
         .catch((err) => {
-          this.validAlert = true;
-          setTimeout(() => (this.validAlert = false), 2000);
-          console.log(err);
+          console.log(err.response.data);
+          if (err.response.data.error) {
+            this.movieAlertText = err.response.data.error;
+          } else if (err.response.data.username &&
+            err.response.data.username[0] ===
+            "해당 사용자 이름은 이미 존재합니다."
+          ) {
+            this.movieAlertText = "이미 등록된 ID 입니다.";
+          } else if (err.response.data.nickname &&
+            err.response.data.nickname[0] ===
+            "사용자의 nickname은/는 이미 존재합니다."
+          ) {
+            this.movieAlertText = "이미 등록된 닉네임입니다.";
+          } else if (err.response.data.email &&
+            err.response.data.email[0] ===
+            "사용자의 email은/는 이미 존재합니다."
+          ) {
+            this.movieAlertText = "이미 등록된 이메일입니다.";
+          } else {
+            this.movieAlertText = "형식이 맞지 않습니다.";
+          }
+          this.movieAlert = true;
+          setTimeout(() => (this.movieAlert = false), 2000);
         });
     },
   },
@@ -683,30 +711,28 @@ export default {
   opacity: 0;
 }
 .chain {
-  border: 5px red solid;
+  border: 5px rgb(222, 223, 197) solid;
   border-radius: 30px;
-  height: 30px;
-  width: 50px;
+  height: 17%;
+  width: 8%;
   position: absolute;
 }
 .chain2 {
   border: 5px white solid;
-  background: red;
+  background: rgb(222, 223, 197);
   border-radius: 30px;
   height: 15px;
-  width: 50px;
+  width: 8%;
   position: absolute;
 }
 .alert-box {
   position: fixed;
   top: 0;
-  height: 5vh;
-  width: 100%;
+  width: 45%;
   z-index: 10;
 }
 .alert {
-  position: relative;
-  max-width: 30vw;
+  position: absolute;
   top: 0;
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
   <v-item-group v-if="movieList">
     <v-container>
+      <!-- 내 프로필 -->
       <v-row v-if="isLoginUser">
         <v-dialog
           color="grey"
@@ -117,15 +118,18 @@
         </v-dialog>
       </v-row>
 
-      
+      <!-- 다른사람 프로필 -->
       <v-row v-else>
+        
         <v-col v-for="(movie, idx) in movieList" :key="idx" cols="4" md="4">
           <v-card
-            class="d-flex align-center mx-auto movie-img"
+            class="d-flex align-center mx-auto"
             width="200"
             height="300"
+            elevation="12"
+            rounded="xl"
           >
-            <img
+            <v-img
             class="movie-img"
             rounded="xl"
             width="200"
@@ -139,6 +143,7 @@
             </user-list-pop>
           </v-row>
         </v-col>
+        
       </v-row>
     </v-container>
   </v-item-group>

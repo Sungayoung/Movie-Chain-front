@@ -1,5 +1,7 @@
 <template>
   <div>
+      <div class='black-curtain'></div>
+   
     <div style="z-index: 100">
       <a class="to-top-button" href="#" title="맨 위로">
         <v-icon color="white" size="36">mdi-arrow-up</v-icon>
@@ -11,35 +13,37 @@
       temporary
       color="rgba(0,0,0,0.8)"
       v-model="openBar"
+      width=300
     >
       <v-spacer style="height: 10vh"></v-spacer>
       <div>
         <!-- N개씩 보기 버튼 -->
         <div class="d-flex">
           <v-select
+          prefix="_______________"
           dark
             v-model="movieCnt"
             :items="movieCntItems"
             @change="getMovie"
             width="10"
-            hide-details
           ></v-select>
         </div>
         <div class="d-flex">
           <v-select
+          prefix="_______________"
           dark
             v-model="orderBy"
             :items="orderItems"
             @change="getMovie"
             width="10"
-            hide-details
           ></v-select>
         </div>
         <!-- 필터지정 -->
-        <div style="width: 15vw">
+        <div class="d-flex">
           <v-select
+          prefix="_______________"
           dark
-            class="d-flex"
+            
             width="10"
             :items="filterItems"
             v-model="filterBy"
@@ -73,18 +77,7 @@
         mdi-chevron-right
       </v-icon>
     </button>
-      <!-- 페이지네이션 버튼 -->
-    <div
-      style="
-        height: 1px;
-        width: 100%;
-        position: fixed;
-        bottom: 100px;
-        z-index: 50;
-      "
-      class="d-flex justify-content-center text-center"
-    >
-    </div>
+    
 
     <div>
       <div class="my-5 container">
@@ -107,18 +100,22 @@
               <MovieCardMatrix :movieList="movies" />
             </div>
           </div>
-          <template style="z-index: 2; position: relative;">
-            <div class="text-center" style="z-index: 2; position: relative;">
+        </div>
+      </div>
+    </div>
+          <div style="z-index: 2;  width:100%; position: relative;" class="d-flex justify-content-center">
+            <div class="text-center justify-content-center d-flex" style="z-index: 2; position: relative;">
               <v-pagination
+              circle
+              dark
+              color='rgb(163, 200, 202)'
+              style="height:100"
                 v-model="page"
                 :length="totalPages"
                 :total-visible="7"
               ></v-pagination>
             </div>
-          </template>
-        </div>
-      </div>
-    </div>
+          </div>
   </div>
 </template>
 
@@ -315,7 +312,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .to-top-button {
   display: scroll;
   position: fixed;
@@ -330,7 +327,7 @@ export default {
   left: 150px;
   top: 100px;
   padding: 10px;
-
+  z-index: 2;
   border-radius: 25px;
   background-color: rgba(0, 0, 0, 0.5);
 }
@@ -339,7 +336,7 @@ export default {
   position: fixed;
   padding: 10px;
   top: 50vh;
-  z-index: 100;
+  z-index: 2;
   border-radius: 25px;
   background-color: rgba(0, 0, 0, 0.5);
 }
@@ -363,4 +360,15 @@ export default {
   border-radius: 25px;
   background-color: rgb(0, 0, 0, 0.6);
 }
+.black-curtain {
+  position: fixed;
+  top: 0;
+  background: rgb(0,0,0,0.7);
+  width: 100%;
+  height: 200vh;
+  transition-delay: 1s;
+  transition-duration: 1.1s;
+  z-index: 1;
+}
+
 </style>
