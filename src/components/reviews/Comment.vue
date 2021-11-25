@@ -91,7 +91,7 @@ export default {
       const data = {
         commentId: this.comment.id,
         params: {
-          content: this.commentInput,
+          content: this.comment.content,
         },
       };
       this.updateComment(data).then((res) => {
