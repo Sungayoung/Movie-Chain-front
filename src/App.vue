@@ -101,6 +101,11 @@ export default {
       }
     },
   },
+  updated: function () {
+    if (!this.isLogin) {
+      this.$router.push({ name: 'MainPage' })
+    }
+  }
 };
 
 var prevScrollpos = window.pageYOffset;
