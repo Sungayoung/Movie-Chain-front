@@ -7,7 +7,7 @@
           <v-img :src="imgUrl"></v-img>
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title>{{ review.user.nickname }}</v-list-item-title>
+          <v-list-item-title>{{ review.user.nickname }}<span v-if="review.rank"><v-icon color="#E6AF00">mdi-star</v-icon> {{ review.rank / 2}}</span></v-list-item-title>
 
           <!-- 수정모드면 input, 아니면 text를 보여준다. -->
           <v-list-item-subtitle v-if="editMode">
