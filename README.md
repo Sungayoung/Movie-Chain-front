@@ -41,14 +41,6 @@
 
 
 
-## 실행 화면
-
-- 회원가입 & 로그인 & 로그아웃
-
-  ![Animation2](README.assets/Animation2-16378661595701.gif)
-
-- 메인화면 인피니티 스크롤
-
 
 
 ## ERD (https://www.erdcloud.com/d/wybuwEuYN9ZSzGKiH)
